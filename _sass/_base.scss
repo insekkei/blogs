@@ -19,7 +19,8 @@ body {
     line-height: $base-line-height;
     font-weight: 300;
     color: $text-color;
-    background-color: $background-color;
+    background: $background-color url(../images/girl.jpg) no-repeat right bottom fixed;
+    background-size:auto 90%;
     -webkit-text-size-adjust: 100%;
 }
 
@@ -128,9 +129,9 @@ blockquote {
 pre,
 code {
     font-size: 15px;
-    border: 1px solid $grey-color-light;
+    border: 1px solid #9C8566;
     border-radius: 3px;
-    background-color: #eef;
+    background-color: #535C59;
 }
 
 code {
@@ -156,8 +157,7 @@ pre {
 .wrapper {
     max-width: -webkit-calc(#{$content-width} - (#{$spacing-unit} * 2));
     max-width:         calc(#{$content-width} - (#{$spacing-unit} * 2));
-    margin-right: auto;
-    margin-left: auto;
+
     padding-right: $spacing-unit;
     padding-left: $spacing-unit;
     @extend %clearfix;
