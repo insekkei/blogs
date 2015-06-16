@@ -1,0 +1,11 @@
+# Site settings
+title: 广莫之野，无何有之乡。
+email: hancong9104@163.com
+description: > # this means to ignore newlines until "baseurl:"
+  我的web前端学习笔记
+baseurl: "/blogs" # the subpath of your site, e.g. /blog/
+url: "http://insekkei.com/blogs/" # the base hostname & protocol for your site
+github_username:  insekkei
+
+# Build settings
+markdown: kramdown
