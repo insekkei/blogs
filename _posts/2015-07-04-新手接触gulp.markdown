@@ -31,7 +31,9 @@ gulp.task('default', function() {
 
 * gulp.watch：当一个文件被修改时，执行某个任务
 
-*简单来说就是：哪些文件（src）？进行怎样的操作（task）？结果怎么写入（dest）？例如，创建一个监听所有类型为less的文件的任务，当任何一个less文件被修改时，执行less-pro这个任务。*
+*简单来说就是：哪些文件（src）？进行怎样的操作（task）？结果怎么写入（dest）？
+
+例如，创建一个监听所有类型为less的文件的任务，当任何一个less文件被修改时，执行less-pro这个任务。*
 
 <pre><code>gulp.task('watch-less', function () {
 
