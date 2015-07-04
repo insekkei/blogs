@@ -5,11 +5,13 @@ date:   2015-07-04 16:54
 categories: gulp js
 ---
 
+因工作需要第一次接触到gulp（在前端混真的很惭愧...），在此记录下对gulp的认识。
+
 # 全局安装：
 
 $ npm install --global gulp
 
-# 创建一个gulpfile.js文件：
+# 重点：gulpfile.js文件，在项目的根目录下创建。默认任务（什么也不做）：
 
 <pre><code>var gulp = require('gulp');
 
@@ -17,7 +19,7 @@ gulp.task('default', function() {
   // place code for your default task here
 });</code></pre>
 
-## API
+## 来看看gulp的API！
 
 分为四个大的部分：
 
@@ -29,7 +31,7 @@ gulp.task('default', function() {
 
 * gulp.watch：当一个文件被修改时，执行某个任务
 
-简单来说就是：哪些文件（src）？进行怎样的操作（task）？结果怎么写入（dest）？例如，创建一个监听所有类型为less的文件的任务，当任何一个less文件被修改时，执行less-pro这个任务。
+*简单来说就是：哪些文件（src）？进行怎样的操作（task）？结果怎么写入（dest）？例如，创建一个监听所有类型为less的文件的任务，当任何一个less文件被修改时，执行less-pro这个任务。*
 
 <pre><code>gulp.task('watch-less', function () {
 
