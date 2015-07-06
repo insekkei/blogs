@@ -11,7 +11,9 @@ categories: gulp js
 
 $ npm install --global gulp
 
-# 重点：gulpfile.js文件，在项目的根目录下创建。默认任务（什么也不做）：
+# gulpfile.js文件：
+
+在项目的根目录下创建。默认任务（什么也不做）：
 
 <pre><code>var gulp = require('gulp');
 
@@ -19,7 +21,11 @@ gulp.task('default', function() {
   // place code for your default task here
 });</code></pre>
 
-## 来看看gulp的API！
+# 运行 gulp
+
+$ gulp
+
+# 来看看gulp的API！
 
 分为四个大的部分：
 
@@ -33,7 +39,9 @@ gulp.task('default', function() {
 
 *简单来说就是：哪些文件（src）？进行怎样的操作（task）？结果怎么写入（dest）？
 
-例如，创建一个监听所有类型为less的文件的任务，当任何一个less文件被修改时，执行less-pro这个任务。*
+# 举个例子！
+
+创建一个监听所有类型为less的文件的任务，当任何一个less文件被修改时，执行less-pro这个任务。*
 
 <pre><code>gulp.task('watch-less', function () {
 
@@ -49,13 +57,13 @@ less-pro任务片段如下：
 
     //编译过程...
 
-    console.log('结束编译');</code></pre>
+    console.log('结束编译');
 
-# 运行 gulp
+	});</code></pre>
 
-$ gulp
 
-如上watch less的例子中，运行：
+如上watch less的例子中，执行：
 
 $ gulp watch-less
 
+就可以实现实时监控less文件改变并且进行编译的目的了。
