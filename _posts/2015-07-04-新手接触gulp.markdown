@@ -5,7 +5,7 @@ date:   2015-07-04 16:54
 categories: gulp js
 ---
 
-因工作需要第一次接触到gulp（在前端混真的很惭愧...），在此记录下对gulp的认识。
+因工作需要第一次接触到[gulp](http://gulpjs.com/)（在前端混真的很惭愧...），在此记录下对gulp的认识。
 
 # 概念：
 
@@ -71,3 +71,5 @@ less-pro任务片段如下：
 $ gulp watch-less
 
 就可以实现实时监控less文件改变并且进行编译的目的了。
+
+# gulp有很多简洁而强大的[插件](http://gulpjs.com/plugins/)！
