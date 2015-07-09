@@ -5,50 +5,86 @@ date:   2015-07-09 10:22
 categories: angular js
 ---
 
-`ng`是angular的命名空间
+# 优势
 
-# Directive
+## MVC
 
-扩展html，给html添加声明语句，以便实现自己的需求（Extend HTML to add declarative syntax to do whatever you want）
+Model包含app当前状态的数据，用对象来定义如：
 
-在下面的各个部分里，html元素`ng-`前缀的属性名称里，`-`后面的部分都是Directive。
+    var someText = '';
 
-# Controller
+View显示数据，在dom中这样展示：`{{someText}}`
 
-# Data Binding
+Controller用来关联M和V，使用`$scope`对象来传递／操作Model，创建方法如下：
 
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.1/angular.min.js"&gt;&lt;/script&gt;
-    &lt;script&gt;
-        var myApp=angular.module('example',[])
-        myApp.controller('HelloController',['$scope',function TestApp($scope){
-            $scope.greeting = { text: 'Insekkei' };
-        }]);
-	&lt;/script&gt;
-&lt;/head&gt;
-&lt;body ng-app="example"&gt;
-    &lt;div ng-controller="HelloController"&gt;
-        &lt;input type="text" placeholder="请输入" ng-model="greeting.text"/&gt;
-        &lt;p&gt;Hello, {{greeting.text}}&lt;/p&gt;
-    &lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
+<pre><code>function TextController($scope) { 
+   $scope.someText = someText;
+}</code></pre>
 
-效果如下：
+MVC中，焦点应该被放在Model上：应该定义怎样的对象？怎样从服务器接收和保存对象？等等，花些时间考虑这些问题。
 
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.1/angular.min.js"></script>
-<script>
-    var myApp=angular.module('example',[])
-    myApp.controller('HelloController',['$scope',function TestApp($scope){
-        $scope.greeting = { text: 'Insekkei' };
-    }]);
-</script>
-<div ng-app="example">
-    <div ng-controller="HelloController">
-        <input type="text" placeholder="请输入" ng-model="greeting.text"/>
-        <p>Hello, {{greeting.text}}</p>
-    </div>
-</div>
+## 数据绑定
+
+利用数据绑定特性，以非常精短的代码，在操作数据的同时实现页面的自动局部刷新。
+
+## 依赖注入
+
+angular要求我们遵循编码规则，按照规定去写代码，使用规定的参数名，这样来自动获取需要的内容。
+
+# 概念
+
+angular缓解了编写ajax应用的痛苦。
+
+## Directive
+
+扩展html，给html添加声明语句，以便实现自己的需求。对于页面中html元素以`ng`为前缀的属性名称，`ng`是angular的命名空间，`-`后面的部分都是Directive。常用的如：`ng-app`，`ng-cotroller`，`ng-repeat`，`ng-model`，`ng-click`等等。 
+
+另外，还有一些关于表单验证的directive，如`input[email]`，`input[url]`等。
+
+## scope
+
+为把model里的data暴露给view，我们需要将$scope对象传给controller。$scope是controller与view之间的纽带。而`ng-controller`能够负责的dom范围，就是controller中$scope的有效区域（正确传递数据，传递正确的数据）。
+
+## service
+
+services都是单例的（不知可否参考设计模式中的单例模式去理解），angular中的service有：`$location`，`route`，`$http`。
+
+当一个app中有一堆controller，其中一些controller实现类似的逻辑（如一个查询功能：发送服务器请求－解析服务器返回的内容存入对象－将对象添加到$scope以显示到view），这时我们就可以定义一个那些controller共用的service，这样做的好处是：1、可以在controller中共享它们，从而减少重复的代码，方便阅读；2、需要的话，多个controller之间能够进行交流，分享状态...
+
+三种方式去创建一个service：
+
+- Services
+
+语法: module.service( 'serviceName', function );
+
+用法：不可配置，内部通过new实例化对象，给this添加属性，然后返回this。
+
+- Factories
+
+语法: module.factory( 'factoryName', function );
+
+用法：不可配置，内部直接创建一个对象，为它添加属性，然后返回这个对象。
+
+- Providers
+
+语法: module.provider( 'providerName', function );
+
+用法：可配置，内部通过$get方法返回一个实例对象。
+
+
+备注：controller使用serviceName／factoryName／providerName作为参数，通过angular的依赖注入特性获取结果。
+
+## filter
+
+声明data被显示给用户的格式，语法：
+
+<pre><code> {\{ expression | filterName : parameter1 : ...parameterN }}</code></pre>
+
+如`{\{12.9 | currency | number:0 }}`显示为`$13`。常用的filter还有`json`，`lowercase`，`orderBy`等等。
+
+`filtername`也可以是自定义的处理数据（转化格式）方法的方法名。
+
+
+
+
+
