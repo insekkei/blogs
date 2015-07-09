@@ -17,24 +17,24 @@ categories: angular js
 
 # Data Binding
 
-<pre><code><!DOCTYPE html>
-<html>
-<head>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.1/angular.min.js"></script>
-    <script>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.1/angular.min.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
         var myApp=angular.module('example',[])
         myApp.controller('HelloController',['$scope',function TestApp($scope){
             $scope.greeting = { text: 'Insekkei' };
         }]);
-	</script>
-</head>
-<body ng-app="example">
-    <div ng-controller="HelloController">
-        <input type="text" placeholder="请输入" ng-model="greeting.text"/>
-        <p>Hello, {{greeting.text}}</p>
-    </div>
-</body>
-</html>
+	&lt;/script&gt;
+&lt;/head&gt;
+&lt;body ng-app="example"&gt;
+    &lt;div ng-controller="HelloController"&gt;
+        &lt;input type="text" placeholder="请输入" ng-model="greeting.text"/&gt;
+        &lt;p&gt;Hello, {{greeting.text}}&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
 
 效果如下：
