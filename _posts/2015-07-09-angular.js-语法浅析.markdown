@@ -81,6 +81,29 @@ MVC中，焦点应该被放在Model上：应该定义怎样的对象？怎样从
 
 利用数据绑定特性，以非常精短的代码，在操作数据的同时实现页面的自动局部刷新。
 
+如下的例子中，当点击button，items数组的对应位置（index）首先被删除，由于div的数量由items决定（ng-repeat），因此当对数组items的删除操作完成时，dom也随之刷新。
+
+<pre><code>&lt;div ng-repeat='item in items'&gt;
+    &lt;span&gt;{\{item.title}}&lt;/span&gt;
+    &lt;input ng-model='item.quantity'&gt;
+    &lt;span&gt;{\{item.price | currency}}&lt;/span&gt; 
+    &lt;span&gt;{\{item.price * item.quantity | currency}}&lt;/span&gt; 
+    &lt;button ng-click="remove($index)"&gt;Remove&lt;/button&gt;
+&lt;/div&gt;
+
+function CartController($scope) { 
+    $scope.items = [
+        {title: 'Paint pots', quantity: 8, price: 3.95},
+        {title: 'Polka dots', quantity: 17, price: 12.95},
+        {title: 'Pebbles', quantity: 5, price: 6.95}
+    ];
+    $scope.remove = function(index) { 
+        $scope.items.splice(index, 1);
+    } 
+}</code></pre>
+
 ## 依赖注入
 
 angular要求我们遵循编码规则，按照规定去写代码，使用规定的参数名，这样来自动获取需要的内容。
+
+比如controller中通过serviceName来获取service的返回值。
