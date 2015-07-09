@@ -1,0 +1,54 @@
+---
+layout: post
+title:  "angular.js语法浅析"
+date:   2015-07-09 10:22
+categories: angular js
+---
+
+`ng`是angular的命名空间
+
+# Directive
+
+扩展html，给html添加声明语句，以便实现自己的需求（Extend HTML to add declarative syntax to do whatever you want）
+
+在下面的各个部分里，html元素`ng-`前缀的属性名称里，`-`后面的部分都是Directive。
+
+# Controller
+
+# Data Binding
+
+<pre><code><!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.1/angular.min.js"></script>
+    <script>
+        var myApp=angular.module('example',[])
+        myApp.controller('HelloController',['$scope',function TestApp($scope){
+            $scope.greeting = { text: 'Insekkei' };
+        }]);
+	</script>
+</head>
+<body ng-app="example">
+    <div ng-controller="HelloController">
+        <input type="text" placeholder="请输入" ng-model="greeting.text"/>
+        <p>Hello, {{greeting.text}}</p>
+    </div>
+</body>
+</html>
+</code></pre>
+
+效果如下：
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.1/angular.min.js"></script>
+<script>
+    var myApp=angular.module('example',[])
+    myApp.controller('HelloController',['$scope',function TestApp($scope){
+        $scope.greeting = { text: 'Insekkei' };
+    }]);
+</script>
+<div ng-app="example">
+    <div ng-controller="HelloController">
+        <input type="text" placeholder="请输入" ng-model="greeting.text"/>
+        <p>Hello, {{greeting.text}}</p>
+    </div>
+</div>
