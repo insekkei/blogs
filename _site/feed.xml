@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>web前端学习笔记</title>
+    <description>绿螘新醅酒，红泥小火炉。&lt;br&gt;晚来天欲雪，能饮一杯无？
+</description>
+    <link>http://insekkei.com/blogs//blogs/</link>
+    <atom:link href="http://insekkei.com/blogs//blogs/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Fri, 10 Jul 2015 11:32:23 +0800</pubDate>
+    <lastBuildDate>Fri, 10 Jul 2015 11:32:23 +0800</lastBuildDate>
+    <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>angular.js语法浅析</title>
+        <description>&lt;p&gt;声明：本文所有的双花括号，为了防止被jekyll当作本身变量编译，都在括号之间增加了空格，原本应该是没有空格的。&lt;/p&gt;
+
+&lt;h1 id=&quot;section&quot;&gt;概念&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;AngularJS is a structural framework for dynamic web apps.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;directive&quot;&gt;Directive&lt;/h2&gt;
+
+&lt;p&gt;扩展html，给html添加声明语句，以便实现自己的需求。对于页面中html元素以&lt;code&gt;ng&lt;/code&gt;为前缀的属性名称，&lt;code&gt;ng&lt;/code&gt;是angular的命名空间，&lt;code&gt;-&lt;/code&gt;后面的部分都是Directive。常用的如：&lt;code&gt;ng-app&lt;/code&gt;，&lt;code&gt;ng-cotroller&lt;/code&gt;，&lt;code&gt;ng-repeat&lt;/code&gt;，&lt;code&gt;ng-model&lt;/code&gt;，&lt;code&gt;ng-click&lt;/code&gt;等等。&lt;/p&gt;
+
+&lt;p&gt;另外，还有一些关于表单的directive，如&lt;code&gt;input[email]&lt;/code&gt;，&lt;code&gt;input[url]&lt;/code&gt;等。&lt;/p&gt;
+
+&lt;p&gt;有的时候，直接写入html的方式并不能满足我们处理浏览器事件或者修改dom的需求，于是我们需要使用directive方法来改变view，用法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;module.directive(&#39;directiveName&#39;, directiveFactoryFunction);&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;scope&quot;&gt;scope&lt;/h2&gt;
+
+&lt;p&gt;为把model里的data暴露给view，我们需要将$scope对象传给controller。$scope是controller与view之间的纽带。而&lt;code&gt;ng-controller&lt;/code&gt;能够负责的dom范围，就是controller中$scope的有效区域（正确传递数据，传递正确的数据）。&lt;/p&gt;
+
+&lt;h2 id=&quot;service&quot;&gt;service&lt;/h2&gt;
+
+&lt;p&gt;services都是单例的（不知可否参考设计模式中的单例模式去理解），angular中的service有：&lt;code&gt;$location&lt;/code&gt;，&lt;code&gt;route&lt;/code&gt;，&lt;code&gt;$http&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;当一个app中有一堆controller，其中一些controller实现类似的逻辑（如一个查询功能：发送服务器请求－解析服务器返回的内容存入对象－将对象添加到$scope以显示到view），这时我们就可以定义一个那些controller共用的service，这样做的好处是：1、可以在controller中共享它们，从而减少重复的代码，方便阅读；2、需要的话，多个controller之间能够进行交流，分享状态…&lt;/p&gt;
+
+&lt;p&gt;三种方式去创建一个service：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Services&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;语法: module.service( ‘serviceName’, function );&lt;/p&gt;
+
+&lt;p&gt;用法：不可配置，内部通过new实例化对象，给this添加属性，然后返回this。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Factories&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;语法: module.factory( ‘factoryName’, function );&lt;/p&gt;
+
+&lt;p&gt;用法：不可配置，内部直接创建一个对象，为它添加属性，然后返回这个对象。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Providers&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;语法: module.provider( ‘providerName’, function );&lt;/p&gt;
+
+&lt;p&gt;用法：可配置，内部通过$get方法返回一个实例对象。&lt;/p&gt;
+
+&lt;p&gt;备注：controller使用serviceName／factoryName／providerName作为参数，通过angular的依赖注入特性获取结果。&lt;/p&gt;
+
+&lt;h2 id=&quot;filter&quot;&gt;filter&lt;/h2&gt;
+
+&lt;p&gt;声明data被显示给用户的格式，语法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; { { expression | filterName : parameter1 : ...parameterN } }&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如&lt;code&gt;{ {12.9 | currency | number:0 } }&lt;/code&gt;显示为&lt;code&gt;$13&lt;/code&gt;。常用的filter还有&lt;code&gt;json&lt;/code&gt;，&lt;code&gt;lowercase&lt;/code&gt;，&lt;code&gt;orderBy&lt;/code&gt;等等。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;filtername&lt;/code&gt;也可以是自定义的处理数据（转化格式）方法的方法名。&lt;/p&gt;
+
+&lt;h2 id=&quot;routelocation&quot;&gt;route&amp;amp;location&lt;/h2&gt;
+
+&lt;p&gt;Ajax应用比较明显的缺点就是，window不能记住页面（局部）url，虽然有一系列解决方案（iframe，onhashchange，pushState结合location.href等），但需要做很多额外的工作。&lt;/p&gt;
+
+&lt;p&gt;angularjs中，可以通过&lt;code&gt;$route&lt;/code&gt;和&lt;code&gt;$location&lt;/code&gt;来改变view（选择加载哪一个view）。如下面这段代码，通过调用&lt;code&gt;$routeProvider&lt;/code&gt;的方法创建route，当发现url变成某一个&lt;code&gt;url&lt;/code&gt;时，&lt;code&gt;aController&lt;/code&gt;关联的&lt;code&gt;ng-controller&lt;/code&gt;元素将load &lt;code&gt;/path/to/tempate&lt;/code&gt;里的模板。如果没有找到匹配的模板，执行&lt;code&gt;otherwise&lt;/code&gt;中的代码。（使用代码时需要web服务器）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;module.config(function($routeProvider) {
+    $routeProvider.
+    when(&#39;url&#39;, {controller:aController, templateUrl:&#39;/path/to/tempate&#39;}). 
+    when(...other mappings for your app...).
+    ...
+    otherwise(...what to do if nothing else matches...);
+)};&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;每一个template里只有局部代码，链接&lt;code&gt;a&lt;/code&gt;元素的&lt;code&gt;href&lt;/code&gt;与&lt;code&gt;route&lt;/code&gt;中的&lt;code&gt;url&lt;/code&gt;相关，index.html模板通过&lt;code&gt;ng-view&lt;/code&gt;元素来标识哪部分是需要局部加载上来的。&lt;/p&gt;
+
+&lt;h2 id=&quot;http&quot;&gt;http&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;$http&lt;/code&gt;是一个service，angular提供了一些方法使我们可以方便地从服务器获取数据。&lt;/p&gt;
+
+&lt;p&gt;比如一个从server获取数据并且显示到view的例子：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;function ShoppingController($scope, $http) { 
+    $http.get(&#39;/products&#39;).success(function(data, status, headers, config) {
+        $scope.items = data;
+    });
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;html中值为&lt;code&gt;ShoppingController&lt;/code&gt;的&lt;code&gt;ng-controller&lt;/code&gt;里面就能通过&lt;code&gt;ng-repeat&lt;/code&gt;方式动态创建html，并且使用&lt;code&gt;item&lt;/code&gt;每一项的数据。&lt;/p&gt;
+
+&lt;h1 id=&quot;section-1&quot;&gt;优势&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;angularjs扩展了html，缓解了编写ajax应用的痛苦。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;mvc&quot;&gt;MVC&lt;/h2&gt;
+
+&lt;p&gt;Model包含app当前状态的数据，用对象来定义如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var someText = &#39;&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;View显示数据，在dom中这样展示：&lt;code&gt;{ {someText} }&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Controller用来关联M和V，使用&lt;code&gt;$scope&lt;/code&gt;对象来传递／操作Model，创建方法如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;function TextController($scope) { 
+   $scope.someText = someText;
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;MVC中，焦点应该被放在Model上：应该定义怎样的对象？怎样从服务器接收和保存对象？等等，花些时间考虑这些问题。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;数据绑定&lt;/h2&gt;
+
+&lt;p&gt;利用数据绑定特性，以非常精短的代码，在操作数据的同时实现页面的自动局部刷新。&lt;/p&gt;
+
+&lt;p&gt;如下的例子中，当点击button，items数组的对应位置（index）首先被删除，由于div的数量由items决定（ng-repeat），因此当对数组items的删除操作完成时，dom也随之刷新。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div ng-repeat=&#39;item in items&#39;&amp;gt;
+    &amp;lt;span&amp;gt;{ {item.title} }&amp;lt;/span&amp;gt;
+    &amp;lt;input ng-model=&#39;item.quantity&#39;&amp;gt;
+    &amp;lt;span&amp;gt;{ {item.price | currency} }&amp;lt;/span&amp;gt; 
+    &amp;lt;span&amp;gt;{ {item.price * item.quantity | currency} }&amp;lt;/span&amp;gt; 
+    &amp;lt;button ng-click=&quot;remove($index)&quot;&amp;gt;Remove&amp;lt;/button&amp;gt;
+&amp;lt;/div&amp;gt;
+
+function CartController($scope) { 
+    $scope.items = [
+        {title: &#39;Paint pots&#39;, quantity: 8, price: 3.95},
+        {title: &#39;Polka dots&#39;, quantity: 17, price: 12.95},
+        {title: &#39;Pebbles&#39;, quantity: 5, price: 6.95}
+    ];
+    $scope.remove = function(index) { 
+        $scope.items.splice(index, 1);
+    } 
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;section-3&quot;&gt;依赖注入&lt;/h2&gt;
+
+&lt;p&gt;angular要求我们遵循编码规则，按照规定去写代码，使用规定的参数名，这样来自动获取需要的内容。&lt;/p&gt;
+
+&lt;p&gt;比如controller中通过serviceName来获取service的返回值。&lt;/p&gt;
+</description>
+        <pubDate>Thu, 09 Jul 2015 10:22:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/angular/js/2015/07/09/angular.js-%E8%AF%AD%E6%B3%95%E6%B5%85%E6%9E%90.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/angular/js/2015/07/09/angular.js-%E8%AF%AD%E6%B3%95%E6%B5%85%E6%9E%90.html</guid>
+        
+        
+        <category>angular</category>
+        
+        <category>js</category>
+        
+      </item>
+    
+      <item>
+        <title>新手接触gulp</title>
+        <description>&lt;p&gt;因工作需要第一次接触到&lt;a href=&quot;http://gulpjs.com/&quot;&gt;gulp&lt;/a&gt;（在前端混真的很惭愧…），在此记录下对gulp的认识。&lt;/p&gt;
+
+&lt;h1 id=&quot;section&quot;&gt;概念：&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;Gulp.js是一个基于node.js的自动化构建工具，开发者可以使用它在项目开发过程中自动执行常见任务。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&quot;section-1&quot;&gt;全局安装：&lt;/h1&gt;
+
+&lt;p&gt;$ npm install –global gulp&lt;/p&gt;
+
+&lt;h1 id=&quot;gulpfilejs&quot;&gt;gulpfile.js文件：&lt;/h1&gt;
+
+&lt;p&gt;在项目的根目录下创建。默认任务（什么也不做）：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var gulp = require(&#39;gulp&#39;);
+
+gulp.task(&#39;default&#39;, function() {
+  // place code for your default task here
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&quot;gulp&quot;&gt;运行 gulp&lt;/h1&gt;
+
+&lt;p&gt;$ gulp&lt;/p&gt;
+
+&lt;h1 id=&quot;gulpapi&quot;&gt;来看看gulp的API！&lt;/h1&gt;
+
+&lt;p&gt;分为四个大的部分：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;gulp.src：定义被操作的源文件（可用*来指定目录、文件类型）&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;gulp.task：定义任务，例如压缩、优化、编译等等&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;gulp.dest：在指定目录写入（执行任务后）生成的文件&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;gulp.watch：当一个文件被修改时，执行某个任务&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;*简单来说就是：哪些文件（src）？进行怎样的操作（task）？结果怎么写入（dest）？&lt;/p&gt;
+
+&lt;h1 id=&quot;section-2&quot;&gt;举个例子！&lt;/h1&gt;
+
+&lt;p&gt;创建一个监听所有类型为less的文件的任务，当任何一个less文件被修改时，执行less-pro这个任务。*&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;gulp.task(&#39;watch-less&#39;, function () {
+
+    gulp.watch(&#39;less/*.less&#39;, [&#39;less-pro&#39;]);
+
+});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;less-pro任务片段如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;gulp.task(&#39;less-pro&#39;, function () {
+
+	console.log(&#39;开始编译&#39;);
+
+    //编译过程...
+
+    console.log(&#39;结束编译&#39;);
+
+	});&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如上watch less的例子中，执行：&lt;/p&gt;
+
+&lt;p&gt;$ gulp watch-less&lt;/p&gt;
+
+&lt;p&gt;就可以实现实时监控less文件改变并且进行编译的目的了。&lt;/p&gt;
+
+&lt;h1 id=&quot;gulphttpgulpjscomplugins&quot;&gt;gulp有很多简洁而强大的&lt;a href=&quot;http://gulpjs.com/plugins/&quot;&gt;插件&lt;/a&gt;！&lt;/h1&gt;
+</description>
+        <pubDate>Sat, 04 Jul 2015 16:54:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/gulp/js/2015/07/04/%E6%96%B0%E6%89%8B%E6%8E%A5%E8%A7%A6gulp.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/gulp/js/2015/07/04/%E6%96%B0%E6%89%8B%E6%8E%A5%E8%A7%A6gulp.html</guid>
+        
+        
+        <category>gulp</category>
+        
+        <category>js</category>
+        
+      </item>
+    
+      <item>
+        <title>js数组去重 及 计算字符串中字符的个数</title>
+        <description>&lt;p&gt;1、数组去重。&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;方法一：&lt;/em&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var arr = [1,2,3,4,5,1,3,12,55,22];
+function getArray(a){
+	var obj = {},
+	resultArray = [];
+	for(var i=0;i&amp;lt;a.length;i++){
+   		obj[a[i]]=a[i];
+		console.log(obj);//纯数字时自带排序
+	}
+	for(var i in obj){
+		resultArray.push(obj[i]);
+	}
+	console.log(resultArray);
+}
+getArray(arr);//[1, 2, 3, 4, 5, 12, 22, 55]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;em&gt;方法二：不存储排序，只利用hash去重&lt;/em&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var arr = [1,2,3,4,5,1,3,12,55,22];
+function getArray2(a){
+	var obj = {},
+	resultArray = [];
+	for(var i=0;i&amp;lt;a.length;i++){
+		if(!obj[a[i]]){
+			obj[a[i]]=true;     
+			resultArray.push(a[i]);
+		}
+	}
+	console.log(resultArray);
+}
+getArray2(arr);//[1, 2, 3, 4, 5, 12, 55, 22]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2、给一个字符串，输出里面的字母分别出现的次数。&lt;/p&gt;
+
+&lt;p&gt;将上题中的hash值改为计数器就可以了：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var string = &quot;serdtfyghjhbuygfct&quot;;
+function getCount(str){
+	var obj = {},
+	         a = str.split(&quot;&quot;); 
+	for(var i=0;i&amp;lt;a.length;i++){
+		if(!obj[a[i]]){
+			obj[a[i]]=1;//发现是新的value
+		}else{
+			obj[a[i]]+=1;
+		}
+	}
+	console.log(obj);
+}
+getCount(string);//Object {s: 1, e: 1, r: 1, d: 1, t: 2…}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+        <pubDate>Tue, 16 Jun 2015 12:00:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/js/function/2015/06/16/js%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D%E5%8F%8A%E8%AE%A1%E7%AE%97%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%AD%97%E7%AC%A6%E7%9A%84%E4%B8%AA%E6%95%B0.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/js/function/2015/06/16/js%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D%E5%8F%8A%E8%AE%A1%E7%AE%97%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%AD%97%E7%AC%A6%E7%9A%84%E4%B8%AA%E6%95%B0.html</guid>
+        
+        
+        <category>js</category>
+        
+        <category>function</category>
+        
+      </item>
+    
+      <item>
+        <title>Javascript反序输出字符串</title>
+        <description>&lt;p&gt;这是一个我在至少4次web前端笔试或者面试中遇到过的题目，就这么一行字的题目，最近一次看到却还让我如遭五雷轰顶，罪过，罪过。&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;解决方案一：&lt;/em&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; &amp;gt;&#39;abcd ed&#39;.split(&#39;&#39;).reverse().join(&#39;&#39;); 
+&amp;lt;-&quot;de dcba&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果写成：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt; &amp;gt;&#39;abcd ed&#39;.split(&#39;&#39;).reverse().join(); 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;结果会是：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt; &amp;lt;&quot;-d,e, ,d,c,b,a&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意&lt;code&gt;join(seperator)&lt;/code&gt;方法是通过指定的字符连接数组所有元素，默认连接符是&lt;code&gt;.&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;解决方案二：&lt;/em&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; &amp;gt;&quot;abcd ed&quot;.split(&#39;&#39;).sort(function(a,b){return 1;}).join(&#39;&#39;);
+&amp;lt;-&quot;de dcba&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;sort(sortby)&lt;/code&gt;方法，如果没有sortby参数，返回数组按照字母顺序，即字符编码顺序进行排列。现在，按照&lt;code&gt;sort()&lt;/code&gt;方法的说明，return 1，也就是一个大于0的数，表示排序后的数组中a应该出现在b之后。&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;解决方案三：&lt;/em&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; &amp;gt;str=&#39;abcd ed&#39;;Array.prototype.map.call(str,function(it, i){return str[str.length-i-1];}).join(&#39;&#39;);
+&amp;lt;-&quot;de dcba&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对@yfwz100的这个方法我表示五体投地地膜拜Orz。
+map()方法会给数组中的每个元素都按顺序调用一次 callback 函数。比如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;var numbers = [1, 4, 9]; 
+&amp;gt;numbers.map(function(num) { return num * 2; });
+&amp;lt;-[2, 8, 18]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;方案三使用了&lt;code&gt;array.map(callback[, thisArg])&lt;/code&gt;，并且，字符串被当作数组来使用…，callback中第一个参数是数组中当前被传递的元素，这里即字符串中当前被传递的字符，第二个参数是当前被传递元素的索引，第三个参数是调用map方法的数组。
+例1，获取每个字符串对应的ASCLL码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;Array.prototype.map.call(&quot;Hello World&quot;, function(x) { return x.charCodeAt(0); }) 
+&amp;lt;-[72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通常情况下，map 方法中的 &lt;code&gt;callback&lt;/code&gt; 函数只需要接受一个参数，就是正在被遍历的数组元素本身。但这并不意味着 &lt;code&gt;map&lt;/code&gt; 只给 &lt;code&gt;callback&lt;/code&gt; 传了一个参数，第三个参数callback会忽视，但第二个参数&lt;code&gt;index&lt;/code&gt;会被使用。&lt;/p&gt;
+
+&lt;p&gt;例2，进制数转换：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;[&quot;1&quot;, &quot;2&quot;, &quot;3&quot;].map(parseInt);
+&amp;lt;-[1, NaN, NaN]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;例2中，&lt;code&gt;parseInt()&lt;/code&gt;方法有两个参数，&lt;code&gt;element&lt;/code&gt;和&lt;code&gt;进制数&lt;/code&gt;，于是它将&lt;code&gt;index&lt;/code&gt;视为了进制数。因此正确的方法应该是：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;function returnInt(element){ return parseInt(element,10); }
+&amp;gt;[&quot;1&quot;, &quot;2&quot;, &quot;3&quot;].map(returnInt);
+&amp;lt;-[1, 2, 3]
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+        <pubDate>Tue, 16 Jun 2015 11:49:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/js/function/2015/06/16/Javascript-%E5%8F%8D%E5%BA%8F%E8%BE%93%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/js/function/2015/06/16/Javascript-%E5%8F%8D%E5%BA%8F%E8%BE%93%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2.html</guid>
+        
+        
+        <category>js</category>
+        
+        <category>function</category>
+        
+      </item>
+    
+      <item>
+        <title>Javascript stop bubble</title>
+        <description>&lt;h1 id=&quot;js&quot;&gt;js阻止冒泡方法：&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;var stopBubble = function (e) {
+	//如果提供了事件对象，则这是一个非IE浏览器
+	if(e &amp;amp;&amp;amp; e.stopPropagation) {
+		//因此它支持W3C的stopPropagation()方法
+		e.stopPropagation();
+	} else {
+		//否则，我们需要使用IE的方式来取消事件冒泡 
+		window.event.cancelBubble = true;
+	}
+	return false;
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;em&gt;用法：&lt;/em&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$(...).click(function(e){
+	stopBubble(e);
+});
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+        <pubDate>Tue, 16 Jun 2015 11:20:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/js/common/2015/06/16/Javascript-stopBubble.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/js/common/2015/06/16/Javascript-stopBubble.html</guid>
+        
+        
+        <category>js</category>
+        
+        <category>common</category>
+        
+      </item>
+    
+  </channel>
+</rss>
