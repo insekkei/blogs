@@ -12,7 +12,11 @@ categories: angular js
 
 扩展html，给html添加声明语句，以便实现自己的需求。对于页面中html元素以`ng`为前缀的属性名称，`ng`是angular的命名空间，`-`后面的部分都是Directive。常用的如：`ng-app`，`ng-cotroller`，`ng-repeat`，`ng-model`，`ng-click`等等。 
 
-另外，还有一些关于表单验证的directive，如`input[email]`，`input[url]`等。
+另外，还有一些关于表单的directive，如`input[email]`，`input[url]`等。
+
+有的时候，直接写入html的方式并不能满足我们处理浏览器事件或者修改dom的需求，于是我们需要使用directive方法来改变view，用法：
+
+<pre><code>module.directive('directiveName', directiveFactoryFunction);</code></pre>
 
 ## scope
 
@@ -56,6 +60,36 @@ services都是单例的（不知可否参考设计模式中的单例模式去理
 如`{\{12.9 | currency | number:0 }}`显示为`$13`。常用的filter还有`json`，`lowercase`，`orderBy`等等。
 
 `filtername`也可以是自定义的处理数据（转化格式）方法的方法名。
+
+## route&location
+
+Ajax应用比较明显的缺点就是，window不能记住页面（局部）url，虽然有一系列解决方案（iframe，onhashchange，pushState结合location.href等），但需要做很多额外的工作。
+
+angularjs中，可以通过`$route`和`$location`来改变view（选择加载哪一个view）。如下面这段代码，通过调用`$routeProvider`的方法创建route，当发现url变成某一个`url`时，`aController`关联的`ng-controller`元素将load `/path/to/tempate`里的模板。如果没有找到匹配的模板，执行`otherwise`中的代码。（使用代码时需要web服务器）
+
+<pre><code>module.config(function($routeProvider) {
+    $routeProvider.
+    when('url', {controller:aController, templateUrl:'/path/to/tempate'}). 
+    when(...other mappings for your app...).
+    ...
+    otherwise(...what to do if nothing else matches...);
+)};</code></pre>
+
+每一个template里只有局部代码，链接`a`元素的`href`与`route`中的`url`相关，index.html模板通过`ng-view`元素来标识哪部分是需要局部加载上来的。
+
+## http
+
+`$http`是一个service，angular提供了一些方法使我们可以方便地从服务器获取数据。
+
+比如一个从server获取数据并且显示到view的例子：
+
+<pre><code>function ShoppingController($scope, $http) { 
+    $http.get('/products').success(function(data, status, headers, config) {
+        $scope.items = data;
+    });
+}</code></pre>
+
+html中值为`ShoppingController`的`ng-controller`里面就能通过`ng-repeat`方式动态创建html，并且使用`item`每一项的数据。
 
 # 优势
 
