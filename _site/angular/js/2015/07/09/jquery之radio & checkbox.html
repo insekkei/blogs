@@ -6,12 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>web前端学习笔记</title>
-  <meta name="description" content="绿螘新醅酒，红泥小火炉。<br>晚来天欲雪，能饮一杯无？
-">
+  <title>jquery中操作radio和checkbox</title>
+  <meta name="description" content="jquery判断radio或者checkbox是否被选中">
 
   <link rel="stylesheet" href="/blogs/css/main.css">
-  <link rel="canonical" href="http://insekkei.com/blogs//blogs/">
+  <link rel="canonical" href="http://insekkei.com/blogs//blogs/angular/js/2015/07/09/jquery%E4%B9%8Bradio%20&%20checkbox.html">
   <link rel="alternate" type="application/rss+xml" title="web前端学习笔记" href="http://insekkei.com/blogs//blogs/feed.xml" />
   <link rel="icon" type="image/png" href="/blogs/images/icon.png">
 </head>
@@ -56,63 +55,46 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="home">
+        <div class="post">
 
-  <h1 class="page-heading">笔记目录</h1>
+  <header class="post-header">
+    <h1 class="post-title">jquery中操作radio和checkbox</h1>
+    <p class="post-meta">Jul 9, 2015</p>
+  </header>
 
-  <ul class="post-list">
-    
-      <li>
-        <span class="post-meta">Jul 9, 2015</span>
+  <article class="post-content">
+    <h1 id="jqueryradiocheckbox">jquery判断radio或者checkbox是否被选中</h1>
 
-        <h2>
-          <a class="post-link" href="/blogs/angular/js/2015/07/09/jquery%E4%B9%8Bradio%20&%20checkbox.html">jquery中操作radio和checkbox</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jul 9, 2015</span>
+<pre><code>// 返回true or false
+$('selector').is(':checked');
+</code></pre>
 
-        <h2>
-          <a class="post-link" href="/blogs/angular/js/2015/07/09/angular.js-%E8%AF%AD%E6%B3%95%E6%B5%85%E6%9E%90.html">angular.js语法浅析</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jul 4, 2015</span>
+<h1 id="jqueryradiocheckbox-1">jquery操作radio或者checkbox使它们被选中</h1>
 
-        <h2>
-          <a class="post-link" href="/blogs/gulp/js/2015/07/04/%E6%96%B0%E6%89%8B%E6%8E%A5%E8%A7%A6gulp.html">新手接触gulp</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jun 16, 2015</span>
+<pre><code>//For versions higher than 1.6, use:
+$('#radio_1').prop('checked', true)
+//For versions of jQuery prior to 1.6, use:
+$('#radio_1').attr('checked', 'checked');
+</code></pre>
 
-        <h2>
-          <a class="post-link" href="/blogs/js/function/2015/06/16/js%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D%E5%8F%8A%E8%AE%A1%E7%AE%97%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%AD%97%E7%AC%A6%E7%9A%84%E4%B8%AA%E6%95%B0.html">js数组去重 及 计算字符串中字符的个数</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jun 16, 2015</span>
+  </article>
 
-        <h2>
-          <a class="post-link" href="/blogs/js/function/2015/06/16/Javascript-%E5%8F%8D%E5%BA%8F%E8%BE%93%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2.html">Javascript反序输出字符串</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jun 16, 2015</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/js/common/2015/06/16/Javascript-stopBubble.html">Javascript stop bubble</a>
-        </h2>
-      </li>
-    
-  </ul>
-
-  <p class="rss-subscribe">subscribe <a href="/blogs/feed.xml">via RSS</a></p>
+  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="jquery中操作radio和checkbox"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"blogs2015"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	<!-- 多说公共JS代码 end -->
 
 </div>
 

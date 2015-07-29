@@ -6,9 +6,36 @@
 </description>
     <link>http://insekkei.com/blogs//blogs/</link>
     <atom:link href="http://insekkei.com/blogs//blogs/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 10 Jul 2015 11:32:23 +0800</pubDate>
-    <lastBuildDate>Fri, 10 Jul 2015 11:32:23 +0800</lastBuildDate>
+    <pubDate>Wed, 29 Jul 2015 18:01:57 +0800</pubDate>
+    <lastBuildDate>Wed, 29 Jul 2015 18:01:57 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>jquery中操作radio和checkbox</title>
+        <description>&lt;h1 id=&quot;jqueryradiocheckbox&quot;&gt;jquery判断radio或者checkbox是否被选中&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;// 返回true or false
+$(&#39;selector&#39;).is(&#39;:checked&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&quot;jqueryradiocheckbox-1&quot;&gt;jquery操作radio或者checkbox使它们被选中&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;//For versions higher than 1.6, use:
+$(&#39;#radio_1&#39;).prop(&#39;checked&#39;, true)
+//For versions of jQuery prior to 1.6, use:
+$(&#39;#radio_1&#39;).attr(&#39;checked&#39;, &#39;checked&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+        <pubDate>Thu, 09 Jul 2015 10:22:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/angular/js/2015/07/09/jquery%E4%B9%8Bradio%20&%20checkbox.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/angular/js/2015/07/09/jquery%E4%B9%8Bradio%20&%20checkbox.html</guid>
+        
+        
+        <category>angular</category>
+        
+        <category>js</category>
+        
+      </item>
     
       <item>
         <title>angular.js语法浅析</title>
