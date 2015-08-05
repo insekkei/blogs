@@ -7,7 +7,7 @@ categories: angularjs js
 
 > 学习一种新的框架真的是痛并快乐着...而当确定了一个清晰的目标，向着这个目标努力时，成就感带来的快感将远大于茫然不解时的痛苦。
 
-——>[预览效果](http://insekkei.com/totolist)
+——>[预览效果](http://insekkei.com/todolist)
 
 # 准备工作
 
