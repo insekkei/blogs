@@ -6,9 +6,186 @@
 </description>
     <link>http://insekkei.com/blogs//blogs/</link>
     <atom:link href="http://insekkei.com/blogs//blogs/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 29 Jul 2015 18:01:57 +0800</pubDate>
-    <lastBuildDate>Wed, 29 Jul 2015 18:01:57 +0800</lastBuildDate>
+    <pubDate>Wed, 05 Aug 2015 16:04:28 +0800</pubDate>
+    <lastBuildDate>Wed, 05 Aug 2015 16:04:28 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>angularjs结合localstorage完成一个简单的备忘录</title>
+        <description>&lt;blockquote&gt;
+  &lt;p&gt;学习一种新的框架真的是痛并快乐着…而当确定了一个清晰的目标，向着这个目标努力时，成就感带来的快感将远大于茫然不解时的痛苦。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;——&amp;gt;&lt;a href=&quot;http://insekkei.com/totolist&quot;&gt;预览效果&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;section&quot;&gt;准备工作&lt;/h1&gt;
+
+&lt;p&gt;用bower安装需要的js：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;bower install angular
+bower install angular-local-storage
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;html中引用bower_components下对应的js文件：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;script src=&quot;js/angular.min.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script src=&quot;js/angular-local-storage.js&quot;&amp;gt;&amp;lt;/script&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;说明：npm也可以，直接下载相应js文件或者用cdn也是ok的…&lt;/p&gt;
+
+&lt;h1 id=&quot;angularjs-directivehttpinsekkeicomblogsangularjs20150709angularjs-e8afade6b395e6b585e69e90htmlindexhtml&quot;&gt;通过&lt;a href=&quot;http://insekkei.com/blogs/angular/js/2015/07/09/angular.js-%E8%AF%AD%E6%B3%95%E6%B5%85%E6%9E%90.html&quot;&gt;angularjs Directive&lt;/a&gt;扩展index.html&lt;/h1&gt;
+
+&lt;h2 id=&quot;angular&quot;&gt;angular接管整个页面：&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;html ng-app=&quot;todoApp&quot;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;bodytodocontroller&quot;&gt;body中的数据由&lt;code&gt;TodoController&lt;/code&gt;来控制：&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;body ng-controller=&quot;TodoController&quot;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;form&quot;&gt;添加备忘的form：&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;form ng-submit=&quot;add()&quot;&amp;gt;
+	&amp;lt;input placeholder=&quot;What you want to do...&quot; type=&quot;text&quot; ng-model=&quot;todoItem&quot; name=&quot;totoItem&quot;&amp;gt;
+	&amp;lt;input type=&quot;submit&quot; id=&quot;submit&quot; value=&quot;add&quot;&amp;gt;
+&amp;lt;/form&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;form&lt;/code&gt;提交表单时（&lt;code&gt;ng-submit&lt;/code&gt;）执行&lt;code&gt;add()&lt;/code&gt;方法，输入框的内容通过&lt;code&gt;ng-model&lt;/code&gt;与&lt;code&gt;todoItem&lt;/code&gt;关联，使用：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;...$scope.todoItem...&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;list&quot;&gt;添加备忘list&lt;/h2&gt;
+
+&lt;p&gt;每条备忘中包含的信息：内容&lt;code&gt;content&lt;/code&gt;、日期&lt;code&gt;creDate&lt;/code&gt;、删除按钮。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;ul&amp;gt;
+	&amp;lt;li ng-repeat=&quot;todo in todoList&quot;&amp;gt;
+		&amp;lt;time&amp;gt;{ {todo.creDate} }&amp;lt;/time&amp;gt;
+		&amp;lt;input type=&quot;text&quot; ng-model=&quot;todo.content&quot;&amp;gt;
+		&amp;lt;span&amp;gt;{ {todo.content} }&amp;lt;/span&amp;gt;
+		&amp;lt;input type=&quot;button&quot; value=&quot;remove&quot; ng-click=&quot;remove($index)&quot;&amp;gt;
+	&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;ng-repeat&lt;/code&gt;用来循环输出每一条备忘，&lt;code&gt;ng-model&lt;/code&gt;指定当前&lt;code&gt;input&lt;/code&gt;的值即备忘内容&lt;code&gt;content&lt;/code&gt;，&lt;code&gt;ng-click&lt;/code&gt;将&lt;code&gt;remove&lt;/code&gt;按钮和&lt;code&gt;remove(index)&lt;/code&gt;方法关联。&lt;/p&gt;
+
+&lt;h1 id=&quot;todojs&quot;&gt;todo.js&lt;/h1&gt;
+
+&lt;p&gt;声明app&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var todoApp=angular.module(&#39;todoApp&#39;,[]);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;定义controller&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;todoApp.controller(&#39;TodoController&#39;, function($scope) {
+	...
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;定义todoList&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$scope.todoList = [];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;add方法&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$scope.add = function() {
+	// 如果输入框有值
+    if ($scope.todoItem) {
+    	// 定义一个空对象
+        var todoInfo = {};
+        // 对象的三个属性：时间为创建时时间
+        todoInfo.creDate = new Date().getMonth() + &#39;/&#39; + new Date().getDate();
+        todoInfo.content = $scope.todoItem;
+        todoInfo.status = &#39;active&#39;;
+
+        // 将todoInfo添加到todoList头部
+        $scope.todoList.unshift(todoInfo);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;remove方法&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// 删除index位置开始的1个数组元素
+$scope.remove = function(index) {
+    $scope.todoList.splice(index, 1);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&quot;todojslocalstorage&quot;&gt;改造todo.js，使用localstorage持久化&lt;/h1&gt;
+
+&lt;p&gt;两种思路：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;分别在&lt;code&gt;$scope.todoList&lt;/code&gt;查询、添加、删除时同步操作&lt;code&gt;localstorage&lt;/code&gt;；&lt;/li&gt;
+  &lt;li&gt;监听&lt;code&gt;$scope.todoList&lt;/code&gt;，当它改变时把&lt;code&gt;$scope.todoList&lt;/code&gt;赋值给&lt;code&gt;localstorage&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;第一种方法明显麻烦很多，但当时不知道&lt;code&gt;$scope.$watch&lt;/code&gt;可以做到监听…这里使用&lt;code&gt;$scope.$watch&lt;/code&gt;：&lt;/p&gt;
+
+&lt;p&gt;添加localstorage模块&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var todoApp=angular.module(&#39;todoApp&#39;,[&#39;LocalStorageModule&#39;]);
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;controller上传入服务&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;todoApp.controller(&#39;TodoController&#39;, function($scope, localStorageService) {
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;从localstorage中get数据，如果不为空，赋值给&lt;code&gt;$scope.todoList&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var todoInStore = localStorageService.get(&#39;todoList&#39;);
+$scope.todoList = todoInStore || [];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;监听$scope.todoList，当它改变时，使用localstorage的&lt;code&gt;set()&lt;/code&gt;方法&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$scope.$watch(&#39;todoList&#39;, function () {
+    localStorageService.set(&#39;todoList&#39;, $scope.todoList);
+}, true);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&quot;over&quot;&gt;over&lt;/h1&gt;
+
+&lt;p&gt;这样就实现了一个简版的备忘录，只要缓存没有被清理，备忘会一直在。&lt;/p&gt;
+
+&lt;p&gt;另外angular local storage还提供了一些方法供开发者使用：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;remove(key)：匹配key删除localStorage条目&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;clearAll()：删除全部localStorage&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;isSupported：检测浏览器是否支持localStorage&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;cookie：操作cookie的方法同localStorage，包含&lt;code&gt;set&lt;/code&gt;、&lt;code&gt;get&lt;/code&gt;、&lt;code&gt;remove&lt;/code&gt;、&lt;code&gt;clearAll&lt;/code&gt;。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+        <pubDate>Wed, 05 Aug 2015 14:59:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/angularjs/js/2015/08/05/angularjs-localstorage.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/angularjs/js/2015/08/05/angularjs-localstorage.html</guid>
+        
+        
+        <category>angularjs</category>
+        
+        <category>js</category>
+        
+      </item>
     
       <item>
         <title>jquery中操作radio和checkbox</title>
@@ -26,12 +203,12 @@ $(&#39;#radio_1&#39;).prop(&#39;checked&#39;, true)
 $(&#39;#radio_1&#39;).attr(&#39;checked&#39;, &#39;checked&#39;);
 &lt;/code&gt;&lt;/pre&gt;
 </description>
-        <pubDate>Thu, 09 Jul 2015 10:22:00 +0800</pubDate>
-        <link>http://insekkei.com/blogs//blogs/angular/js/2015/07/09/jquery%E4%B9%8Bradio%20&%20checkbox.html</link>
-        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/angular/js/2015/07/09/jquery%E4%B9%8Bradio%20&%20checkbox.html</guid>
+        <pubDate>Wed, 29 Jul 2015 17:50:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/jquery/js/2015/07/29/jquery%E4%B9%8Bradio%20&%20checkbox.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/jquery/js/2015/07/29/jquery%E4%B9%8Bradio%20&%20checkbox.html</guid>
         
         
-        <category>angular</category>
+        <category>jquery</category>
         
         <category>js</category>
         

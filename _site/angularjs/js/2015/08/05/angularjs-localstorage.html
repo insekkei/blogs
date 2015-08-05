@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>js数组去重 及 计算字符串中字符的个数</title>
-  <meta name="description" content="1、数组去重。">
+  <title>angularjs结合localstorage完成一个简单的备忘录</title>
+  <meta name="description" content="  学习一种新的框架真的是痛并快乐着…而当确定了一个清晰的目标，向着这个目标努力时，成就感带来的快感将远大于茫然不解时的痛苦。">
 
   <link rel="stylesheet" href="/blogs/css/main.css">
-  <link rel="canonical" href="http://insekkei.com/blogs//blogs/js/function/2015/06/16/js%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D%E5%8F%8A%E8%AE%A1%E7%AE%97%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%AD%97%E7%AC%A6%E7%9A%84%E4%B8%AA%E6%95%B0.html">
+  <link rel="canonical" href="http://insekkei.com/blogs//blogs/angularjs/js/2015/08/05/angularjs-localstorage.html">
   <link rel="alternate" type="application/rss+xml" title="web前端学习笔记" href="http://insekkei.com/blogs//blogs/feed.xml" />
   <link rel="icon" type="image/png" href="/blogs/images/icon.png">
 </head>
@@ -58,72 +58,179 @@
         <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">js数组去重 及 计算字符串中字符的个数</h1>
-    <p class="post-meta">Jun 16, 2015</p>
+    <h1 class="post-title">angularjs结合localstorage完成一个简单的备忘录</h1>
+    <p class="post-meta">Aug 5, 2015</p>
   </header>
 
   <article class="post-content">
-    <p>1、数组去重。</p>
+    <blockquote>
+  <p>学习一种新的框架真的是痛并快乐着…而当确定了一个清晰的目标，向着这个目标努力时，成就感带来的快感将远大于茫然不解时的痛苦。</p>
+</blockquote>
 
-<p><em>方法一：</em></p>
+<p>——&gt;<a href="http://insekkei.com/totolist">预览效果</a></p>
 
-<pre><code>var arr = [1,2,3,4,5,1,3,12,55,22];
-function getArray(a){
-	var obj = {},
-	resultArray = [];
-	for(var i=0;i&lt;a.length;i++){
-   		obj[a[i]]=a[i];
-		console.log(obj);//纯数字时自带排序
-	}
-	for(var i in obj){
-		resultArray.push(obj[i]);
-	}
-	console.log(resultArray);
-}
-getArray(arr);//[1, 2, 3, 4, 5, 12, 22, 55]
+<h1 id="section">准备工作</h1>
+
+<p>用bower安装需要的js：</p>
+
+<pre><code>bower install angular
+bower install angular-local-storage
 </code></pre>
 
-<p><em>方法二：不存储排序，只利用hash去重</em></p>
+<p>html中引用bower_components下对应的js文件：</p>
 
-<pre><code>var arr = [1,2,3,4,5,1,3,12,55,22];
-function getArray2(a){
-	var obj = {},
-	resultArray = [];
-	for(var i=0;i&lt;a.length;i++){
-		if(!obj[a[i]]){
-			obj[a[i]]=true;     
-			resultArray.push(a[i]);
-		}
-	}
-	console.log(resultArray);
-}
-getArray2(arr);//[1, 2, 3, 4, 5, 12, 55, 22]
+<pre><code>&lt;script src="js/angular.min.js"&gt;&lt;/script&gt;
+&lt;script src="js/angular-local-storage.js"&gt;&lt;/script&gt;</code></pre>
+
+<p>说明：npm也可以，直接下载相应js文件或者用cdn也是ok的…</p>
+
+<h1 id="angularjs-directivehttpinsekkeicomblogsangularjs20150709angularjs-e8afade6b395e6b585e69e90htmlindexhtml">通过<a href="http://insekkei.com/blogs/angular/js/2015/07/09/angular.js-%E8%AF%AD%E6%B3%95%E6%B5%85%E6%9E%90.html">angularjs Directive</a>扩展index.html</h1>
+
+<h2 id="angular">angular接管整个页面：</h2>
+
+<pre><code>&lt;html ng-app="todoApp"&gt;
 </code></pre>
 
-<p>2、给一个字符串，输出里面的字母分别出现的次数。</p>
+<h2 id="bodytodocontroller">body中的数据由<code>TodoController</code>来控制：</h2>
 
-<p>将上题中的hash值改为计数器就可以了：</p>
-
-<pre><code>var string = "serdtfyghjhbuygfct";
-function getCount(str){
-	var obj = {},
-	         a = str.split(""); 
-	for(var i=0;i&lt;a.length;i++){
-		if(!obj[a[i]]){
-			obj[a[i]]=1;//发现是新的value
-		}else{
-			obj[a[i]]+=1;
-		}
-	}
-	console.log(obj);
-}
-getCount(string);//Object {s: 1, e: 1, r: 1, d: 1, t: 2…}
+<pre><code>&lt;body ng-controller="TodoController"&gt;
 </code></pre>
+
+<h2 id="form">添加备忘的form：</h2>
+
+<pre><code>&lt;form ng-submit="add()"&gt;
+	&lt;input placeholder="What you want to do..." type="text" ng-model="todoItem" name="totoItem"&gt;
+	&lt;input type="submit" id="submit" value="add"&gt;
+&lt;/form&gt;
+</code></pre>
+
+<p><code>form</code>提交表单时（<code>ng-submit</code>）执行<code>add()</code>方法，输入框的内容通过<code>ng-model</code>与<code>todoItem</code>关联，使用：</p>
+
+<pre><code>...$scope.todoItem...</code></pre>
+
+<h2 id="list">添加备忘list</h2>
+
+<p>每条备忘中包含的信息：内容<code>content</code>、日期<code>creDate</code>、删除按钮。</p>
+
+<pre><code>&lt;ul&gt;
+	&lt;li ng-repeat="todo in todoList"&gt;
+		&lt;time&gt;{ {todo.creDate} }&lt;/time&gt;
+		&lt;input type="text" ng-model="todo.content"&gt;
+		&lt;span&gt;{ {todo.content} }&lt;/span&gt;
+		&lt;input type="button" value="remove" ng-click="remove($index)"&gt;
+	&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+<p><code>ng-repeat</code>用来循环输出每一条备忘，<code>ng-model</code>指定当前<code>input</code>的值即备忘内容<code>content</code>，<code>ng-click</code>将<code>remove</code>按钮和<code>remove(index)</code>方法关联。</p>
+
+<h1 id="todojs">todo.js</h1>
+
+<p>声明app</p>
+
+<pre><code>var todoApp=angular.module('todoApp',[]);
+</code></pre>
+
+<p>定义controller</p>
+
+<pre><code>todoApp.controller('TodoController', function($scope) {
+	...
+});
+</code></pre>
+
+<p>定义todoList</p>
+
+<pre><code>$scope.todoList = [];
+</code></pre>
+
+<p>add方法</p>
+
+<pre><code>$scope.add = function() {
+	// 如果输入框有值
+    if ($scope.todoItem) {
+    	// 定义一个空对象
+        var todoInfo = {};
+        // 对象的三个属性：时间为创建时时间
+        todoInfo.creDate = new Date().getMonth() + '/' + new Date().getDate();
+        todoInfo.content = $scope.todoItem;
+        todoInfo.status = 'active';
+
+        // 将todoInfo添加到todoList头部
+        $scope.todoList.unshift(todoInfo);
+    }
+}
+</code></pre>
+
+<p>remove方法</p>
+
+<pre><code>// 删除index位置开始的1个数组元素
+$scope.remove = function(index) {
+    $scope.todoList.splice(index, 1);
+}
+</code></pre>
+
+<h1 id="todojslocalstorage">改造todo.js，使用localstorage持久化</h1>
+
+<p>两种思路：</p>
+
+<ul>
+  <li>分别在<code>$scope.todoList</code>查询、添加、删除时同步操作<code>localstorage</code>；</li>
+  <li>监听<code>$scope.todoList</code>，当它改变时把<code>$scope.todoList</code>赋值给<code>localstorage</code>.</li>
+</ul>
+
+<p>第一种方法明显麻烦很多，但当时不知道<code>$scope.$watch</code>可以做到监听…这里使用<code>$scope.$watch</code>：</p>
+
+<p>添加localstorage模块</p>
+
+<pre><code>var todoApp=angular.module('todoApp',['LocalStorageModule']);
+...
+</code></pre>
+
+<p>controller上传入服务</p>
+
+<pre><code>todoApp.controller('TodoController', function($scope, localStorageService) {
+...
+</code></pre>
+
+<p>从localstorage中get数据，如果不为空，赋值给<code>$scope.todoList</code></p>
+
+<pre><code>var todoInStore = localStorageService.get('todoList');
+$scope.todoList = todoInStore || [];
+</code></pre>
+
+<p>监听$scope.todoList，当它改变时，使用localstorage的<code>set()</code>方法</p>
+
+<pre><code>$scope.$watch('todoList', function () {
+    localStorageService.set('todoList', $scope.todoList);
+}, true);
+</code></pre>
+
+<h1 id="over">over</h1>
+
+<p>这样就实现了一个简版的备忘录，只要缓存没有被清理，备忘会一直在。</p>
+
+<p>另外angular local storage还提供了一些方法供开发者使用：</p>
+
+<ul>
+  <li>
+    <p>remove(key)：匹配key删除localStorage条目</p>
+  </li>
+  <li>
+    <p>clearAll()：删除全部localStorage</p>
+  </li>
+  <li>
+    <p>isSupported：检测浏览器是否支持localStorage</p>
+  </li>
+  <li>
+    <p>cookie：操作cookie的方法同localStorage，包含<code>set</code>、<code>get</code>、<code>remove</code>、<code>clearAll</code>。</p>
+  </li>
+</ul>
+
 
   </article>
 
   <!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="" data-title="js数组去重 及 计算字符串中字符的个数"></div>
+	<div class="ds-thread" data-thread-key="" data-title="angularjs结合localstorage完成一个简单的备忘录"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

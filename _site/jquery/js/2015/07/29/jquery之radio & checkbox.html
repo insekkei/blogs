@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>js数组去重 及 计算字符串中字符的个数</title>
-  <meta name="description" content="1、数组去重。">
+  <title>jquery中操作radio和checkbox</title>
+  <meta name="description" content="jquery判断radio或者checkbox是否被选中">
 
   <link rel="stylesheet" href="/blogs/css/main.css">
-  <link rel="canonical" href="http://insekkei.com/blogs//blogs/js/function/2015/06/16/js%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D%E5%8F%8A%E8%AE%A1%E7%AE%97%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%AD%97%E7%AC%A6%E7%9A%84%E4%B8%AA%E6%95%B0.html">
+  <link rel="canonical" href="http://insekkei.com/blogs//blogs/jquery/js/2015/07/29/jquery%E4%B9%8Bradio%20&%20checkbox.html">
   <link rel="alternate" type="application/rss+xml" title="web前端学习笔记" href="http://insekkei.com/blogs//blogs/feed.xml" />
   <link rel="icon" type="image/png" href="/blogs/images/icon.png">
 </head>
@@ -58,72 +58,29 @@
         <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">js数组去重 及 计算字符串中字符的个数</h1>
-    <p class="post-meta">Jun 16, 2015</p>
+    <h1 class="post-title">jquery中操作radio和checkbox</h1>
+    <p class="post-meta">Jul 29, 2015</p>
   </header>
 
   <article class="post-content">
-    <p>1、数组去重。</p>
+    <h1 id="jqueryradiocheckbox">jquery判断radio或者checkbox是否被选中</h1>
 
-<p><em>方法一：</em></p>
-
-<pre><code>var arr = [1,2,3,4,5,1,3,12,55,22];
-function getArray(a){
-	var obj = {},
-	resultArray = [];
-	for(var i=0;i&lt;a.length;i++){
-   		obj[a[i]]=a[i];
-		console.log(obj);//纯数字时自带排序
-	}
-	for(var i in obj){
-		resultArray.push(obj[i]);
-	}
-	console.log(resultArray);
-}
-getArray(arr);//[1, 2, 3, 4, 5, 12, 22, 55]
+<pre><code>// 返回true or false
+$('selector').is(':checked');
 </code></pre>
 
-<p><em>方法二：不存储排序，只利用hash去重</em></p>
+<h1 id="jqueryradiocheckbox-1">jquery操作radio或者checkbox使它们被选中</h1>
 
-<pre><code>var arr = [1,2,3,4,5,1,3,12,55,22];
-function getArray2(a){
-	var obj = {},
-	resultArray = [];
-	for(var i=0;i&lt;a.length;i++){
-		if(!obj[a[i]]){
-			obj[a[i]]=true;     
-			resultArray.push(a[i]);
-		}
-	}
-	console.log(resultArray);
-}
-getArray2(arr);//[1, 2, 3, 4, 5, 12, 55, 22]
-</code></pre>
-
-<p>2、给一个字符串，输出里面的字母分别出现的次数。</p>
-
-<p>将上题中的hash值改为计数器就可以了：</p>
-
-<pre><code>var string = "serdtfyghjhbuygfct";
-function getCount(str){
-	var obj = {},
-	         a = str.split(""); 
-	for(var i=0;i&lt;a.length;i++){
-		if(!obj[a[i]]){
-			obj[a[i]]=1;//发现是新的value
-		}else{
-			obj[a[i]]+=1;
-		}
-	}
-	console.log(obj);
-}
-getCount(string);//Object {s: 1, e: 1, r: 1, d: 1, t: 2…}
+<pre><code>//For versions higher than 1.6, use:
+$('#radio_1').prop('checked', true)
+//For versions of jQuery prior to 1.6, use:
+$('#radio_1').attr('checked', 'checked');
 </code></pre>
 
   </article>
 
   <!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="" data-title="js数组去重 及 计算字符串中字符的个数"></div>
+	<div class="ds-thread" data-thread-key="" data-title="jquery中操作radio和checkbox"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
