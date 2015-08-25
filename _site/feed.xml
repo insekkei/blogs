@@ -6,8 +6,8 @@
 </description>
     <link>http://insekkei.com/blogs//blogs/</link>
     <atom:link href="http://insekkei.com/blogs//blogs/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 25 Aug 2015 15:48:50 +0800</pubDate>
-    <lastBuildDate>Tue, 25 Aug 2015 15:48:50 +0800</lastBuildDate>
+    <pubDate>Tue, 25 Aug 2015 15:50:06 +0800</pubDate>
+    <lastBuildDate>Tue, 25 Aug 2015 15:50:06 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -201,7 +201,7 @@ render: function () {
     switch (actionType) {
     	...
         case &#39;example_set_terminal&#39;:
-        	// dispatcher -&amp;gt; store
+            // dispatcher -&amp;gt; store
             exampleStore.setTerminal(payload.item);
             break;
         ...

@@ -192,7 +192,7 @@ Dispatcher创建一个action。
     switch (actionType) {
     	...
         case 'example_set_terminal':
-        	// dispatcher -> store
+            // dispatcher -> store
             exampleStore.setTerminal(payload.item);
             break;
         ...
