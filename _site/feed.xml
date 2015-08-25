@@ -6,9 +6,336 @@
 </description>
     <link>http://insekkei.com/blogs//blogs/</link>
     <atom:link href="http://insekkei.com/blogs//blogs/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 25 Aug 2015 12:01:07 +0800</pubDate>
-    <lastBuildDate>Tue, 25 Aug 2015 12:01:07 +0800</lastBuildDate>
+    <pubDate>Tue, 25 Aug 2015 15:18:37 +0800</pubDate>
+    <lastBuildDate>Tue, 25 Aug 2015 15:18:37 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>react&amp;flux之BasicSelect组件实现</title>
+        <description>&lt;p&gt;应工作需求，用到flux，为了解react设计思想及其flux强调的数据流，查找了各种在线资料，终于可以开工了。然而编码的时候时常产生一种怀疑：我真的是一个前端？&lt;/p&gt;
+
+&lt;h1 id=&quot;react&quot;&gt;React&lt;/h1&gt;
+
+&lt;p&gt;对于react，我是从&lt;a href=&quot;http://facebook.github.io/react/docs/getting-started.html&quot;&gt;这里&lt;/a&gt;开始了解的，然而这儿仅仅能了解到react的语法。&lt;/p&gt;
+
+&lt;p&gt;对于习惯了html＋css＋js文件的我来说，乍一看到react的代码，第一反应是：html写在js中？这不就是前端一直强调的“结构、样式、行为分离”思想的反面教材吗？不能再颠覆啊！我感到无所适从。&lt;/p&gt;
+
+&lt;p&gt;于是，我想应该先了解下react的设计思想，因此，我跳过了&lt;a href=&quot;http://facebook.github.io/react/docs/tutorial.html&quot;&gt;Tudorial&lt;/a&gt;，从&lt;a href=&quot;http://facebook.github.io/react/docs/thinking-in-react.html&quot;&gt;Thinking in React&lt;/a&gt;开始看起。&lt;/p&gt;
+
+&lt;p&gt;在&lt;a href=&quot;http://facebook.github.io/react/docs/thinking-in-react.html&quot;&gt;Thinking in React&lt;/a&gt;页面我看到了一个很实用的栗子，然后快速地抓住了使用react编码的两个关键字：拆分、组件复用。&lt;/p&gt;
+
+&lt;p&gt;更多关于“理解react设计思想”的文章，可以在许多知名博客中搜索到，文码并茂，看多了就理解了…&lt;/p&gt;
+
+&lt;h1 id=&quot;flux&quot;&gt;flux&lt;/h1&gt;
+
+&lt;p&gt;什么是flux？&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;It’s more of a pattern rather than a formal framework.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;与angular双向数据绑定不同，它的数据流向永远是单向的，因此带来的好处是：我不必思考当前数据应该传递给谁。&lt;/p&gt;
+
+&lt;p&gt;在flux中，view和controller是一体的，同时它增加的两层内容：dispatcher和stores，前者负责创建actions，然后将actions按照名称（&lt;code&gt;actionType&lt;/code&gt;）分发给stores，stores中对数据进行修改，触发一些change相关的方法，将改动渲染到view层（一般先是最高层级的组件收到新的数据，再把这些数据传递到子组件中）。简单说就是：&lt;/p&gt;
+
+&lt;p&gt;Action -&amp;gt; Dispatcher -&amp;gt; Store -&amp;gt; View…&lt;/p&gt;
+
+&lt;p&gt;实战总是比理论让人理解得更加深刻，这是当年学习依赖注入、控制翻转时得到的结论。于是在写了几个查询数据的模块之后，将一点心得在这里记录下来，方便以后查看。&lt;/p&gt;
+
+&lt;h1 id=&quot;select&quot;&gt;一个select组件实例&lt;/h1&gt;
+
+&lt;p&gt;这里将通过一个select组件的实现过程描述flux的数据流。&lt;/p&gt;
+
+&lt;h2 id=&quot;configjs&quot;&gt;静态数据：config.js&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;terminalArr: [
+    {
+        key: &#39;x&#39;,
+        val: &#39;0&#39;
+    },
+    {
+        key: &#39;xx&#39;,
+        val: &#39;1&#39;
+    },
+    {
+        key: &#39;xxx&#39;,
+        val: &#39;2&#39;
+    }
+]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;examplejs&quot;&gt;Example.js&lt;/h2&gt;
+
+&lt;p&gt;顶层view组件，监测stores变化，并将新的queryObj传递给组件的formData属性，由顶级组件向下分发数据。&lt;/p&gt;
+
+&lt;pre&gt;var Example = React.createClass({
+	
+    componentDidMount: function () {
+        exampleStore.addChangeListener(this._change);
+
+        if (this.isMounted()) {
+            exampleStore.loadData();
+        }
+    },
+    componentWillUnmount: function () {
+        exampleStore.removeChangeListener(this._change);
+    },
+    _change: function () {
+        this.setState(exampleStore.queryObj);
+    },
+    render: function () {
+        return (
+        	&amp;lt;div&amp;gt;
+        		...
+                &amp;lt;ExampleForm formData={this.state.queryObj}/&amp;gt;
+                ...
+            &amp;lt;/div&amp;gt;
+        );
+    }
+});
+&lt;/pre&gt;
+
+&lt;p&gt;中间组件，从formData中取出特定数据，传递给再下游的组件作为属性（props）值。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var ExampleForm = React.createClass({
+    render: function () {
+        var formData = this.props.formData;
+        return (
+            &amp;lt;form&amp;gt;
+                ...
+                &amp;lt;TerminalsSelect terminal={formData.terminal}&amp;gt;&amp;lt;/Terminals&amp;gt;
+                ...
+            &amp;lt;/form&amp;gt;
+        );
+    }
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;继续向下，当select change时，调用action中的方法，其中select使用了已经定义好的BasicSelect组件，因此需要传递一些参数。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var TerminalsSelect =  React.createClass({
+    changeTerminalHandler: function (e) {
+    	// view -&amp;gt; action
+        ExampleActions.setTerminal({
+            terminal: e.target.value
+        });
+    },
+    render: function () {
+        return (
+            &amp;lt;div className=&quot;form-group&quot;&amp;gt;
+                &amp;lt;label htmlFor=&quot;terminal&quot; className=&quot;form-control-static&quot;&amp;gt;Terminal：&amp;lt;/label&amp;gt;
+                &amp;lt;BasicSelect
+                    &amp;lt;!-- option数据 --&amp;gt;
+                    optionData={terminalArr}
+                    &amp;lt;!-- 引用的config里的数据的字段名（不是所有数据都是val,key） --&amp;gt;
+                    optKey=&quot;key&quot;
+                    optVal=&quot;val&quot;
+                    &amp;lt;!-- 将上层组件获取到的formData.terminal传递给BasicSelect --&amp;gt;
+                    defaultVal={this.props.terminal}
+                    &amp;lt;!-- select name --&amp;gt;
+                    nameText=&quot;terminal&quot;
+                    &amp;lt;!-- change方法 --&amp;gt;
+                    changeHandler={this.changeTerminalHandler}
+                &amp;gt;&amp;lt;/BasicSelect&amp;gt;
+            &amp;lt;/div&amp;gt;
+        );
+    }
+});
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最底层的组件：为了能够最大程度复用，所有文字内容都避免写死而是以变量（参考上一段代码注释）传入。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var BasicSelect = React.createClass({
+render: function () {
+        // option内容
+        var optionContent;
+        // option html字段
+        var optKey = this.props.optKey;
+        // option value字段
+        var optVal = this.props.optVal;
+
+        // 遍历optionData的值（此处是terminalArr），返回所有option html代码
+        optionContent = this.props.optionData.map(function (item) {
+            return (
+                &amp;lt;option value={item[optVal]}&amp;gt;{item[optKey]}&amp;lt;/option&amp;gt;
+            );
+        });
+
+        // select
+        return (
+            &amp;lt;select 
+                className=&quot;form-control&quot;
+                defaultValue={this.props.defaultVal}
+                name={this.props.nameText}
+                onChange={this.props.changeHandler}
+            &amp;gt;
+                &amp;lt;option value=&quot;&quot;&amp;gt;全部&amp;lt;/option&amp;gt;
+                {optionContent}
+            &amp;lt;/select&amp;gt;
+        );
+    }
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;exampleactionsjs&quot;&gt;ExampleActions.js&lt;/h2&gt;
+
+&lt;p&gt;Dispatcher创建一个action。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;setTerminal: function (params) {
+    // action -&amp;gt; dispatcher
+    PlatformDispatcher.dispatch({
+        actionType: &#39;province_flow_set_terminal&#39;,
+        item: params
+    });
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;examplestorejs&quot;&gt;ExampleStore.js&lt;/h2&gt;
+
+&lt;p&gt;处理actionType，调用具体方法。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;PlatformDispatcher.register(function (payload) {
+    var actionType = payload.actionType;
+
+    switch (actionType) {
+    	...
+        case &#39;province_flow_set_terminal&#39;:
+        	// dispatcher -&amp;gt; store
+            provinceFlowStore.setTerminal(payload.item);
+            break;
+        ...
+    }
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对应的方法触发emit，使store改变，view重新渲染。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ExampleStore.prototype = assign({}, EventEmitter.prototype, {
+
+    ...
+
+    // store -&amp;gt; view
+    setTerminal: function (params) {
+        this.queryObj.terminal = params.terminal;
+        this.emit(&#39;change&#39;);
+    },
+    addChangeListener: function (action) {
+        this.on(&#39;change&#39;, action);
+    },
+    removeChangeListener: function (action) {
+        this.removeListener(&#39;change&#39;, action);
+    },
+    emitChange: function () {
+        this.emit(&#39;change&#39;);
+    }
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;至此，一个flux下实现select组件的栗子就完成了，然而，如果要级联呢？怎么办？&lt;/p&gt;
+
+&lt;h1 id=&quot;select-1&quot;&gt;select级联&lt;/h1&gt;
+
+&lt;p&gt;比如我们要实现一级目录和二级目录的级联，数据结构是这样的：&lt;/p&gt;
+
+&lt;h2 id=&quot;configjs-1&quot;&gt;config.js&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;dirs: [
+    {children:[{dirName:&#39;xx&#39;,dirId:&#39;secondDir0&#39;},
+    {dirName:&#39;xx&#39;,dirId:&#39;secondDir1&#39;},
+    {dirName:&#39;xx&#39;,dirId:&#39;secondDir2&#39;},
+    {dirName:&#39;xx&#39;,dirId:&#39;secondDir3&#39;},
+    {dirName:&#39;xx&#39;,dirId:&#39;secondDir4&#39;},
+    {dirName:&#39;xx&#39;,dirId:&#39;secondDir5&#39;},
+    {dirName:&#39;xx&#39;,dirId:&#39;secondDir6&#39;},
+    {dirName:&#39;xx&#39;,dirId:&#39;secondDir7&#39;},
+    {dirName:&#39;xx&#39;,dirId:&#39;secondDir8&#39;}],dirName:&#39;情感&#39;,dirId:&#39;firstDir0&#39;},
+    ...
+    // first1...2...3...
+]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&quot;examplejs-1&quot;&gt;Example.js&lt;/h1&gt;
+
+&lt;p&gt;此时，ExampleForm组件之下，使用一个DirsContent组件，传入上层分发下来的数据：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;DirsContent firstDir={formData.firstDir}
+    secondDir={formData.secondDir}
+&amp;gt;
+&amp;lt;/DirsContent&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;实现DirsContent组件：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var DirsContent = React.createClass({
+
+    // 两个select的change方法，action、store中类似上面terminal的写法
+    changeFirstDirHandler: function (e) {
+        ContentFlowActions.setFirstDir({
+            firstDir: e.target.value
+        });
+    },
+    changeSecondDirHandler: function (e) {
+        ContentFlowActions.setSecondDir({
+            secondDir: e.target.value
+        });
+    },
+    render: function () {
+        var firstDir = this.props.firstDir;
+        var secondDir = this.props.secondDir;
+        // 二级目录select选项初始为空
+        secondDirsArr = [];
+        // 如果选择了一级目录
+        if (firstDir) {
+        	// 二级目录取对应的children字段的值（以firstDir0、firstDir1、firstDir2...最后一位的数字为索引）
+            secondDirsArr = dirsArr[firstDir.split(&#39;Dir&#39;)[1]].children;
+        }
+        return (
+            &amp;lt;div className=&quot;form-group&quot;&amp;gt;
+                &amp;lt;div className=&quot;form-group&quot;&amp;gt;
+                    &amp;lt;label htmlFor=&quot;&quot; className=&quot;form-control-static&quot;&amp;gt;一级目录：&amp;lt;/label&amp;gt;
+                    &amp;lt;BasicSelect
+                    	&amp;lt;!-- 一级目录的数据，可以直接从config中获取 --&amp;gt;
+                        optionData={dirsArr}
+                        optKey=&quot;dirName&quot;
+                        optVal=&quot;dirId&quot;
+                        changeHandler={this.changeFirstDirHandler}
+                        nameText=&quot;firstDir&quot;
+                        defaultVal={firstDir}
+                    &amp;gt;&amp;lt;/BasicSelect&amp;gt;
+                &amp;lt;/div&amp;gt;
+
+                &amp;lt;div className=&quot;form-group&quot;&amp;gt;
+                    &amp;lt;label htmlFor=&quot;&quot; className=&quot;form-control-static&quot;&amp;gt;二级目录：&amp;lt;/label&amp;gt;
+                    &amp;lt;BasicSelect
+                    	&amp;tl;!-- 二级目录的数据，为render方法中计算出来的数据 --&amp;gt;
+                        optionData={secondDirsArr}
+                        optKey=&quot;dirName&quot;
+                        optVal=&quot;dirId&quot;
+                        defaultVal={secondDir}
+                        nameText=&quot;secondDir&quot;
+                        changeHandler={this.changeSecondDirHandler}
+                    &amp;gt;&amp;lt;/BasicSelect&amp;gt;
+                &amp;lt;/div&amp;gt;
+            &amp;lt;/div&amp;gt;
+        );
+    }
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+</description>
+        <pubDate>Tue, 25 Aug 2015 14:03:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/react/js/flux/2015/08/25/react&flux-data-flow.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/react/js/flux/2015/08/25/react&flux-data-flow.html</guid>
+        
+        
+        <category>react</category>
+        
+        <category>js</category>
+        
+        <category>flux</category>
+        
+      </item>
     
       <item>
         <title>bootstrap-select.js使用ajax get到的option数据</title>
