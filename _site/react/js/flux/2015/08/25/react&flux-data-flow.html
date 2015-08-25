@@ -236,7 +236,7 @@ render: function () {
 <pre><code>setTerminal: function (params) {
     // action -&gt; dispatcher
     PlatformDispatcher.dispatch({
-        actionType: 'province_flow_set_terminal',
+        actionType: 'example_set_terminal',
         item: params
     });
 }
@@ -251,9 +251,9 @@ render: function () {
 
     switch (actionType) {
     	...
-        case 'province_flow_set_terminal':
+        case 'example_set_terminal':
         	// dispatcher -&gt; store
-            provinceFlowStore.setTerminal(payload.item);
+            exampleStore.setTerminal(payload.item);
             break;
         ...
     }
@@ -322,12 +322,12 @@ render: function () {
 
     // 两个select的change方法，action、store中类似上面terminal的写法
     changeFirstDirHandler: function (e) {
-        ContentFlowActions.setFirstDir({
+        ExampleActions.setFirstDir({
             firstDir: e.target.value
         });
     },
     changeSecondDirHandler: function (e) {
-        ContentFlowActions.setSecondDir({
+        ExampleActions.setSecondDir({
             secondDir: e.target.value
         });
     },

@@ -176,7 +176,7 @@ Dispatcher创建一个action。
 <pre><code>setTerminal: function (params) {
     // action -> dispatcher
     PlatformDispatcher.dispatch({
-        actionType: 'province_flow_set_terminal',
+        actionType: 'example_set_terminal',
         item: params
     });
 }
@@ -191,9 +191,9 @@ Dispatcher创建一个action。
 
     switch (actionType) {
     	...
-        case 'province_flow_set_terminal':
+        case 'example_set_terminal':
         	// dispatcher -> store
-            provinceFlowStore.setTerminal(payload.item);
+            exampleStore.setTerminal(payload.item);
             break;
         ...
     }
@@ -263,12 +263,12 @@ Dispatcher创建一个action。
 
     // 两个select的change方法，action、store中类似上面terminal的写法
     changeFirstDirHandler: function (e) {
-        ContentFlowActions.setFirstDir({
+        ExampleActions.setFirstDir({
             firstDir: e.target.value
         });
     },
     changeSecondDirHandler: function (e) {
-        ContentFlowActions.setSecondDir({
+        ExampleActions.setSecondDir({
             secondDir: e.target.value
         });
     },
