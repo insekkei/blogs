@@ -310,7 +310,7 @@ store响应dispatcher分发出来的action。接收example_set_terminal，调用
                 &lt;div className="form-group"&gt;
                     &lt;label htmlFor="" className="form-control-static"&gt;二级目录：&lt;/label&gt;
                     &lt;BasicSelect
-                    	&tl;!-- 二级目录的数据，为render方法中计算出来的数据 --&gt;
+                    	&lt;!-- 二级目录的数据，为render方法中计算出来的数据 --&gt;
                         optionData={secondDirsArr}
                         optKey="dirName"
                         optVal="dirId"
