@@ -17,15 +17,17 @@ categories: react js flux
 
 在[Thinking in React](http://facebook.github.io/react/docs/thinking-in-react.html)页面我看到了一个很实用的栗子，然后快速地抓住了使用react编码的两个关键字：拆分、组件复用。
 
-更多关于“理解react设计思想”的文章，可以在许多知名博客中搜索到，文码并茂，看多了就理解了...
+因此，即使很多东西比如select、radio button、弹窗、react都没有都需要从0开始写，就组件复用这一处优点，它也是值得被使用的。
 
 # flux
 
 什么是flux？
 
-> It's more of a pattern rather than a formal framework. 
+> 比起框架，flux更像是一种模式。
 
-与angular双向数据绑定不同，它的数据流向永远是单向的，因此带来的好处是：我不必思考当前数据应该传递给谁。
+它只是一种模式，所以有很多种实现方式...
+
+与angular双向数据绑定不同，flux中数据流向永远是单向的，因此带来的好处是：我不必思考当前数据应该传递给谁。
 
 在flux中，view和controller是一体的，同时它增加的两层内容：dispatcher和stores，前者负责创建actions，然后将actions按照名称（`actionType`）分发给stores，stores中对数据进行修改，触发一些change相关的方法，将改动渲染到view层（一般先是最高层级的组件收到新的数据，再把这些数据传递到子组件中）。简单说就是：
 
@@ -59,6 +61,8 @@ Action -> Dispatcher -> Store -> View...
 
 顶层view组件，监测stores变化，并将新的queryObj传递给组件的formData属性，由顶级组件向下分发数据。
 
+注意对props和state的理解：组件内部使用state，组件之间的通信靠props，比如这里，queryObj数据是Example的state（是在Example内部setState的），queryObj被传递给了ExampleForm这个高层组件，这时候，这个queryObj就变成了ExampleForm的props数据了。然后，ExampleForm内部的Select等组件就都可以使用formData了，通过同样的属性赋值方法传递给下游的组件去使用。
+
 <pre></code>var Example = React.createClass({
 	
     componentDidMount: function () {
@@ -72,6 +76,7 @@ Action -> Dispatcher -> Store -> View...
         exampleStore.removeChangeListener(this._change);
     },
     _change: function () {
+        // 只要store有变化，emit('change')执行了，就setState
         this.setState(exampleStore.queryObj);
     },
     render: function () {
@@ -106,7 +111,8 @@ Action -> Dispatcher -> Store -> View...
 
 <pre><code>var TerminalsSelect =  React.createClass({
     changeTerminalHandler: function (e) {
-    	// view -> action
+        // view -> action
+        // 如果在这里直接通过this.setState方法去更新terminal的值，也可以达到相同的目的，但数据流向就出现问题了。
         ExampleActions.setTerminal({
             terminal: e.target.value
         });
@@ -135,7 +141,7 @@ Action -> Dispatcher -> Store -> View...
 
 </code></pre>
 
-最底层的组件：为了能够最大程度复用，所有文字内容都避免写死而是以变量（参考上一段代码注释）传入。
+最底层的组件：为了能够最大程度复用，所有文字内容都避免写死而是以变量（参考上一段代码html注释）传入。
 
 <pre><code>var BasicSelect = React.createClass({
 render: function () {
@@ -171,7 +177,9 @@ render: function () {
 
 ## ExampleActions.js
 
-Dispatcher创建一个action。
+Dispatcher注册一个action，把这个action分发给example_set_terminal。
+
+module.exports = new Dispatcher();
 
 <pre><code>setTerminal: function (params) {
     // action -> dispatcher
@@ -184,7 +192,7 @@ Dispatcher创建一个action。
 
 ## ExampleStore.js
 
-处理actionType，调用具体方法。
+store响应dispatcher分发出来的action。接收example_set_terminal，调用具体set方法。
 
 <pre><code>PlatformDispatcher.register(function (payload) {
     var actionType = payload.actionType;
@@ -200,7 +208,7 @@ Dispatcher创建一个action。
 });
 </code></pre>
 
-对应的方法触发emit，使store改变，view重新渲染。
+调用方法，改变store
 
 <pre><code>ExampleStore.prototype = assign({}, EventEmitter.prototype, {
 
@@ -208,6 +216,8 @@ Dispatcher创建一个action。
 
     // store -> view
     setTerminal: function (params) {
+        // 这部分里，每当params被修改，queryObj就会被更新，相应的，
+        // Example.js部分顶级组件接收的formData也会更新，继而更新所有组件中的数据。
         this.queryObj.terminal = params.terminal;
         this.emit('change');
     },
