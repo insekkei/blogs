@@ -6,8 +6,8 @@
 </description>
     <link>http://insekkei.com/blogs//blogs/</link>
     <atom:link href="http://insekkei.com/blogs//blogs/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 25 Aug 2015 15:18:37 +0800</pubDate>
-    <lastBuildDate>Tue, 25 Aug 2015 15:18:37 +0800</lastBuildDate>
+    <pubDate>Tue, 25 Aug 2015 15:45:03 +0800</pubDate>
+    <lastBuildDate>Tue, 25 Aug 2015 15:45:03 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -323,6 +323,9 @@ render: function () {
 });
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;h1 id=&quot;section&quot;&gt;补充&lt;/h1&gt;
+
+&lt;p&gt;到现在为止，写了五个大同小异的查询数据模块，猿生第一次写这么多的js代码（用了React不得不写这么多啊…），从开始的迷茫到逐渐拨开云雾见到彩虹，感谢&lt;a href=&quot;http://yansm.github.io/fromone&quot;&gt;三木君&lt;/a&gt;耐心的帮助和清晰的讲解。学习一种新的东西，或许，可以先上手再理解…&lt;/p&gt;
 </description>
         <pubDate>Tue, 25 Aug 2015 14:03:00 +0800</pubDate>
         <link>http://insekkei.com/blogs//blogs/react/js/flux/2015/08/25/react&flux-data-flow.html</link>
