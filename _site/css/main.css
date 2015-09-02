@@ -315,6 +315,27 @@ pre {
         font-size: 14px; } }
 
 /**
+ * svg
+ */
+path {
+  transition: all .1s linear; }
+
+.hair:hover {
+  fill: #000000; }
+
+.dress:hover {
+  fill: #222; }
+
+svg:hover .dog {
+  fill: #fff; }
+
+svg:hover .dog-leg {
+  fill: #f7f7f7; }
+
+svg:hover .left-eye, svg:hover .right-eye {
+  fill: #333; }
+
+/**
  * Syntax highlighting styles
  */
 .highlight {
