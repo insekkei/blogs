@@ -6,11 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>bootstrap-select.js使用ajax get到的option数据</title>
-  <meta name="description" content="  第一次用到，搜了很多博文都没用，一篇抄一篇而且整得特复杂…还是官方文档比较给力，然而最近红杏什么的都没法用了，代理jquery到国内cdn后才能正确显示效果，非常之坑…有些东西遮遮掩掩真的有用吗？">
+  <title>web前端学习笔记</title>
+  <meta name="description" content="绿螘新醅酒，红泥小火炉。<br>晚来天欲雪，能饮一杯无？
+">
 
   <link rel="stylesheet" href="/blogs/css/main.css">
-  <link rel="canonical" href="http://insekkei.com/blogs//blogs/bootstrap/js/2015/08/25/bootstrap-select-with-ajax-data.html">
+  <link rel="canonical" href="http://insekkei.com/blogs//blogs/blogs/page2/">
   <link rel="alternate" type="application/rss+xml" title="web前端学习笔记" href="http://insekkei.com/blogs//blogs/feed.xml" />
   <link rel="icon" type="image/png" href="/blogs/images/icon.png">
 </head>
@@ -57,64 +58,54 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="post">
+        <div class="home">
 
-  <header class="post-header">
-    <h1 class="post-title">bootstrap-select.js使用ajax get到的option数据</h1>
-    <p class="post-meta">Aug 25, 2015</p>
-  </header>
+  <h1 class="page-heading">笔记目录</h1>
 
-  <article class="post-content">
-    <blockquote>
-  <p>第一次用到，搜了很多博文都没用，一篇抄一篇而且整得特复杂…还是官方文档比较给力，然而最近红杏什么的都没法用了，代理jquery到国内cdn后才能正确显示效果，非常之坑…有些东西遮遮掩掩真的有用吗？</p>
-</blockquote>
+  <ul class="post-list">
+    
+      <li>
+        <span class="post-meta">Jun 16, 2015</span>
 
-<p><a href="http://silviomoreto.github.io/bootstrap-select/">bootstrap-select.js官方文档</a></p>
+        <h2>
+          <a class="post-link" href="/blogs/js/function/2015/06/16/Javascript-%E5%8F%8D%E5%BA%8F%E8%BE%93%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2.html">Javascript反序输出字符串</a>
+        </h2>
+      </li>
+    
+      <li>
+        <span class="post-meta">Jun 16, 2015</span>
 
-<p>html：</p>
+        <h2>
+          <a class="post-link" href="/blogs/js/common/2015/06/16/Javascript-stopBubble.html">Javascript stop bubble</a>
+        </h2>
+      </li>
+    
+  </ul>
 
-<pre><code>&lt;select class="form-control selectpicker"  data-live-search="true"&gt;
-	...
-&lt;/select&gt;
-</code></pre>
+  <!-- Pagination links -->
+  
+  <div class="pagination">
+    
+      <a href="/blogs/index.html">&laquo; Prev</a>
+    
 
-<p>js部分：</p>
+    
+      
+        <a href="/blogs/index.html">1</a>
+      
+    
+      
+        <em>2</em>
+      
+    
 
-<pre><code>$.ajax({
-	// get请求地址
-    	url: basePath,
-    	dataType: "json",
-    	success: function (data) {
-	    	var optArr = [];
-	        for (var i = 0; i &lt; data.length; i++) {
-	            $('.selectpicker').append("&lt;option value=" + data[i].userName + "&gt;" + data[i].userName + "&lt;/option&gt;");
-	        }
+    
+      <span>Next &raquo;</span>
+    
+  </div>
+  
 
-	        // 缺一不可
-	        $('#adeName').selectpicker('refresh');
-	        $('#adeName').selectpicker('render');
-    }
-});
-</code></pre>
-
-  </article>
-
-  <!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="" data-title="bootstrap-select.js使用ajax get到的option数据"></div>
-	<!-- 多说评论框 end -->
-	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"blogs2015"};
-		(function() {
-			var ds = document.createElement('script');
-			ds.type = 'text/javascript';ds.async = true;
-			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-			ds.charset = 'UTF-8';
-			(document.getElementsByTagName('head')[0] 
-			 || document.getElementsByTagName('body')[0]).appendChild(ds);
-		})();
-		</script>
-	<!-- 多说公共JS代码 end -->
+  <p class="rss-subscribe">subscribe <a href="/blogs/feed.xml">via RSS</a></p>
 
 </div>
 
