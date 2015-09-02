@@ -6,9 +6,126 @@
 </description>
     <link>http://insekkei.com/blogs//blogs/</link>
     <atom:link href="http://insekkei.com/blogs//blogs/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 25 Aug 2015 20:08:25 +0800</pubDate>
-    <lastBuildDate>Tue, 25 Aug 2015 20:08:25 +0800</lastBuildDate>
+    <pubDate>Wed, 02 Sep 2015 11:22:43 +0800</pubDate>
+    <lastBuildDate>Wed, 02 Sep 2015 11:22:43 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>react ajax跨域请求</title>
+        <description>&lt;h1 id=&quot;section&quot;&gt;同源策略&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;a href=&quot;https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy&quot;&gt;同源策略&lt;/a&gt;限制了一个源（origin）中加载文本或脚本与来自其它源（origin）中资源的交互方式。如果两个页面拥有相同的 &lt;code&gt;协议（protocol）&lt;/code&gt;，&lt;code&gt;端口&lt;/code&gt;（如果指定），和 &lt;code&gt;主机&lt;/code&gt;，那么这两个页面就属于同一个源（origin）。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;在使用XMLHttpRequest时会受到同源策略的约束。&lt;/p&gt;
+
+&lt;p&gt;浏览器发送的请求header中包含一个&lt;code&gt;Origin&lt;/code&gt;，而服务器返回给浏览器的响应header中包含一个&lt;code&gt;Access-Control-Allow-Origin&lt;/code&gt;，因此：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;可以通过设置&lt;code&gt;Access-Control-Allow-Origin:&lt;/code&gt;来允许跨域请求，origin的值可以设置为｀*｀，表示接受来自任何站点的跨域请求，也可以设置为特定的域，表示只有这个域能跨域请求到服务器上的数据。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;使用&lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS&quot;&gt;cors(Cross-Origin Resource Sharing)&lt;/a&gt;可以实现跨域访问，但cors只支持现代浏览器。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;jsonp&quot;&gt;jsonp&lt;/h1&gt;
+
+&lt;p&gt;jsonp（json with padding），一种包含在函数调用中的json。解决跨域请求比较可靠的一种思路是：设置&lt;code&gt;dataType&lt;/code&gt;为&lt;code&gt;jsonp&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;普通的json格式：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{&#39;name&#39;: &#39;insekkei&#39;}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;jsonp格式：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;callback(
+    {&#39;name&#39;: &#39;insekkei&#39;}
+);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;即：调用jsonp回调函数callback，并将返回的json作为参数传入这个回调函数。&lt;code&gt;callback&lt;/code&gt;是jsonp请求默认的回调函数名称，会在请求url中追加&lt;code&gt;?callback=?&lt;/code&gt;，也可以自定义这个名称：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;dataType : &#39;jsonp&#39;,
+jsonp: &#39;callbackName&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这时服务器需要返回的数据格式为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;callbackName(
+    {&#39;name&#39;: &#39;insekkei&#39;}
+);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;显而易见，jsonp不仅需要客户端js进行配置，也需要服务器端返回数据格式的配合。不过，&lt;code&gt;jsonp只支持get请求...&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h1 id=&quot;superagent&quot;&gt;superagent&lt;/h1&gt;
+
+&lt;p&gt;react中需要ajax请求时，可以使用&lt;a href=&quot;https://cnodejs.org/topic/5378720ed6e2d16149fa16bd&quot;&gt;superagent&lt;/a&gt;这个模块，例如一个get请求：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var request = require(&#39;superagent&#39;);
+
+request
+    .get(url)
+    .set(&#39;Accept&#39;, &#39;application/json&#39;)
+    .query(paramObj)
+    .end(function(res){
+        // do something
+    });
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;post方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;request
+    .post(url)
+    .send(dataObj)
+    ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然而有时候需要跨域请求数据，如果只是使用上面的方法，控制台会出现类似如下提示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;XMLHttpRequest cannot load http://xxx.xx.... No &#39;Access-Control-Allow-Origin&#39; header is present on the requested resource. Origin &#39;http://yyy.yy...&#39; is therefore not allowed access.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&quot;superagent-jsonp&quot;&gt;superagent-jsonp&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.npmjs.com/package/superagent-jsonp&quot;&gt;superagent-jsonp&lt;/a&gt;为superagent添加了jsonp方法。&lt;/p&gt;
+
+&lt;p&gt;安装：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;npm i superagent-jsonp --save
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var request = require(&#39;superagent&#39;);
+var superagent = require(&#39;superagent&#39;);
+require(&#39;superagent-jsonp&#39;)(request);
+
+request
+    .get(url)
+    .jsonp()
+    .end(function(){
+        // do something...
+    });
+&lt;/code&gt;&lt;/pre&gt;
+
+</description>
+        <pubDate>Wed, 02 Sep 2015 10:10:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/react/js/ajax/2015/09/02/js&react%E8%B7%A8%E5%9F%9F.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/react/js/ajax/2015/09/02/js&react%E8%B7%A8%E5%9F%9F.html</guid>
+        
+        
+        <category>react</category>
+        
+        <category>js</category>
+        
+        <category>ajax</category>
+        
+      </item>
     
       <item>
         <title>react&amp;flux之BasicSelect组件实现</title>
