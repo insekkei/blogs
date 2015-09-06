@@ -173,6 +173,10 @@
 
     > li {
         margin-bottom: $spacing-unit;
+
+        .excerpt:after {
+            content:"...";
+        }
     }
 }
 
@@ -186,7 +190,27 @@
     font-size: 18px;
 }
 
+/**
+ * Archive page
+ **/
+#archive li{
+    list-style: none;
+    line-height: 2.5em;
 
+    time{
+        display: inline-block;
+        margin-right: 10px;
+        width: 4em;
+        text-align: right;
+
+        &:after{
+            content: ".";
+            position: relative;
+            left: 5px;
+            color: $grey-color-dark;
+        }
+    }
+}
 
 /**
  * Posts

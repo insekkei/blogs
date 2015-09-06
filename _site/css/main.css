@@ -273,6 +273,8 @@ pre {
   list-style: none; }
   .post-list > li {
     margin-bottom: 30px; }
+    .post-list > li .excerpt:after {
+      content: "..."; }
 
 .post-meta {
   font-size: 12.25px;
@@ -281,6 +283,23 @@ pre {
 .post-link {
   display: block;
   font-size: 18px; }
+
+/**
+ * Archive page
+ **/
+#archive li {
+  list-style: none;
+  line-height: 2.5em; }
+  #archive li time {
+    display: inline-block;
+    margin-right: 10px;
+    width: 4em;
+    text-align: right; }
+    #archive li time:after {
+      content: ".";
+      position: relative;
+      left: 5px;
+      color: #fe5076; }
 
 /**
  * Posts
