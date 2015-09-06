@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /**
  * Reset some basic elements
  */
@@ -130,6 +131,9 @@ pre {
   right: 0;
   bottom: 0; }
 
+@media all and (max-width: 640px) {
+  .mygirl {
+    z-index: -1; } }
 /**
  * Clearfix
  */
@@ -273,8 +277,14 @@ pre {
   list-style: none; }
   .post-list > li {
     margin-bottom: 30px; }
-    .post-list > li .excerpt:after {
-      content: "..."; }
+    .post-list > li h2 a:hover:after {
+      content: "＃";
+      display: inline-block;
+      color: #eee; }
+    .post-list > li .excerpt {
+      padding-left: 2em; }
+      .post-list > li .excerpt:after {
+        content: "..."; }
 
 .post-meta {
   font-size: 12.25px;
@@ -283,6 +293,8 @@ pre {
 .post-link {
   display: block;
   font-size: 18px; }
+  .post-link:hover {
+    text-decoration: none; }
 
 /**
  * Archive page

@@ -177,6 +177,11 @@ pre {
     right:0;
     bottom:0;
 }
+@media all and (max-width: 640px){
+    .mygirl{
+        z-index: -1;
+    }
+}
 
 /**
  * Clearfix

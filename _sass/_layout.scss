@@ -174,9 +174,19 @@
     > li {
         margin-bottom: $spacing-unit;
 
-        .excerpt:after {
-            content:"...";
+        h2 a:hover:after{
+            content: "＃";
+            display: inline-block;
+            color: #eee;
         }
+
+        .excerpt{
+            padding-left: 2em;
+
+            &:after {
+                content:"...";
+            }
+        }   
     }
 }
 
@@ -188,6 +198,10 @@
 .post-link {
     display: block;
     font-size: 18px;
+
+    &:hover{
+        text-decoration: none;
+    }
 }
 
 /**
