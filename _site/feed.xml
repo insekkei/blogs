@@ -6,8 +6,8 @@
 </description>
     <link>http://insekkei.com/blogs//blogs/</link>
     <atom:link href="http://insekkei.com/blogs//blogs/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 06 Sep 2015 19:33:39 +0800</pubDate>
-    <lastBuildDate>Sun, 06 Sep 2015 19:33:39 +0800</lastBuildDate>
+    <pubDate>Sun, 06 Sep 2015 19:40:24 +0800</pubDate>
+    <lastBuildDate>Sun, 06 Sep 2015 19:40:24 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -115,8 +115,8 @@ request
 
 </description>
         <pubDate>Wed, 02 Sep 2015 10:10:00 +0800</pubDate>
-        <link>http://insekkei.com/blogs//blogs/react/js/ajax/2015/09/02/js&react%E8%B7%A8%E5%9F%9F.html</link>
-        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/react/js/ajax/2015/09/02/js&react%E8%B7%A8%E5%9F%9F.html</guid>
+        <link>http://insekkei.com/blogs//blogs/react/js/ajax/2015/09/02/js-react%E8%B7%A8%E5%9F%9F.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/react/js/ajax/2015/09/02/js-react%E8%B7%A8%E5%9F%9F.html</guid>
         
         
         <category>react</category>
@@ -455,8 +455,8 @@ render: function () {
 &lt;p&gt;到现在为止，写了五个大同小异的查询数据模块，猿生第一次写这么多的js代码（用了React不得不写这么多啊…），从开始的迷茫到逐渐拨开云雾见到彩虹，感谢&lt;a href=&quot;http://yansm.github.io/fromone&quot;&gt;三木君&lt;/a&gt;耐心的帮助和清晰的讲解。学习一种新的东西，或许，可以先上手再理解…&lt;/p&gt;
 </description>
         <pubDate>Tue, 25 Aug 2015 14:03:00 +0800</pubDate>
-        <link>http://insekkei.com/blogs//blogs/react/js/flux/2015/08/25/react&flux-data-flow.html</link>
-        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/react/js/flux/2015/08/25/react&flux-data-flow.html</guid>
+        <link>http://insekkei.com/blogs//blogs/react/js/flux/2015/08/25/react-flux-data-flow.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/react/js/flux/2015/08/25/react-flux-data-flow.html</guid>
         
         
         <category>react</category>
@@ -706,8 +706,8 @@ $(&#39;#radio_1&#39;).attr(&#39;checked&#39;, &#39;checked&#39;);
 &lt;/code&gt;&lt;/pre&gt;
 </description>
         <pubDate>Wed, 29 Jul 2015 17:50:00 +0800</pubDate>
-        <link>http://insekkei.com/blogs//blogs/jquery/js/2015/07/29/jquery%E4%B9%8Bradio%20&%20checkbox.html</link>
-        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/jquery/js/2015/07/29/jquery%E4%B9%8Bradio%20&%20checkbox.html</guid>
+        <link>http://insekkei.com/blogs//blogs/jquery/js/2015/07/29/jquery%E4%B9%8Bradio-checkbox.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/jquery/js/2015/07/29/jquery%E4%B9%8Bradio-checkbox.html</guid>
         
         
         <category>jquery</category>
