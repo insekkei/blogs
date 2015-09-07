@@ -6,8 +6,8 @@
 </description>
     <link>http://insekkei.com/blogs//blogs/</link>
     <atom:link href="http://insekkei.com/blogs//blogs/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 07 Sep 2015 20:08:18 +0800</pubDate>
-    <lastBuildDate>Mon, 07 Sep 2015 20:08:18 +0800</lastBuildDate>
+    <pubDate>Mon, 07 Sep 2015 20:09:34 +0800</pubDate>
+    <lastBuildDate>Mon, 07 Sep 2015 20:09:34 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -16,11 +16,17 @@
 
 &lt;p&gt;本篇将完成一个具备以下简单功能的react组件（结合Flux）：&lt;/p&gt;
 
-&lt;p&gt;-页码list&lt;/p&gt;
-
-&lt;p&gt;-首页、末页、上下页&lt;/p&gt;
-
-&lt;p&gt;-页码数量过多时用省略号指引&lt;!--more--&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;页码list&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;首页、末页、上下页&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;页码数量过多时用省略号指引&lt;!--more--&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;h1 id=&quot;section&quot;&gt;组件将被这样使用：&lt;/h1&gt;
 
