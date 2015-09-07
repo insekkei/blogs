@@ -10,7 +10,7 @@ categories: js function
 *方法一：*
 
 <pre><code>var arr = [1,2,3,4,5,1,3,12,55,22];
-function getArray(a){
+function getArray(a){<!--more-->
 	var obj = {},
 	resultArray = [];
 	for(var i=0;i<a.length;i++){

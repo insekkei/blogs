@@ -7,7 +7,7 @@ categories: react js ajax
 
 # 同源策略
 
-> [同源策略](https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy)限制了一个源（origin）中加载文本或脚本与来自其它源（origin）中资源的交互方式。如果两个页面拥有相同的 `协议（protocol）`，`端口`（如果指定），和 `主机`，那么这两个页面就属于同一个源（origin）。
+> [同源策略](https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy)限制了一个源（origin）中加载文本或脚本与来自其它源（origin）中资源的交互方式。如果两个页面拥有相同的 `协议（protocol）`，`端口`（如果指定），和 `主机`，那么这两个页面就属于同一个源（origin）。<!--more-->
 
 在使用XMLHttpRequest时会受到同源策略的约束。
 

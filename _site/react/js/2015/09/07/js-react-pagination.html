@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Javascript反序输出字符串</title>
-  <meta name="description" content="这是一个我在至少4次web前端笔试或者面试中遇到过的题目，就这么一行字的题目，最近一次看到却还让我如遭五雷轰顶，罪过，罪过。解决方案一： &gt;'abcd ed'.split('').reverse().join(''); ">
+  <title>用react完成一个带省略号的分页</title>
+  <meta name="description" content="分页其实想起来很容易：不过就是从后台拿一些数据来——当前页码、总页数、总条目数、每页显示的数量等等。本篇将完成一个具备以下简单功能的react组件（结合Flux）：-页码list-首页、末页、上下页-页码数量过多时用省略号指引">
 
   <link rel="stylesheet" href="/blogs/css/main.css">
-  <link rel="canonical" href="http://insekkei.com/blogs//blogs/js/function/2015/06/16/Javascript-%E5%8F%8D%E5%BA%8F%E8%BE%93%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2.html">
+  <link rel="canonical" href="http://insekkei.com/blogs//blogs/react/js/2015/09/07/js-react-pagination.html">
   <link rel="alternate" type="application/rss+xml" title="web前端笔记" href="http://insekkei.com/blogs//blogs/feed.xml" />
   <link rel="icon" type="image/png" href="/blogs/images/icon.png">
 </head>
@@ -63,75 +63,354 @@
         <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">Javascript反序输出字符串</h1>
-    <p class="post-meta">Jun 16, 2015</p>
+    <h1 class="post-title">用react完成一个带省略号的分页</h1>
+    <p class="post-meta">Sep 7, 2015</p>
   </header>
 
   <article class="post-content">
-    <p>这是一个我在至少4次web前端笔试或者面试中遇到过的题目，就这么一行字的题目，最近一次看到却还让我如遭五雷轰顶，罪过，罪过。</p>
+    <p>分页其实想起来很容易：不过就是从后台拿一些数据来——当前页码、总页数、总条目数、每页显示的数量等等。</p>
 
-<p><em>解决方案一：</em></p>
+<p>本篇将完成一个具备以下简单功能的react组件（结合Flux）：</p>
 
-<pre><code> &gt;'abcd ed'.split('').reverse().join(''); <!--more-->
-&lt;-"de dcba"
-</code></pre>
-<p>如果写成：</p>
-<pre><code> &gt;'abcd ed'.split('').reverse().join(); 
-</code></pre>
-<p>结果会是：</p>
-<pre><code> &lt;"-d,e, ,d,c,b,a"
-</code></pre>
+<p>-页码list</p>
 
-<p>注意<code>join(seperator)</code>方法是通过指定的字符连接数组所有元素，默认连接符是<code>.</code>。</p>
+<p>-首页、末页、上下页</p>
 
-<p><em>解决方案二：</em></p>
+<p>-页码数量过多时用省略号指引<!--more--></p>
 
-<pre><code> &gt;"abcd ed".split('').sort(function(a,b){return 1;}).join('');
-&lt;-"de dcba"
-</code></pre>
+<h1 id="section">组件将被这样使用：</h1>
 
-<p><code>sort(sortby)</code>方法，如果没有sortby参数，返回数组按照字母顺序，即字符编码顺序进行排列。现在，按照<code>sort()</code>方法的说明，return 1，也就是一个大于0的数，表示排序后的数组中a应该出现在b之后。</p>
-
-<p><em>解决方案三：</em></p>
-
-<pre><code> &gt;str='abcd ed';Array.prototype.map.call(str,function(it, i){return str[str.length-i-1];}).join('');
-&lt;-"de dcba"
+<pre><code>&lt;Pagination currentPn={currentPn}
+        pageCount={pageCount}
+        pageSize={pageSize}
+        dataSize={dataSize}
+        clickHandler={this.changePn}
+        prevHandler={this.prevPn}
+        nextHandler={this.nextPn}
+        firstHandler={this.firstPn}
+        lastHandler={this.lastPn}
+&gt;
+&lt;/Pagination&gt;
 </code></pre>
 
-<p>对@yfwz100的这个方法我表示五体投地地膜拜Orz。
-map()方法会给数组中的每个元素都按顺序调用一次 callback 函数。比如：</p>
+<p>点击每一个list中的页码链接，执行<code>this.changePn</code>方法：</p>
 
-<pre><code>&gt;var numbers = [1, 4, 9]; 
-&gt;numbers.map(function(num) { return num * 2; });
-&lt;-[2, 8, 18]
+<pre><code>changePn: function (e) {
+    e.preventDefault();
+    ExampleActions.setPageNumber({
+        pageNumber: e.target.innerHTML
+    });
+}
 </code></pre>
 
-<p>方案三使用了<code>array.map(callback[, thisArg])</code>，并且，字符串被当作数组来使用…，callback中第一个参数是数组中当前被传递的元素，这里即字符串中当前被传递的字符，第二个参数是当前被传递元素的索引，第三个参数是调用map方法的数组。
-例1，获取每个字符串对应的ASCLL码：</p>
+<p>上下页翻页方法：</p>
 
-<pre><code>&gt;Array.prototype.map.call("Hello World", function(x) { return x.charCodeAt(0); }) 
-&lt;-[72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100]
+<pre><code>prevPn: function (e) {
+    e.preventDefault();
+    ExampleActions.setPageNumber({
+        pageNumber: currentPn － 1
+    });
+},
+nextPn: function (e, currentPn) {
+    e.preventDefault();
+    ExampleActions.setPageNumber({
+        pageNumber: currentPn ＋ 1
+    });
+}
 </code></pre>
 
-<p>通常情况下，map 方法中的 <code>callback</code> 函数只需要接受一个参数，就是正在被遍历的数组元素本身。但这并不意味着 <code>map</code> 只给 <code>callback</code> 传了一个参数，第三个参数callback会忽视，但第二个参数<code>index</code>会被使用。</p>
+<p>首页和末页方法：</p>
 
-<p>例2，进制数转换：</p>
-
-<pre><code>&gt;["1", "2", "3"].map(parseInt);
-&lt;-[1, NaN, NaN]
+<pre><code>firstPn: function (e) {
+    e.preventDefault();
+    ExampleActions.setPageNumber({
+        pageNumber: 1
+    });
+},
+lastPn: function (e, currentPn) {
+    e.preventDefault();
+    ExampleActions.setPageNumber({
+        pageNumber: pageCount
+    });
+}
 </code></pre>
 
-<p>例2中，<code>parseInt()</code>方法有两个参数，<code>element</code>和<code>进制数</code>，于是它将<code>index</code>视为了进制数。因此正确的方法应该是：</p>
+<p>上述五个方法执行后，通过action调用dispatcher，dispatcher调用store，store中loadData，重新render组件这个过程更新页面中展示的数据。</p>
 
-<pre><code>&gt;function returnInt(element){ return parseInt(element,10); }
-&gt;["1", "2", "3"].map(returnInt);
-&lt;-[1, 2, 3]
+<h1 id="section-1">组件将被这样实现：</h1>
+
+<p>定义变量：</p>
+
+<pre><code>var pageList = '';
+var pageListArr = [];
+var prevPage = '';
+var nextPage = '';
+var firstPage = '';
+var lastPage = '';
+var thisProps = this.props;
 </code></pre>
+
+<p>展示页码list并不难，取到上面使用组件时传递过来的属性，将pageCount肢解，遍历，加入标签组装就可以完成这个任务：</p>
+
+<pre><code>for (var i = 0; i &lt; thisProps.pageCount; i++) {
+    pageListArr.push(i);
+};
+pageList = pageListArr.map(function (item) {
+    // 判断是否当前页
+    if (item === thisProps.currentPn) {
+        return (
+            &lt;li className="active"&gt;&lt;a href="" onClick={thisProps.clickHandler}&gt;
+                {item}&lt;/a&gt;
+            &lt;/li&gt;
+        );
+    }
+    else {
+        return (
+            &lt;li&gt;&lt;a href="" onClick={thisProps.clickHandler}&gt;
+                {item}&lt;/a&gt;
+            &lt;/li&gt;
+        );
+    }
+});
+</code></pre>
+
+<p>上下页翻页链接，要判断是否可点击，首页和末页类似，但不需要判断状态：</p>
+
+<pre><code>// 上一页
+prevPage = (function () {
+    if (thisProps.currentPn === 1) {
+        return (
+            &lt;li className="disabled"&gt;
+              &lt;span&gt;
+                &lt;span aria-hidden="true"&gt;上一页&lt;/span&gt;
+              &lt;/span&gt;
+            &lt;/li&gt;
+        );
+    }
+    else {
+        return (
+            &lt;li&gt;
+              &lt;a href="#" aria-label="Previous" onClick={thisProps.prevHandler}&gt;
+                &lt;span aria-hidden="true"&gt;上一页&lt;/span&gt;
+              &lt;/a&gt;
+            &lt;/li&gt;
+        );
+    }
+})();
+
+// 下一页
+nextPage = (function () {
+    if (thisProps.currentPn === thisProps.pageCount) {
+        return (
+            &lt;li className="disabled"&gt;
+              &lt;span&gt;
+                &lt;span aria-hidden="true"&gt;下一页&lt;/span&gt;
+              &lt;/span&gt;
+            &lt;/li&gt;
+        );
+    }
+    else {
+        return (
+            &lt;li&gt;
+              &lt;a href="#" aria-label="Next" onClick={thisProps.nextHandler}&gt;
+                &lt;span aria-hidden="true"&gt;下一页&lt;/span&gt;
+              &lt;/a&gt;
+            &lt;/li&gt;
+        );
+    }
+})();
+</code></pre>
+
+<p>组装：</p>
+
+<pre><code>&lt;ul className="pagination pull-right"&gt;
+    {firstPage}
+    {prevPage}
+    {pageList}
+    {nextPage}
+    {lastPage}
+&lt;/ul&gt;
+</code></pre>
+
+<h1 id="section-2">显示省略号</h1>
+
+<p>考虑四种情况：</p>
+
+<ul>
+  <li>
+    <p>左边右边都不需要省略号</p>
+  </li>
+  <li>
+    <p>左边有省略号，右边没有</p>
+  </li>
+  <li>
+    <p>左边没有省略号，右边有</p>
+  </li>
+  <li>
+    <p>左右两边都需要省略号</p>
+  </li>
+</ul>
+
+<p>再考虑：</p>
+
+<ul>
+  <li>“首页”和“末页”可以用“1”“100（假设是最后一页的页码）”放在list中代替，因为不管有没有省略号，1和100始终都要显示出来。</li>
+</ul>
+
+<p>两种实现思路：</p>
+
+<p>1、四种不同的情况下，直接拼装包含<code>...</code>的html代码</p>
+
+<p>2、四种不同的情况下，先拼装pageListArr这个变量，再遍历生成html代码</p>
+
+<p>考虑到react中store影响view这个特性，我决定采用第二种方法（我不会告诉你其实我先尝试了第一种方法，然后拼装变量和字符串快要崩溃…jsx都不完全懂，还是默默地去操作变量吧…何况这样真的比较清爽…）</p>
+
+<p>添加变量：</p>
+
+<pre><code>// 假设当前页码总在中间显示，pageTab就是当前页码到省略号之间的数量，比如1...4,5,6,7,8...100，pageTab就是2
+var pageTab = 4;
+
+// 左边的省略号，在第1页之后
+var leftEllipse = '';
+
+// 右边的省略号，在第100页之前
+var rightEllipse = '';
+</code></pre>
+
+<p>总页数小于11，全部显示（这里可以做成可配置的）：</p>
+
+<pre><code>if (thisProps.pageCount &lt; 11) {
+
+    // 注意pageListArr要先清空
+    pageListArr = [];
+
+    // 从第二页开始显示，到倒数第二页
+    for (var i = 1; i &lt; thisProps.pageCount-1; i++) {
+        pageListArr.push(i);
+    };
+
+    //左右都没有省略号
+    leftEllipse = '';
+    rightEllipse = '';
+}
+</code></pre>
+
+<p>总页码数大于11时，有<code>...</code>出现：</p>
+
+<pre><code>if (thisProps.pageCount &gt; 10) {
+    // 当前页减去pageTab小于1，右边显示省略号，左边不显示
+    if (thisProps.currentPn - pageTab &lt; 1) {
+
+        pageListArr = [];
+
+        for (var i = 1; i &lt; 10; i++) {
+            pageListArr.push(i);
+        };
+
+        leftEllipse = '';
+        rightEllipse = &lt;li&gt;&lt;span&gt;...&lt;/span&gt;&lt;/li&gt;;
+    }
+
+    // 当前页减去pageTab大于1 且 当前页加上pageTab小于总页数，两边都显示省略号
+    if ((thisProps.currentPn - pageTab &gt; 1) &amp;&amp; ((thisProps.currentPn + pageTab) &lt; thisProps.pageCount)) {
+
+        pageListArr = [];
+
+        for (var i = thisProps.currentPn - pageTab; i &lt; thisProps.currentPn + pageTab; i++) {
+            pageListArr.push(i);
+        };
+
+        leftEllipse = &lt;li&gt;&lt;span&gt;...&lt;/span&gt;&lt;/li&gt;;
+        rightEllipse = &lt;li&gt;&lt;span&gt;...&lt;/span&gt;&lt;/li&gt;
+    }
+
+    // 当前页码加上pageTab大于总页数，右边不显示省略号，左边显示
+    if ((thisProps.currentPn + pageTab) &gt; (thisProps.pageCount)) {
+
+        pageListArr = [];
+
+        for (var i = thisProps.pageCount - (pageTab*2 + 1); i &lt; thisProps.pageCount; i++) {
+            pageListArr.push(i);
+        };
+
+        leftEllipse = &lt;li&gt;&lt;span&gt;...&lt;/span&gt;&lt;/li&gt;;
+        rightEllipse = '';
+    }
+}
+</code></pre>
+
+<p>首页和末页：</p>
+
+<pre><code>// 首页
+firstPage = (function () {
+    if (thisProps.currentPn === 1) {
+        return (
+            &lt;li className="active"&gt;&lt;a href="" onClick={thisProps.firstHandler}&gt;
+                1&lt;/a&gt;
+            &lt;/li&gt;
+        );
+    }
+    else {
+        return (
+            &lt;li&gt;&lt;a href="" onClick={thisProps.firstHandler}&gt;
+                1&lt;/a&gt;
+            &lt;/li&gt;
+        );
+    }
+})();
+
+// 末页
+lastPage = (function () {
+    if (thisProps.currentPn === thisProps.pageCount) {
+        return (
+            &lt;li className="active"&gt;&lt;a href="" onClick={thisProps.lastHandler}&gt;
+                {thisProps.pageCount}&lt;/a&gt;
+            &lt;/li&gt;
+        );
+    }
+    else {
+        return (
+            &lt;li&gt;&lt;a href="" onClick={thisProps.lastHandler}&gt;
+                {thisProps.pageCount}&lt;/a&gt;
+            &lt;/li&gt;
+        );
+    }
+})();
+</code></pre>
+
+<p>装入<code>ul</code>：</p>
+
+<pre><code>&lt;ul className="pagination pull-right"&gt;
+    {prevPage}
+    {firstPage}
+    {leftEllipse}
+    {pageList}
+    {rightEllipse}
+    {lastPage}
+    {nextPage}
+&lt;/ul&gt;
+</code></pre>
+
+<p>总的组织结构：</p>
+
+<pre><code>var Pagination = React.createClass({
+    render: function () {
+        ...算法／过程...
+        return (
+            &lt;ul&gt;
+                ...组装结果...
+            &lt;/ul&gt;
+        );
+    }
+});
+</code></pre>
+
+<p>备注：分页样式使用bootstrap。</p>
 
   </article>
 
   <!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="" data-title="Javascript反序输出字符串"></div>
+	<div class="ds-thread" data-thread-key="" data-title="用react完成一个带省略号的分页"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

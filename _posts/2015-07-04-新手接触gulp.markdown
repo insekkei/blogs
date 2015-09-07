@@ -10,7 +10,7 @@ categories: gulp js
 # 概念：
 
     Gulp.js是一个基于node.js的自动化构建工具，开发者可以使用它在项目开发过程中自动执行常见任务。
-
+<!--more-->
 # 全局安装：
 
 $ npm install --global gulp

@@ -9,7 +9,7 @@ categories: jquery js
 
 <pre><code>// 返回true or false
 $('selector').is(':checked');
-</code></pre>
+</code></pre><!--more-->
 
 #jquery操作radio或者checkbox使它们被选中
 

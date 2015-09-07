@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>新手接触gulp</title>
-  <meta name="description" content="因工作需要第一次接触到gulp（在前端混真的很惭愧…），在此记录下对gulp的认识。">
+  <meta name="description" content="因工作需要第一次接触到gulp（在前端混真的很惭愧…），在此记录下对gulp的认识。概念：Gulp.js是一个基于node.js的自动化构建工具，开发者可以使用它在项目开发过程中自动执行常见任务。">
 
   <link rel="stylesheet" href="/blogs/css/main.css">
   <link rel="canonical" href="http://insekkei.com/blogs//blogs/gulp/js/2015/07/04/%E6%96%B0%E6%89%8B%E6%8E%A5%E8%A7%A6gulp.html">
@@ -72,10 +72,8 @@
 
 <h1 id="section">概念：</h1>
 
-<pre><code>Gulp.js是一个基于node.js的自动化构建工具，开发者可以使用它在项目开发过程中自动执行常见任务。
+<pre><code>Gulp.js是一个基于node.js的自动化构建工具，开发者可以使用它在项目开发过程中自动执行常见任务。 &lt;!--more--&gt; # 全局安装：
 </code></pre>
-
-<h1 id="section-1">全局安装：</h1>
 
 <p>$ npm install –global gulp</p>
 
@@ -114,7 +112,7 @@ gulp.task('default', function() {
 
 <p>*简单来说就是：哪些文件（src）？进行怎样的操作（task）？结果怎么写入（dest）？</p>
 
-<h1 id="section-2">举个例子！</h1>
+<h1 id="section-1">举个例子！</h1>
 
 <p>创建一个监听所有类型为less的文件的任务，当任何一个less文件被修改时，执行less-pro这个任务。*</p>
 

@@ -9,7 +9,7 @@ categories: js function
 
 *解决方案一：*
 
-<pre><code> >'abcd ed'.split('').reverse().join(''); 
+<pre><code> >'abcd ed'.split('').reverse().join(''); <!--more-->
 <-"de dcba"
 </code></pre>
 如果写成：

@@ -9,7 +9,7 @@ categories: angular js
 
 # 概念
 
-> AngularJS is a structural framework for dynamic web apps.
+> AngularJS is a structural framework for dynamic web apps.<!--more-->
 
 ## Directive
 

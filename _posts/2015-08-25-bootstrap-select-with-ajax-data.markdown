@@ -7,7 +7,7 @@ categories: bootstrap js
 
 > 第一次用到，搜了很多博文都没用，一篇抄一篇而且整得特复杂...还是官方文档比较给力，然而最近红杏什么的都没法用了，代理jquery到国内cdn后才能正确显示效果，非常之坑...有些东西遮遮掩掩真的有用吗？
 
-[bootstrap-select.js官方文档](http://silviomoreto.github.io/bootstrap-select/)
+[bootstrap-select.js官方文档](http://silviomoreto.github.io/bootstrap-select/)<!--more-->
 
 html：
 

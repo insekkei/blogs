@@ -12,5 +12,8 @@ github_username:  insekkei
 markdown: kramdown
 
 # paginate settings
-paginate: 8
+paginate: 10
 paginate_path: "/blogs/page:num"
+
+
+excerpt_separator: "<!--more-->"

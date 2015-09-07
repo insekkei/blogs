@@ -9,7 +9,7 @@ categories: react js flux
 
 # React
 
-对于react，我是从[这里](http://facebook.github.io/react/docs/getting-started.html)开始了解的，然而这儿仅仅能了解到react的语法。
+对于react，我是从[这里](http://facebook.github.io/react/docs/getting-started.html)开始了解的，然而这儿仅仅能了解到react的语法。<!--more-->
 
 对于习惯了html＋css＋js文件的我来说，乍一看到react的代码，第一反应是：html写在js中？这不就是前端一直强调的“结构、样式、行为分离”思想的反面教材吗？不能再颠覆啊！我感到无所适从。
 

@@ -6,16 +6,368 @@
 </description>
     <link>http://insekkei.com/blogs//blogs/</link>
     <atom:link href="http://insekkei.com/blogs//blogs/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 06 Sep 2015 19:40:24 +0800</pubDate>
-    <lastBuildDate>Sun, 06 Sep 2015 19:40:24 +0800</lastBuildDate>
+    <pubDate>Mon, 07 Sep 2015 20:08:18 +0800</pubDate>
+    <lastBuildDate>Mon, 07 Sep 2015 20:08:18 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>用react完成一个带省略号的分页</title>
+        <description>&lt;p&gt;分页其实想起来很容易：不过就是从后台拿一些数据来——当前页码、总页数、总条目数、每页显示的数量等等。&lt;/p&gt;
+
+&lt;p&gt;本篇将完成一个具备以下简单功能的react组件（结合Flux）：&lt;/p&gt;
+
+&lt;p&gt;-页码list&lt;/p&gt;
+
+&lt;p&gt;-首页、末页、上下页&lt;/p&gt;
+
+&lt;p&gt;-页码数量过多时用省略号指引&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;section&quot;&gt;组件将被这样使用：&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;Pagination currentPn={currentPn}
+        pageCount={pageCount}
+        pageSize={pageSize}
+        dataSize={dataSize}
+        clickHandler={this.changePn}
+        prevHandler={this.prevPn}
+        nextHandler={this.nextPn}
+        firstHandler={this.firstPn}
+        lastHandler={this.lastPn}
+&amp;gt;
+&amp;lt;/Pagination&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;点击每一个list中的页码链接，执行&lt;code&gt;this.changePn&lt;/code&gt;方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;changePn: function (e) {
+    e.preventDefault();
+    ExampleActions.setPageNumber({
+        pageNumber: e.target.innerHTML
+    });
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上下页翻页方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;prevPn: function (e) {
+    e.preventDefault();
+    ExampleActions.setPageNumber({
+        pageNumber: currentPn － 1
+    });
+},
+nextPn: function (e, currentPn) {
+    e.preventDefault();
+    ExampleActions.setPageNumber({
+        pageNumber: currentPn ＋ 1
+    });
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;首页和末页方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;firstPn: function (e) {
+    e.preventDefault();
+    ExampleActions.setPageNumber({
+        pageNumber: 1
+    });
+},
+lastPn: function (e, currentPn) {
+    e.preventDefault();
+    ExampleActions.setPageNumber({
+        pageNumber: pageCount
+    });
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上述五个方法执行后，通过action调用dispatcher，dispatcher调用store，store中loadData，重新render组件这个过程更新页面中展示的数据。&lt;/p&gt;
+
+&lt;h1 id=&quot;section-1&quot;&gt;组件将被这样实现：&lt;/h1&gt;
+
+&lt;p&gt;定义变量：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var pageList = &#39;&#39;;
+var pageListArr = [];
+var prevPage = &#39;&#39;;
+var nextPage = &#39;&#39;;
+var firstPage = &#39;&#39;;
+var lastPage = &#39;&#39;;
+var thisProps = this.props;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;展示页码list并不难，取到上面使用组件时传递过来的属性，将pageCount肢解，遍历，加入标签组装就可以完成这个任务：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;for (var i = 0; i &amp;lt; thisProps.pageCount; i++) {
+    pageListArr.push(i);
+};
+pageList = pageListArr.map(function (item) {
+    // 判断是否当前页
+    if (item === thisProps.currentPn) {
+        return (
+            &amp;lt;li className=&quot;active&quot;&amp;gt;&amp;lt;a href=&quot;&quot; onClick={thisProps.clickHandler}&amp;gt;
+                {item}&amp;lt;/a&amp;gt;
+            &amp;lt;/li&amp;gt;
+        );
+    }
+    else {
+        return (
+            &amp;lt;li&amp;gt;&amp;lt;a href=&quot;&quot; onClick={thisProps.clickHandler}&amp;gt;
+                {item}&amp;lt;/a&amp;gt;
+            &amp;lt;/li&amp;gt;
+        );
+    }
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上下页翻页链接，要判断是否可点击，首页和末页类似，但不需要判断状态：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// 上一页
+prevPage = (function () {
+    if (thisProps.currentPn === 1) {
+        return (
+            &amp;lt;li className=&quot;disabled&quot;&amp;gt;
+              &amp;lt;span&amp;gt;
+                &amp;lt;span aria-hidden=&quot;true&quot;&amp;gt;上一页&amp;lt;/span&amp;gt;
+              &amp;lt;/span&amp;gt;
+            &amp;lt;/li&amp;gt;
+        );
+    }
+    else {
+        return (
+            &amp;lt;li&amp;gt;
+              &amp;lt;a href=&quot;#&quot; aria-label=&quot;Previous&quot; onClick={thisProps.prevHandler}&amp;gt;
+                &amp;lt;span aria-hidden=&quot;true&quot;&amp;gt;上一页&amp;lt;/span&amp;gt;
+              &amp;lt;/a&amp;gt;
+            &amp;lt;/li&amp;gt;
+        );
+    }
+})();
+
+// 下一页
+nextPage = (function () {
+    if (thisProps.currentPn === thisProps.pageCount) {
+        return (
+            &amp;lt;li className=&quot;disabled&quot;&amp;gt;
+              &amp;lt;span&amp;gt;
+                &amp;lt;span aria-hidden=&quot;true&quot;&amp;gt;下一页&amp;lt;/span&amp;gt;
+              &amp;lt;/span&amp;gt;
+            &amp;lt;/li&amp;gt;
+        );
+    }
+    else {
+        return (
+            &amp;lt;li&amp;gt;
+              &amp;lt;a href=&quot;#&quot; aria-label=&quot;Next&quot; onClick={thisProps.nextHandler}&amp;gt;
+                &amp;lt;span aria-hidden=&quot;true&quot;&amp;gt;下一页&amp;lt;/span&amp;gt;
+              &amp;lt;/a&amp;gt;
+            &amp;lt;/li&amp;gt;
+        );
+    }
+})();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;组装：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;ul className=&quot;pagination pull-right&quot;&amp;gt;
+    {firstPage}
+    {prevPage}
+    {pageList}
+    {nextPage}
+    {lastPage}
+&amp;lt;/ul&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&quot;section-2&quot;&gt;显示省略号&lt;/h1&gt;
+
+&lt;p&gt;考虑四种情况：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;左边右边都不需要省略号&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;左边有省略号，右边没有&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;左边没有省略号，右边有&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;左右两边都需要省略号&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;再考虑：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;“首页”和“末页”可以用“1”“100（假设是最后一页的页码）”放在list中代替，因为不管有没有省略号，1和100始终都要显示出来。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;两种实现思路：&lt;/p&gt;
+
+&lt;p&gt;1、四种不同的情况下，直接拼装包含&lt;code&gt;...&lt;/code&gt;的html代码&lt;/p&gt;
+
+&lt;p&gt;2、四种不同的情况下，先拼装pageListArr这个变量，再遍历生成html代码&lt;/p&gt;
+
+&lt;p&gt;考虑到react中store影响view这个特性，我决定采用第二种方法（我不会告诉你其实我先尝试了第一种方法，然后拼装变量和字符串快要崩溃…jsx都不完全懂，还是默默地去操作变量吧…何况这样真的比较清爽…）&lt;/p&gt;
+
+&lt;p&gt;添加变量：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// 假设当前页码总在中间显示，pageTab就是当前页码到省略号之间的数量，比如1...4,5,6,7,8...100，pageTab就是2
+var pageTab = 4;
+
+// 左边的省略号，在第1页之后
+var leftEllipse = &#39;&#39;;
+
+// 右边的省略号，在第100页之前
+var rightEllipse = &#39;&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;总页数小于11，全部显示（这里可以做成可配置的）：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;if (thisProps.pageCount &amp;lt; 11) {
+
+    // 注意pageListArr要先清空
+    pageListArr = [];
+
+    // 从第二页开始显示，到倒数第二页
+    for (var i = 1; i &amp;lt; thisProps.pageCount-1; i++) {
+        pageListArr.push(i);
+    };
+
+    //左右都没有省略号
+    leftEllipse = &#39;&#39;;
+    rightEllipse = &#39;&#39;;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;总页码数大于11时，有&lt;code&gt;...&lt;/code&gt;出现：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;if (thisProps.pageCount &amp;gt; 10) {
+    // 当前页减去pageTab小于1，右边显示省略号，左边不显示
+    if (thisProps.currentPn - pageTab &amp;lt; 1) {
+
+        pageListArr = [];
+
+        for (var i = 1; i &amp;lt; 10; i++) {
+            pageListArr.push(i);
+        };
+
+        leftEllipse = &#39;&#39;;
+        rightEllipse = &amp;lt;li&amp;gt;&amp;lt;span&amp;gt;...&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;;
+    }
+
+    // 当前页减去pageTab大于1 且 当前页加上pageTab小于总页数，两边都显示省略号
+    if ((thisProps.currentPn - pageTab &amp;gt; 1) &amp;amp;&amp;amp; ((thisProps.currentPn + pageTab) &amp;lt; thisProps.pageCount)) {
+
+        pageListArr = [];
+
+        for (var i = thisProps.currentPn - pageTab; i &amp;lt; thisProps.currentPn + pageTab; i++) {
+            pageListArr.push(i);
+        };
+
+        leftEllipse = &amp;lt;li&amp;gt;&amp;lt;span&amp;gt;...&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;;
+        rightEllipse = &amp;lt;li&amp;gt;&amp;lt;span&amp;gt;...&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;
+    }
+
+    // 当前页码加上pageTab大于总页数，右边不显示省略号，左边显示
+    if ((thisProps.currentPn + pageTab) &amp;gt; (thisProps.pageCount)) {
+
+        pageListArr = [];
+
+        for (var i = thisProps.pageCount - (pageTab*2 + 1); i &amp;lt; thisProps.pageCount; i++) {
+            pageListArr.push(i);
+        };
+
+        leftEllipse = &amp;lt;li&amp;gt;&amp;lt;span&amp;gt;...&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;;
+        rightEllipse = &#39;&#39;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;首页和末页：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// 首页
+firstPage = (function () {
+    if (thisProps.currentPn === 1) {
+        return (
+            &amp;lt;li className=&quot;active&quot;&amp;gt;&amp;lt;a href=&quot;&quot; onClick={thisProps.firstHandler}&amp;gt;
+                1&amp;lt;/a&amp;gt;
+            &amp;lt;/li&amp;gt;
+        );
+    }
+    else {
+        return (
+            &amp;lt;li&amp;gt;&amp;lt;a href=&quot;&quot; onClick={thisProps.firstHandler}&amp;gt;
+                1&amp;lt;/a&amp;gt;
+            &amp;lt;/li&amp;gt;
+        );
+    }
+})();
+
+// 末页
+lastPage = (function () {
+    if (thisProps.currentPn === thisProps.pageCount) {
+        return (
+            &amp;lt;li className=&quot;active&quot;&amp;gt;&amp;lt;a href=&quot;&quot; onClick={thisProps.lastHandler}&amp;gt;
+                {thisProps.pageCount}&amp;lt;/a&amp;gt;
+            &amp;lt;/li&amp;gt;
+        );
+    }
+    else {
+        return (
+            &amp;lt;li&amp;gt;&amp;lt;a href=&quot;&quot; onClick={thisProps.lastHandler}&amp;gt;
+                {thisProps.pageCount}&amp;lt;/a&amp;gt;
+            &amp;lt;/li&amp;gt;
+        );
+    }
+})();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;装入&lt;code&gt;ul&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;ul className=&quot;pagination pull-right&quot;&amp;gt;
+    {prevPage}
+    {firstPage}
+    {leftEllipse}
+    {pageList}
+    {rightEllipse}
+    {lastPage}
+    {nextPage}
+&amp;lt;/ul&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;总的组织结构：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var Pagination = React.createClass({
+    render: function () {
+        ...算法／过程...
+        return (
+            &amp;lt;ul&amp;gt;
+                ...组装结果...
+            &amp;lt;/ul&amp;gt;
+        );
+    }
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;备注：分页样式使用bootstrap。&lt;/p&gt;
+</description>
+        <pubDate>Mon, 07 Sep 2015 19:18:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/react/js/2015/09/07/js-react-pagination.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/react/js/2015/09/07/js-react-pagination.html</guid>
+        
+        
+        <category>react</category>
+        
+        <category>js</category>
+        
+      </item>
     
       <item>
         <title>react ajax跨域请求</title>
         <description>&lt;h1 id=&quot;section&quot;&gt;同源策略&lt;/h1&gt;
 
 &lt;blockquote&gt;
-  &lt;p&gt;&lt;a href=&quot;https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy&quot;&gt;同源策略&lt;/a&gt;限制了一个源（origin）中加载文本或脚本与来自其它源（origin）中资源的交互方式。如果两个页面拥有相同的 &lt;code&gt;协议（protocol）&lt;/code&gt;，&lt;code&gt;端口&lt;/code&gt;（如果指定），和 &lt;code&gt;主机&lt;/code&gt;，那么这两个页面就属于同一个源（origin）。&lt;/p&gt;
+  &lt;p&gt;&lt;a href=&quot;https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy&quot;&gt;同源策略&lt;/a&gt;限制了一个源（origin）中加载文本或脚本与来自其它源（origin）中资源的交互方式。如果两个页面拥有相同的 &lt;code&gt;协议（protocol）&lt;/code&gt;，&lt;code&gt;端口&lt;/code&gt;（如果指定），和 &lt;code&gt;主机&lt;/code&gt;，那么这两个页面就属于同一个源（origin）。&lt;!--more--&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;p&gt;在使用XMLHttpRequest时会受到同源策略的约束。&lt;/p&gt;
@@ -133,7 +485,7 @@ request
 
 &lt;h1 id=&quot;react&quot;&gt;React&lt;/h1&gt;
 
-&lt;p&gt;对于react，我是从&lt;a href=&quot;http://facebook.github.io/react/docs/getting-started.html&quot;&gt;这里&lt;/a&gt;开始了解的，然而这儿仅仅能了解到react的语法。&lt;/p&gt;
+&lt;p&gt;对于react，我是从&lt;a href=&quot;http://facebook.github.io/react/docs/getting-started.html&quot;&gt;这里&lt;/a&gt;开始了解的，然而这儿仅仅能了解到react的语法。&lt;!--more--&gt;&lt;/p&gt;
 
 &lt;p&gt;对于习惯了html＋css＋js文件的我来说，乍一看到react的代码，第一反应是：html写在js中？这不就是前端一直强调的“结构、样式、行为分离”思想的反面教材吗？不能再颠覆啊！我感到无所适从。&lt;/p&gt;
 
@@ -473,7 +825,7 @@ render: function () {
   &lt;p&gt;第一次用到，搜了很多博文都没用，一篇抄一篇而且整得特复杂…还是官方文档比较给力，然而最近红杏什么的都没法用了，代理jquery到国内cdn后才能正确显示效果，非常之坑…有些东西遮遮掩掩真的有用吗？&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;a href=&quot;http://silviomoreto.github.io/bootstrap-select/&quot;&gt;bootstrap-select.js官方文档&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://silviomoreto.github.io/bootstrap-select/&quot;&gt;bootstrap-select.js官方文档&lt;/a&gt;&lt;!--more--&gt;&lt;/p&gt;
 
 &lt;p&gt;html：&lt;/p&gt;
 
@@ -521,7 +873,7 @@ render: function () {
 &lt;p&gt;——&amp;gt;&lt;a href=&quot;http://insekkei.com/todolist&quot;&gt;预览效果&lt;/a&gt;&lt;/p&gt;
 
 &lt;h1 id=&quot;section&quot;&gt;准备工作&lt;/h1&gt;
-
+&lt;!--more--&gt;
 &lt;p&gt;用bower安装需要的js：&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;bower install angular
@@ -696,6 +1048,7 @@ $scope.todoList = todoInStore || [];
 &lt;pre&gt;&lt;code&gt;// 返回true or false
 $(&#39;selector&#39;).is(&#39;:checked&#39;);
 &lt;/code&gt;&lt;/pre&gt;
+&lt;!--more--&gt;
 
 &lt;h1 id=&quot;jqueryradiocheckbox-1&quot;&gt;jquery操作radio或者checkbox使它们被选中&lt;/h1&gt;
 
@@ -723,7 +1076,7 @@ $(&#39;#radio_1&#39;).attr(&#39;checked&#39;, &#39;checked&#39;);
 &lt;h1 id=&quot;section&quot;&gt;概念&lt;/h1&gt;
 
 &lt;blockquote&gt;
-  &lt;p&gt;AngularJS is a structural framework for dynamic web apps.&lt;/p&gt;
+  &lt;p&gt;AngularJS is a structural framework for dynamic web apps.&lt;!--more--&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;h2 id=&quot;directive&quot;&gt;Directive&lt;/h2&gt;
@@ -885,10 +1238,8 @@ function CartController($scope) {
 
 &lt;h1 id=&quot;section&quot;&gt;概念：&lt;/h1&gt;
 
-&lt;pre&gt;&lt;code&gt;Gulp.js是一个基于node.js的自动化构建工具，开发者可以使用它在项目开发过程中自动执行常见任务。
+&lt;pre&gt;&lt;code&gt;Gulp.js是一个基于node.js的自动化构建工具，开发者可以使用它在项目开发过程中自动执行常见任务。 &amp;lt;!--more--&amp;gt; # 全局安装：
 &lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&quot;section-1&quot;&gt;全局安装：&lt;/h1&gt;
 
 &lt;p&gt;$ npm install –global gulp&lt;/p&gt;
 
@@ -927,7 +1278,7 @@ gulp.task(&#39;default&#39;, function() {
 
 &lt;p&gt;*简单来说就是：哪些文件（src）？进行怎样的操作（task）？结果怎么写入（dest）？&lt;/p&gt;
 
-&lt;h1 id=&quot;section-2&quot;&gt;举个例子！&lt;/h1&gt;
+&lt;h1 id=&quot;section-1&quot;&gt;举个例子！&lt;/h1&gt;
 
 &lt;p&gt;创建一个监听所有类型为less的文件的任务，当任何一个less文件被修改时，执行less-pro这个任务。*&lt;/p&gt;
 
@@ -975,7 +1326,7 @@ gulp.task(&#39;default&#39;, function() {
 &lt;p&gt;&lt;em&gt;方法一：&lt;/em&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;var arr = [1,2,3,4,5,1,3,12,55,22];
-function getArray(a){
+function getArray(a){&lt;!--more--&gt;
 	var obj = {},
 	resultArray = [];
 	for(var i=0;i&amp;lt;a.length;i++){
@@ -1044,7 +1395,7 @@ getCount(string);//Object {s: 1, e: 1, r: 1, d: 1, t: 2…}
 
 &lt;p&gt;&lt;em&gt;解决方案一：&lt;/em&gt;&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt; &amp;gt;&#39;abcd ed&#39;.split(&#39;&#39;).reverse().join(&#39;&#39;); 
+&lt;pre&gt;&lt;code&gt; &amp;gt;&#39;abcd ed&#39;.split(&#39;&#39;).reverse().join(&#39;&#39;); &lt;!--more--&gt;
 &amp;lt;-&quot;de dcba&quot;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;如果写成：&lt;/p&gt;
@@ -1108,40 +1459,6 @@ map()方法会给数组中的每个元素都按顺序调用一次 callback 函�
         <category>js</category>
         
         <category>function</category>
-        
-      </item>
-    
-      <item>
-        <title>Javascript stop bubble</title>
-        <description>&lt;h1 id=&quot;js&quot;&gt;js阻止冒泡方法：&lt;/h1&gt;
-
-&lt;pre&gt;&lt;code&gt;var stopBubble = function (e) {
-	//如果提供了事件对象，则这是一个非IE浏览器
-	if(e &amp;amp;&amp;amp; e.stopPropagation) {
-		//因此它支持W3C的stopPropagation()方法
-		e.stopPropagation();
-	} else {
-		//否则，我们需要使用IE的方式来取消事件冒泡 
-		window.event.cancelBubble = true;
-	}
-	return false;
-};
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;em&gt;用法：&lt;/em&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$(...).click(function(e){
-	stopBubble(e);
-});
-&lt;/code&gt;&lt;/pre&gt;
-</description>
-        <pubDate>Tue, 16 Jun 2015 11:20:00 +0800</pubDate>
-        <link>http://insekkei.com/blogs//blogs/js/common/2015/06/16/Javascript-stopBubble.html</link>
-        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/js/common/2015/06/16/Javascript-stopBubble.html</guid>
-        
-        
-        <category>js</category>
-        
-        <category>common</category>
         
       </item>
     

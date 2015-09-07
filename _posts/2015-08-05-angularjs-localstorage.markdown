@@ -10,7 +10,7 @@ categories: angularjs js
 ——>[预览效果](http://insekkei.com/todolist)
 
 # 准备工作
-
+<!--more-->
 用bower安装需要的js：
 
 <pre><code>bower install angular
