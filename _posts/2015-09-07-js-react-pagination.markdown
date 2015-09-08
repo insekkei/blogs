@@ -319,4 +319,8 @@ categories: react js
         }
     });
 
+另外，传递过来的dataSize、pageSize还可以展示出来，写一个总结：本页共有xx条数据，等等..
+
+pageSize也可以做成select形式的，用户可以调整每页展示的数量...
+
 备注：分页样式使用bootstrap。
