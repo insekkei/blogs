@@ -6,9 +6,103 @@
 </description>
     <link>http://insekkei.com/blogs//blogs/</link>
     <atom:link href="http://insekkei.com/blogs//blogs/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 08 Sep 2015 10:53:35 +0800</pubDate>
-    <lastBuildDate>Tue, 08 Sep 2015 10:53:35 +0800</lastBuildDate>
+    <pubDate>Thu, 24 Sep 2015 15:12:56 +0800</pubDate>
+    <lastBuildDate>Thu, 24 Sep 2015 15:12:56 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>flux中使用react-loder</title>
+        <description>&lt;blockquote&gt;
+  &lt;p&gt;做一个react的项目，需要loading菊花的效果，找到了&lt;a href=&quot;https://github.com/quickleft/react-loader&quot;&gt;react-loader&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;三木君说，这种方法藕合度挺高的。然而我目前想不到更好（kuai，四声）的方法来对付手头的flux项目了…如果谁有思路，请&lt;a href=&quot;hancong9104@163.com&quot;&gt;务必告知&lt;/a&gt;，不胜感激。&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;In the view:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;Loader loaded={!this.state.data.isLoading} ... /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;When send a xhr request:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;...
+componentDidMount: function () {
+    sampleStore.addChangeListener(this._change);
+
+    if (this.isMounted()) {
+
+        SampleActions.setIsLoading();
+        SampleActions.loadData(); 
+    }
+},
+..
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And in SampleActions.js:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;...
+setIsLoading: function (params) {
+    PlatformDispatcher.dispatch({
+        actionType: &#39;order_statistic_set_isLoading&#39;,
+        item: params
+    });
+},
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then in sampleStore.js:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;PlatformDispatcher.register(function (payload) {
+    var actionType = payload.actionType;
+
+    switch (actionType) {
+        ...
+        case &#39;order_statistic_set_isLoading&#39;:
+          orderStatisticStore.setIsLoading(payload.item);
+          break;
+        ...
+    }
+});
+
+OrderStatisticStore.prototype = assign({}, EventEmitter.prototype, {
+    setIsLoading: function (params) {
+        // when send a xhr request, change state
+        this.data.isLoading = true;
+        this.emit(&#39;change&#39;);
+    },
+    loadData: function (params, callback) {
+        var params = params || {};
+
+        // send request
+        PlatformRequest.getQuestHandle({
+            url: ...,
+            data: {
+                ...
+            }
+        }, function (res) {
+            // when success, change the state of isLoading
+            this.data.isLoading = false;
+            this.data... = res;
+            this.emitChange();
+            callback &amp;amp;&amp;amp; callback();
+        }.bind(this));
+    },
+    ...
+});
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+        <pubDate>Thu, 24 Sep 2015 15:07:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/react/loader/2015/09/24/react-loader-with-flux.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/react/loader/2015/09/24/react-loader-with-flux.html</guid>
+        
+        
+        <category>react</category>
+        
+        <category>loader</category>
+        
+      </item>
     
       <item>
         <title>用react完成一个带省略号的分页</title>
@@ -1391,79 +1485,6 @@ getCount(string);//Object {s: 1, e: 1, r: 1, d: 1, t: 2…}
         <pubDate>Tue, 16 Jun 2015 12:00:00 +0800</pubDate>
         <link>http://insekkei.com/blogs//blogs/js/function/2015/06/16/js%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D%E5%8F%8A%E8%AE%A1%E7%AE%97%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%AD%97%E7%AC%A6%E7%9A%84%E4%B8%AA%E6%95%B0.html</link>
         <guid isPermaLink="true">http://insekkei.com/blogs//blogs/js/function/2015/06/16/js%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D%E5%8F%8A%E8%AE%A1%E7%AE%97%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%AD%97%E7%AC%A6%E7%9A%84%E4%B8%AA%E6%95%B0.html</guid>
-        
-        
-        <category>js</category>
-        
-        <category>function</category>
-        
-      </item>
-    
-      <item>
-        <title>Javascript反序输出字符串</title>
-        <description>&lt;p&gt;这是一个我在至少4次web前端笔试或者面试中遇到过的题目，就这么一行字的题目，最近一次看到却还让我如遭五雷轰顶，罪过，罪过。&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;解决方案一：&lt;/em&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt; &amp;gt;&#39;abcd ed&#39;.split(&#39;&#39;).reverse().join(&#39;&#39;); &lt;!--more--&gt;
-&amp;lt;-&quot;de dcba&quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;如果写成：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt; &amp;gt;&#39;abcd ed&#39;.split(&#39;&#39;).reverse().join(); 
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;结果会是：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt; &amp;lt;&quot;-d,e, ,d,c,b,a&quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;注意&lt;code&gt;join(seperator)&lt;/code&gt;方法是通过指定的字符连接数组所有元素，默认连接符是&lt;code&gt;.&lt;/code&gt;。&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;解决方案二：&lt;/em&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt; &amp;gt;&quot;abcd ed&quot;.split(&#39;&#39;).sort(function(a,b){return 1;}).join(&#39;&#39;);
-&amp;lt;-&quot;de dcba&quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;sort(sortby)&lt;/code&gt;方法，如果没有sortby参数，返回数组按照字母顺序，即字符编码顺序进行排列。现在，按照&lt;code&gt;sort()&lt;/code&gt;方法的说明，return 1，也就是一个大于0的数，表示排序后的数组中a应该出现在b之后。&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;解决方案三：&lt;/em&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt; &amp;gt;str=&#39;abcd ed&#39;;Array.prototype.map.call(str,function(it, i){return str[str.length-i-1];}).join(&#39;&#39;);
-&amp;lt;-&quot;de dcba&quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;对@yfwz100的这个方法我表示五体投地地膜拜Orz。
-map()方法会给数组中的每个元素都按顺序调用一次 callback 函数。比如：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;gt;var numbers = [1, 4, 9]; 
-&amp;gt;numbers.map(function(num) { return num * 2; });
-&amp;lt;-[2, 8, 18]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;方案三使用了&lt;code&gt;array.map(callback[, thisArg])&lt;/code&gt;，并且，字符串被当作数组来使用…，callback中第一个参数是数组中当前被传递的元素，这里即字符串中当前被传递的字符，第二个参数是当前被传递元素的索引，第三个参数是调用map方法的数组。
-例1，获取每个字符串对应的ASCLL码：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;gt;Array.prototype.map.call(&quot;Hello World&quot;, function(x) { return x.charCodeAt(0); }) 
-&amp;lt;-[72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;通常情况下，map 方法中的 &lt;code&gt;callback&lt;/code&gt; 函数只需要接受一个参数，就是正在被遍历的数组元素本身。但这并不意味着 &lt;code&gt;map&lt;/code&gt; 只给 &lt;code&gt;callback&lt;/code&gt; 传了一个参数，第三个参数callback会忽视，但第二个参数&lt;code&gt;index&lt;/code&gt;会被使用。&lt;/p&gt;
-
-&lt;p&gt;例2，进制数转换：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;gt;[&quot;1&quot;, &quot;2&quot;, &quot;3&quot;].map(parseInt);
-&amp;lt;-[1, NaN, NaN]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;例2中，&lt;code&gt;parseInt()&lt;/code&gt;方法有两个参数，&lt;code&gt;element&lt;/code&gt;和&lt;code&gt;进制数&lt;/code&gt;，于是它将&lt;code&gt;index&lt;/code&gt;视为了进制数。因此正确的方法应该是：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;gt;function returnInt(element){ return parseInt(element,10); }
-&amp;gt;[&quot;1&quot;, &quot;2&quot;, &quot;3&quot;].map(returnInt);
-&amp;lt;-[1, 2, 3]
-&lt;/code&gt;&lt;/pre&gt;
-</description>
-        <pubDate>Tue, 16 Jun 2015 11:49:00 +0800</pubDate>
-        <link>http://insekkei.com/blogs//blogs/js/function/2015/06/16/Javascript-%E5%8F%8D%E5%BA%8F%E8%BE%93%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2.html</link>
-        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/js/function/2015/06/16/Javascript-%E5%8F%8D%E5%BA%8F%E8%BE%93%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2.html</guid>
         
         
         <category>js</category>

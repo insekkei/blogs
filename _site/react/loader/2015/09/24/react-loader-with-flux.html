@@ -6,12 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>web前端笔记</title>
-  <meta name="description" content="绿螘新醅酒，红泥小火炉。<br>晚来天欲雪，能饮一杯无？
-">
+  <title>flux中使用react-loder</title>
+  <meta name="description" content="  做一个react的项目，需要loading菊花的效果，找到了react-loader三木君说，这种方法藕合度挺高的。然而我目前想不到更好（kuai，四声）的方法来对付手头的flux项目了…如果谁有思路，请务必告知，不胜感激。">
 
   <link rel="stylesheet" href="/blogs/css/main.css">
-  <link rel="canonical" href="http://insekkei.com/blogs//blogs/blogs/page2/">
+  <link rel="canonical" href="http://insekkei.com/blogs//blogs/react/loader/2015/09/24/react-loader-with-flux.html">
   <link rel="alternate" type="application/rss+xml" title="web前端笔记" href="http://insekkei.com/blogs//blogs/feed.xml" />
   <link rel="icon" type="image/png" href="/blogs/images/icon.png">
 </head>
@@ -61,71 +60,113 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="home">
+        <div class="post">
 
-  <h1 class="page-heading">笔记目录</h1>
+  <header class="post-header">
+    <h1 class="post-title">flux中使用react-loder</h1>
+    <p class="post-meta">Sep 24, 2015</p>
+  </header>
 
-  <ul class="post-list">
-    
-      <li>
-        <span class="post-meta">Jun 16, 2015</span>
+  <article class="post-content">
+    <blockquote>
+  <p>做一个react的项目，需要loading菊花的效果，找到了<a href="https://github.com/quickleft/react-loader">react-loader</a></p>
+</blockquote>
 
-        <h2>
-          <a class="post-link" href="/blogs/js/function/2015/06/16/Javascript-%E5%8F%8D%E5%BA%8F%E8%BE%93%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2.html">Javascript反序输出字符串</a>
-        </h2>
-        <p class="excerpt">这是一个我在至少4次web前端笔试或者面试中遇到过的题目，就这么一行字的题目，最近一次看到却还让我如遭五雷轰顶，罪过，罪过。
+<p>三木君说，这种方法藕合度挺高的。然而我目前想不到更好（kuai，四声）的方法来对付手头的flux项目了…如果谁有思路，请<a href="hancong9104@163.com">务必告知</a>，不胜感激。</p>
 
-解决方案一：
+<!--more-->
 
- &gt;'abcd ed'.split('').reverse().join(''); 
+<p>In the view:</p>
 
+<pre><code>&lt;Loader loaded={!this.state.data.isLoading} ... /&gt;
+</code></pre>
 
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jun 16, 2015</span>
+<p>When send a xhr request:</p>
 
-        <h2>
-          <a class="post-link" href="/blogs/js/common/2015/06/16/Javascript-stopBubble.html">Javascript stop bubble</a>
-        </h2>
-        <p class="excerpt">js阻止冒泡方法：
+<pre><code>...
+componentDidMount: function () {
+    sampleStore.addChangeListener(this._change);
 
-var stopBubble = function (e) {
-	//如果提供了事件对象，则这是一个非IE浏览器
-	if(e &amp;&amp; e.stopPropagation) {
-		//因此它支持W3C的stopPropagation()方法
+    if (this.isMounted()) {
 
+        SampleActions.setIsLoading();
+        SampleActions.loadData(); 
+    }
+},
+..
+</code></pre>
 
-</p>
-      </li>
-    
-  </ul>
+<p>And in SampleActions.js:</p>
 
-  <!-- Pagination links -->
-  
-  <div class="pagination">
-    
-      <a class="prevpage" href="/blogs/index.html">&laquo; Prev</a>
-    
+<pre><code>...
+setIsLoading: function (params) {
+    PlatformDispatcher.dispatch({
+        actionType: 'order_statistic_set_isLoading',
+        item: params
+    });
+},
+...
+</code></pre>
 
-    
-      
-        <a href="/blogs/index.html">1</a>
-      
-    
-      
-        <em>2</em>
-      
-    
+<p>Then in sampleStore.js:</p>
 
-    
-      <span>Next &raquo;</span>
-    
-  </div>
-  
+<pre><code>PlatformDispatcher.register(function (payload) {
+    var actionType = payload.actionType;
 
-  <p class="rss-subscribe">subscribe <a href="/blogs/feed.xml">via RSS</a></p>
+    switch (actionType) {
+        ...
+        case 'order_statistic_set_isLoading':
+          orderStatisticStore.setIsLoading(payload.item);
+          break;
+        ...
+    }
+});
+
+OrderStatisticStore.prototype = assign({}, EventEmitter.prototype, {
+    setIsLoading: function (params) {
+        // when send a xhr request, change state
+        this.data.isLoading = true;
+        this.emit('change');
+    },
+    loadData: function (params, callback) {
+        var params = params || {};
+
+        // send request
+        PlatformRequest.getQuestHandle({
+            url: ...,
+            data: {
+                ...
+            }
+        }, function (res) {
+            // when success, change the state of isLoading
+            this.data.isLoading = false;
+            this.data... = res;
+            this.emitChange();
+            callback &amp;&amp; callback();
+        }.bind(this));
+    },
+    ...
+});
+</code></pre>
+
+  </article>
+
+  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="flux中使用react-loder"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"blogs2015"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	<!-- 多说公共JS代码 end -->
 
 </div>
 
