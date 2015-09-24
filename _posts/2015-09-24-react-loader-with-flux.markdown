@@ -7,7 +7,7 @@ categories: react loader
 
 > 做一个react的项目，需要loading菊花的效果，找到了[react-loader](https://github.com/quickleft/react-loader)，然而README中只有一些不明觉厉的伪代码...
 
-经过多番尝试，终于做出来了一款flux的小菊花...三木君说，这种方法藕合度挺高的。然而我目前想不到更好（kuai，四声）<!--more-->的方法来对付手头的flux项目了...如果谁有思路，请[务必告知](hancong9104@163.com)，不胜感激。
+经过多番尝试，终于做出来了一款flux的小菊花...三木君说，这种方法藕合度挺高的。然而我目前想不到更好（kuai，四声）<!--more-->的方法来对付手头的flux项目了...如果谁有思路，请[务必告知](mailto:hancong9104@163.com)，不胜感激。
 
 In the view:
 
