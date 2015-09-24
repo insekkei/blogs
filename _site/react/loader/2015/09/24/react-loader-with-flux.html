@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>flux中使用react-loder</title>
-  <meta name="description" content="  做一个react的项目，需要loading菊花的效果，找到了react-loader三木君说，这种方法藕合度挺高的。然而我目前想不到更好（kuai，四声）的方法来对付手头的flux项目了…如果谁有思路，请务必告知，不胜感激。">
+  <meta name="description" content="  做一个react的项目，需要loading菊花的效果，找到了react-loader，然而README中只有一些不明觉厉的伪代码…经过多番尝试，终于做出来了一款flux的小菊花…三木君说，这种方法藕合度挺高的。然而我目前想不到更好（kuai，四声）">
 
   <link rel="stylesheet" href="/blogs/css/main.css">
   <link rel="canonical" href="http://insekkei.com/blogs//blogs/react/loader/2015/09/24/react-loader-with-flux.html">
@@ -69,12 +69,10 @@
 
   <article class="post-content">
     <blockquote>
-  <p>做一个react的项目，需要loading菊花的效果，找到了<a href="https://github.com/quickleft/react-loader">react-loader</a></p>
+  <p>做一个react的项目，需要loading菊花的效果，找到了<a href="https://github.com/quickleft/react-loader">react-loader</a>，然而README中只有一些不明觉厉的伪代码…</p>
 </blockquote>
 
-<p>三木君说，这种方法藕合度挺高的。然而我目前想不到更好（kuai，四声）的方法来对付手头的flux项目了…如果谁有思路，请<a href="hancong9104@163.com">务必告知</a>，不胜感激。</p>
-
-<!--more-->
+<p>经过多番尝试，终于做出来了一款flux的小菊花…三木君说，这种方法藕合度挺高的。然而我目前想不到更好（kuai，四声）<!--more-->的方法来对付手头的flux项目了…如果谁有思路，请<a href="hancong9104@163.com">务必告知</a>，不胜感激。</p>
 
 <p>In the view:</p>
 
@@ -88,7 +86,7 @@ componentDidMount: function () {
     sampleStore.addChangeListener(this._change);
 
     if (this.isMounted()) {
-
+        // 发请求之前都先setIsLoading
         SampleActions.setIsLoading();
         SampleActions.loadData(); 
     }
@@ -108,7 +106,7 @@ setIsLoading: function (params) {
 ...
 </code></pre>
 
-<p>Then in sampleStore.js:</p>
+<p>Then, in sampleStore.js:</p>
 
 <pre><code>PlatformDispatcher.register(function (payload) {
     var actionType = payload.actionType;
@@ -148,6 +146,8 @@ OrderStatisticStore.prototype = assign({}, EventEmitter.prototype, {
     ...
 });
 </code></pre>
+
+<p>如果再配合bootstrap-react的loading button state，也是美呆了…</p>
 
   </article>
 
