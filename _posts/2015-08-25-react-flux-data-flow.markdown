@@ -27,7 +27,7 @@ categories: react js flux
 
 React只是引入了虚拟DOM的机制，在view层实现可复用的web前端组件，但她并没有什么数据绑定，依赖诸如这些特性，于是单纯用react的话，数据怎么管理？
 
-Flux正是facebook为react设计的一个架构，它只是一种模式，按照其设计思想，必然会有很多种实现方式。
+Flux是facebook推出的一个组织web应用开发的架构，它只是一种模式，一种设计思想，因此，对于不同的js库，必然会有不同的实现方式，react只是其中一种。
 
 在flux中，view和controller是一体的，同时它增加的两层内容：dispatcher和stores，前者负责创建actions，然后将actions按照名称（`actionType`）分发给stores，stores中对数据进行修改，触发一些change相关的方法，将改动渲染到view层（一般先是最高层级的组件收到新的数据，再把这些数据传递到子组件中）。简单说就是：
 
