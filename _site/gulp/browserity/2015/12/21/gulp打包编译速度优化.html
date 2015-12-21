@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>js数组去重 及 计算字符串中字符的个数</title>
-  <meta name="description" content="1、数组去重。方法一：var arr = [1,2,3,4,5,1,3,12,55,22];function getArray(a){">
+  <title>gulp打包编译速度优化</title>
+  <meta name="description" content="  保持对新技术的好奇心，深入研究当前工作使用的技术，同时进行一些输出，例如写博客，做开源，研究分享，写书等的，没有输出的学习就是耍流氓。——来自知乎做项目时使用了browserify，但每次修改编译时间都很长，十几秒的样子？">
 
   <link rel="stylesheet" href="/blogs/css/main.css">
-  <link rel="canonical" href="http://insekkei.com/blogs//blogs/js/function/2015/06/16/js%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D%E5%8F%8A%E8%AE%A1%E7%AE%97%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%AD%97%E7%AC%A6%E7%9A%84%E4%B8%AA%E6%95%B0.html">
+  <link rel="canonical" href="http://insekkei.com/blogs//blogs/gulp/browserity/2015/12/21/gulp%E6%89%93%E5%8C%85%E7%BC%96%E8%AF%91%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8C%96.html">
   <link rel="alternate" type="application/rss+xml" title="web前端笔记" href="http://insekkei.com/blogs//blogs/feed.xml" />
   <link rel="icon" type="image/png" href="/blogs/images/icon.png">
 </head>
@@ -63,72 +63,109 @@
         <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">js数组去重 及 计算字符串中字符的个数</h1>
-    <p class="post-meta">Jun 16, 2015</p>
+    <h1 class="post-title">gulp打包编译速度优化</h1>
+    <p class="post-meta">Dec 21, 2015</p>
   </header>
 
   <article class="post-content">
-    <p>1、数组去重。</p>
+    <blockquote>
+  <p>保持对新技术的好奇心，深入研究当前工作使用的技术，同时进行一些输出，例如写博客，做开源，研究分享，写书等的，没有输出的学习就是耍流氓。
+——来自知乎</p>
+</blockquote>
 
-<p><em>方法一：</em></p>
+<p>做项目时使用了browserify，但每次修改编译时间都很长，十几秒的样子？<!--more-->反正感觉等待编译的时间已经远远超过了修改代码的时间，忍无可忍之时，开始寻找解决方案。</p>
 
-<pre><code>var arr = [1,2,3,4,5,1,3,12,55,22];
-function getArray(a){<!--more-->
-	var obj = {},
-	resultArray = [];
-	for(var i=0;i&lt;a.length;i++){
-   		obj[a[i]]=a[i];
-		console.log(obj);//纯数字时自带排序
-	}
-	for(var i in obj){
-		resultArray.push(obj[i]);
-	}
-	console.log(resultArray);
-}
-getArray(arr);//[1, 2, 3, 4, 5, 12, 22, 55]
+<p>于是很快就找到了watchify，简单理解，就是增量编译。</p>
+
+<p>修改之前：</p>
+
+<pre><code>var source = require('vinyl-source-stream');
+var browserify = require('browserify');
+var streamify = require('gulp-streamify');
+
+gulp.task('browserify', function () {
+    var bundleStream = browserify('v1/js/app.js').bundle();
+
+    return bundleStream
+    .pipe(source('app.js'))
+    .pipe(streamify(uglify()))
+    .pipe(gulp.dest('./dev/js/'));
+});
+
+// after each change, execute browserify, make a long long progress...
+gulp.task('release', ['browserify'], function () {
+    return gulp.src('./dev/js/app.js')
+    .pipe(gulp.dest('../static/js/'));
+});
+
+// watch everything
+gulp.task('watch', function () {
+    gulp.watch(['v1/less/**/*'], ['css2js']);
+    gulp.watch(['v1/js/**/*'], ['release']);
+});
+
+...
+gulp.task('default', ['release', 'watch']);
 </code></pre>
 
-<p><em>方法二：不存储排序，只利用hash去重</em></p>
+<p>添加watchify：</p>
 
-<pre><code>var arr = [1,2,3,4,5,1,3,12,55,22];
-function getArray2(a){
-	var obj = {},
-	resultArray = [];
-	for(var i=0;i&lt;a.length;i++){
-		if(!obj[a[i]]){
-			obj[a[i]]=true;     
-			resultArray.push(a[i]);
-		}
-	}
-	console.log(resultArray);
+<pre><code>var watchify = require('watchify'); 
+var source = require('vinyl-source-stream');
+var browserify = require('browserify');
+var streamify = require('gulp-streamify');
+var assign = require('lodash.assign');
+
+var bundleStream = watchify(browserify(assign({}, watchify.args, {
+    // required for watchify
+    cache: {},
+    // required for watchify
+    packageCache: {},
+    entries: ['v1/js/app.js']
+}))); 
+
+gulp.task('browserify', bundle);
+// on any dep update, runs the bundler
+bundleStream.on('update', bundle);
+// output build logs to terminal
+bundleStream.on('log', gutil.log);
+
+function bundle() {  
+  return bundleStream.bundle()
+    // log errors if they happen
+    .on('error', gutil.log.bind(gutil, 'Browserify Error'))
+    .pipe(source('app.js'))
+    .pipe(streamify(uglify()))
+    .pipe(gulp.dest('./dev/js/'));
 }
-getArray2(arr);//[1, 2, 3, 4, 5, 12, 55, 22]
+
+// browserify will not need
+gulp.task('release', function () {
+    return gulp.src('./dev/js/app.js')
+    .pipe(gulp.dest('../static/js/'));
+});
+
+gulp.task('watch', function () {
+    gulp.watch(['v1/less/**/*'], ['css2js']);
+    // just watch one file produced by WATCHIFY
+    gulp.watch(['./dev/js/app.js'], ['release']);
+});
+
+...
+// only at the beginning browserify being executed
+gulp.task('default', ['browserify', 'watch']);
 </code></pre>
 
-<p>2、给一个字符串，输出里面的字母分别出现的次数。</p>
+<p>延伸阅读及参考资料：</p>
 
-<p>将上题中的hash值改为计数器就可以了：</p>
+<p>http://csspod.com/advanced-tips-for-using-gulp-js/</p>
 
-<pre><code>var string = "serdtfyghjhbuygfct";
-function getCount(str){
-	var obj = {},
-	         a = str.split(""); 
-	for(var i=0;i&lt;a.length;i++){
-		if(!obj[a[i]]){
-			obj[a[i]]=1;//发现是新的value
-		}else{
-			obj[a[i]]+=1;
-		}
-	}
-	console.log(obj);
-}
-getCount(string);//Object {s: 1, e: 1, r: 1, d: 1, t: 2…}
-</code></pre>
+<p>http://csspod.com/using-browserify-with-gulp/</p>
 
   </article>
 
   <!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="" data-title="js数组去重 及 计算字符串中字符的个数"></div>
+	<div class="ds-thread" data-thread-key="" data-title="gulp打包编译速度优化"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

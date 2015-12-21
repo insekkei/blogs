@@ -6,8 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>jquery中操作radio和checkbox</title>
-  <meta name="description" content="jquery判断radio或者checkbox是否被选中// 返回true or false$('selector').is(':checked');">
+  <title>jquery和dom中操作radio和checkbox</title>
+  <meta name="description" content="  DOM对象才能使用DOM中的方法，jquery对象不可以使用dom中的方法。DOM对象可以和jquery对象互相转换：jquery对象转dom对象：$(selector).get(index);// or$(selector)[index];dom对象转jquery对象：">
 
   <link rel="stylesheet" href="/blogs/css/main.css">
   <link rel="canonical" href="http://insekkei.com/blogs//blogs/jquery/js/2015/07/29/jquery%E4%B9%8Bradio-checkbox.html">
@@ -63,19 +63,47 @@
         <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">jquery中操作radio和checkbox</h1>
+    <h1 class="post-title">jquery和dom中操作radio和checkbox</h1>
     <p class="post-meta">Jul 29, 2015</p>
   </header>
 
   <article class="post-content">
-    <h1 id="jqueryradiocheckbox">jquery判断radio或者checkbox是否被选中</h1>
+    <blockquote>
+  <p>DOM对象才能使用DOM中的方法，jquery对象不可以使用dom中的方法。</p>
+</blockquote>
+
+<p>DOM对象可以和jquery对象互相转换：</p>
+
+<h1 id="jquerydom">jquery对象转dom对象：</h1>
+
+<pre><code>$(selector).get(index);
+// or
+$(selector)[index];
+</code></pre>
+
+<h1 id="domjquery--more--">dom对象转jquery对象：<!--more--></h1>
+
+<pre><code>// dom对象
+var object = document.getElementById('object');
+// jquery对象
+var $object = $(object);
+</code></pre>
+
+<h1 id="jqueryradiocheckboxjquery">jquery判断radio或者checkbox是否被选中，需要jquery类型的对象。</h1>
 
 <pre><code>// 返回true or false
 $('selector').is(':checked');
 </code></pre>
-<!--more-->
 
-<h1 id="jqueryradiocheckbox-1">jquery操作radio或者checkbox使它们被选中</h1>
+<h1 id="domradiocheckboxdom">DOM方式判断radio或者checkbox是否被选中，需要用dom类型的对象。</h1>
+
+<pre><code>// 返回true or false
+$('selector')[0].checked;
+// or
+$('selector').get(0).checked;
+</code></pre>
+
+<h1 id="jqueryradiocheckbox">jquery操作radio或者checkbox使它们被选中</h1>
 
 <pre><code>//For versions higher than 1.6, use:
 $('#radio_1').prop('checked', true)
@@ -86,7 +114,7 @@ $('#radio_1').attr('checked', 'checked');
   </article>
 
   <!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="" data-title="jquery中操作radio和checkbox"></div>
+	<div class="ds-thread" data-thread-key="" data-title="jquery和dom中操作radio和checkbox"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
