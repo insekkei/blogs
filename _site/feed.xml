@@ -6,9 +6,251 @@
 </description>
     <link>http://insekkei.com/blogs//blogs/</link>
     <atom:link href="http://insekkei.com/blogs//blogs/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 21 Dec 2015 14:02:14 +0800</pubDate>
-    <lastBuildDate>Mon, 21 Dec 2015 14:02:14 +0800</lastBuildDate>
+    <pubDate>Mon, 25 Jan 2016 18:40:45 +0800</pubDate>
+    <lastBuildDate>Mon, 25 Jan 2016 18:40:45 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>IE9不打开控制台无法正常执行js</title>
+        <description>&lt;p&gt;接手一个系统项目，必须运行在windows下，浏览器要求IE9。&lt;/p&gt;
+
+&lt;p&gt;调试脚本的过程中使用过&lt;code&gt;console.log()&lt;/code&gt;，同时页面包含一个&lt;code&gt;setInterval()&lt;/code&gt;方法，每隔300毫秒自动获取接口传过来的数据， 获取到正确的数据之后，停止定时器。&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;chrome中测试无误，然而转到IE9中之后，死活无法等到数据，便想打开控制台看看有没有报错，然而每每一打开控制台几乎瞬间数据就传过来了！试了好多次，确定不是机缘未到，抱着怀疑的心理搜索了一下“ie9 控制台打开才执行js”，果然很多人都遇到过这个问题，但是，故事的结局往往出人意料：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;IE仅在开启developer tools的时候，脚本才能访问到console这个对象。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这真是一个让人忍不住想吐槽的设定…&lt;/p&gt;
+
+&lt;p&gt;对此情况，解决方案有：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;生产环境下移除或者注释掉&lt;code&gt;console.log()&lt;/code&gt; 。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;为避免报错，这样声明&lt;code&gt;console&lt;/code&gt;：&lt;/p&gt;
+
+    &lt;pre&gt;&lt;code&gt;  var console = console || {
+      log : function () {
+          return;
+      }
+  }
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;自定义封装个方法调用：&lt;/p&gt;
+
+    &lt;pre&gt;&lt;code&gt;  function log(msg){
+      if (window.console){
+          console.log(msg);
+      }
+  }
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;更多内容：&lt;a href=&quot;https://msdn.microsoft.com/zh-cn/library/dn255006(v=vs.85).aspx&quot;&gt;https://msdn.microsoft.com/zh-cn/library/dn255006.aspx&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 25 Jan 2016 17:32:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/ie/js/2016/01/25/ie9%E6%97%A0%E6%B3%95%E5%85%BC%E5%AE%B9console%E5%AF%B9%E8%B1%A1.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/ie/js/2016/01/25/ie9%E6%97%A0%E6%B3%95%E5%85%BC%E5%AE%B9console%E5%AF%B9%E8%B1%A1.html</guid>
+        
+        
+        <category>ie</category>
+        
+        <category>js</category>
+        
+      </item>
+    
+      <item>
+        <title>css实现背景图片局部滤镜加半透明效果</title>
+        <description>&lt;p&gt;实现效果预览：&lt;a href=&quot;http://www.daipuarchitects.com/?cat=14&quot;&gt;Daipu Architects&lt;/a&gt; 中间区域。&lt;/p&gt;
+
+&lt;p&gt;html：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div class=&quot;wrapper&quot;&amp;gt;
+    &amp;lt;div class=&quot;overlay&quot;&amp;gt;
+        &amp;lt;div class=&quot;overlay-con&quot;&amp;gt;
+        &amp;lt;/div&amp;gt;
+    &amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;父级div，一般背景图会覆盖浏览器可视区域：&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;.wrapper{
+    ...
+    width: 100%;
+    height: 100%;
+    background: url(image.png);
+    background-size: cover;
+    ...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;模糊背景层，固定宽度，高度为js计算得出，:after设置模糊效果，如果在child上设置，包含文字也会模糊掉:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;.overlay{
+    ...
+    width: 750px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    margin-left: -375px;
+    background: inherit;
+    ...
+
+    &amp;amp;:after {
+        content: &quot;&quot;;
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: inherit;
+        z-index: 0;
+        -webkit-filter: blur(3px);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;文字层div：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;.overlay-con {
+    background: rgba(255,255,255,.6);
+    position: relative;
+    z-index: 1;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;总结：没想到&lt;code&gt;background:inherit&lt;/code&gt;会带来这么大的惊喜～&lt;/p&gt;
+</description>
+        <pubDate>Mon, 25 Jan 2016 17:21:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/css/2016/01/25/css%E5%AE%9E%E7%8E%B0%E8%83%8C%E6%99%AF%E5%9B%BE%E5%B1%80%E9%83%A8%E6%BB%A4%E9%95%9C%E5%8A%A0%E5%8D%8A%E9%80%8F%E6%98%8E%E6%95%88%E6%9E%9C.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/css/2016/01/25/css%E5%AE%9E%E7%8E%B0%E8%83%8C%E6%99%AF%E5%9B%BE%E5%B1%80%E9%83%A8%E6%BB%A4%E9%95%9C%E5%8A%A0%E5%8D%8A%E9%80%8F%E6%98%8E%E6%95%88%E6%9E%9C.html</guid>
+        
+        
+        <category>css</category>
+        
+      </item>
+    
+      <item>
+        <title>forever守护进程相关记录</title>
+        <description>&lt;h2 id=&quot;forever&quot;&gt;安装forever&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;$ npm install forever -g
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;forever-1&quot;&gt;使用forever&lt;/h2&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;用法一：&lt;/h3&gt;
+
+&lt;p&gt;例如：后台定时运行一个phantomjs截图的任务。&lt;/p&gt;
+
+&lt;p&gt;phantmjs截图的代码写在pagename.js中：
+&lt;!--more--&gt;
+    var page = require(‘webpage’).create();&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;page.open(&#39;pageurl&#39;, function() {
+    page.render(&#39;imagePath&#39;);
+    phantom.exit();
+});
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;定时任务写在capturePage.js中：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var childProcess = require(&#39;child_process&#39;);
+
+getImageDaily();
+
+function getImageDaily() {
+    getImageByDate(date, function () {
+        // 一小时后再更新
+        setTimeout(function () {
+            getImageDaily();
+        }, 60*60000);
+    }, function (error, stdout) {
+        ...
+    });
+}
+
+getImageByDate(date) {
+    childProcess.exec(&#39;phantomjs pagename.js&#39;, function (error, stdout, stderr) {
+        ...
+    });
+}
+
+app.listen(port || 8888);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;执行&lt;code&gt;$ forever start capturePage.js&lt;/code&gt;后，查看node进程：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ ps aux|grep node
+
+xxx           13169   0.0  0.4  3058580  33252   ??  S     5:02PM   0:00.22 /usr/local/bin/node /Users/baidu/Documents/xxx/capturePage.js
+xxx           13168   0.0  0.5  3057732  39420   ??  Ss    5:02PM   0:00.37 /usr/local/bin/node /usr/local/lib/node_modules/forever/bin/monitor capturePage.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;多出了一个monitor的进程，然后，杀死13169即capturePage.js的进程：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ kill 13169
+$ ps aux|grep node
+
+xxx           13176   0.0  0.4  3058580  33144   ??  S     5:05PM   0:00.22 /usr/local/bin/node /Users/baidu/Documents/xxx/capturePage.js
+xxx           13168   0.0  0.5  3057732  39740   ??  Ss    5:02PM   0:00.38 /usr/local/bin/node /usr/local/lib/node_modules/forever/bin/monitor capturePage.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以看到，杀死capturePage.js之后，capturePage.js重启了，进程号不同了。&lt;/p&gt;
+
+&lt;h3 id=&quot;forever-monitorcapturepagejs&quot;&gt;用法二：安装forever-monitor，编码式监控capturePage.js&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;$ npm install forever-monitor
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;新建文档monitor.js：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var forever = require(&#39;forever-monitor&#39;);
+
+var child = new (forever.Monitor)(&#39;capturePage.js&#39;, {
+    max: 3,
+    silent: true,
+    args: []
+});
+
+child.on(&#39;exit&#39;, function () {
+    console.log(&#39;your-filename.js has exited after 3 restarts&#39;);
+});
+
+child.start();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;后台执行monitor.js&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ node monitor.js &amp;amp;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;优点是，自主可控，缺点是，自己写的，功能不会很完善，当然比不上forever命令，还有日志管理等等。&lt;/p&gt;
+
+&lt;p&gt;资料参考：&lt;a href=&quot;https://github.com/foreverjs/forever-monitor&quot;&gt;forever-monitor&lt;/a&gt;、&lt;a href=&quot;https://github.com/foreverjs/forever&quot;&gt;forever&lt;/a&gt;、&lt;a href=&quot;http://phantomjs.org/screen-capture.html&quot;&gt;phantomjs&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Mon, 25 Jan 2016 16:35:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/node/forever/phantomjs/2016/01/25/forever%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%E7%9B%B8%E5%85%B3%E8%AE%B0%E5%BD%95.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/node/forever/phantomjs/2016/01/25/forever%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%E7%9B%B8%E5%85%B3%E8%AE%B0%E5%BD%95.html</guid>
+        
+        
+        <category>node</category>
+        
+        <category>forever</category>
+        
+        <category>phantomjs</category>
+        
+      </item>
     
       <item>
         <title>gulp打包编译速度优化</title>
@@ -1249,312 +1491,6 @@ $scope.todoList = todoInStore || [];
         
         
         <category>angularjs</category>
-        
-        <category>js</category>
-        
-      </item>
-    
-      <item>
-        <title>jquery和dom中操作radio和checkbox</title>
-        <description>&lt;blockquote&gt;
-  &lt;p&gt;DOM对象才能使用DOM中的方法，jquery对象不可以使用dom中的方法。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;DOM对象可以和jquery对象互相转换：&lt;/p&gt;
-
-&lt;h1 id=&quot;jquerydom&quot;&gt;jquery对象转dom对象：&lt;/h1&gt;
-
-&lt;pre&gt;&lt;code&gt;$(selector).get(index);
-// or
-$(selector)[index];
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&quot;domjquery--more--&quot;&gt;dom对象转jquery对象：&lt;!--more--&gt;&lt;/h1&gt;
-
-&lt;pre&gt;&lt;code&gt;// dom对象
-var object = document.getElementById(&#39;object&#39;);
-// jquery对象
-var $object = $(object);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&quot;jqueryradiocheckboxjquery&quot;&gt;jquery判断radio或者checkbox是否被选中，需要jquery类型的对象。&lt;/h1&gt;
-
-&lt;pre&gt;&lt;code&gt;// 返回true or false
-$(&#39;selector&#39;).is(&#39;:checked&#39;);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&quot;domradiocheckboxdom&quot;&gt;DOM方式判断radio或者checkbox是否被选中，需要用dom类型的对象。&lt;/h1&gt;
-
-&lt;pre&gt;&lt;code&gt;// 返回true or false
-$(&#39;selector&#39;)[0].checked;
-// or
-$(&#39;selector&#39;).get(0).checked;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&quot;jqueryradiocheckbox&quot;&gt;jquery操作radio或者checkbox使它们被选中&lt;/h1&gt;
-
-&lt;pre&gt;&lt;code&gt;//For versions higher than 1.6, use:
-$(&#39;#radio_1&#39;).prop(&#39;checked&#39;, true)
-//For versions of jQuery prior to 1.6, use:
-$(&#39;#radio_1&#39;).attr(&#39;checked&#39;, &#39;checked&#39;);
-&lt;/code&gt;&lt;/pre&gt;
-</description>
-        <pubDate>Wed, 29 Jul 2015 17:50:00 +0800</pubDate>
-        <link>http://insekkei.com/blogs//blogs/jquery/js/2015/07/29/jquery%E4%B9%8Bradio-checkbox.html</link>
-        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/jquery/js/2015/07/29/jquery%E4%B9%8Bradio-checkbox.html</guid>
-        
-        
-        <category>jquery</category>
-        
-        <category>js</category>
-        
-      </item>
-    
-      <item>
-        <title>angular.js语法浅析</title>
-        <description>&lt;p&gt;声明：本文所有的双花括号，为了防止被jekyll当作本身变量编译，都在括号之间增加了空格，原本应该是没有空格的。&lt;/p&gt;
-
-&lt;h1 id=&quot;section&quot;&gt;概念&lt;/h1&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;AngularJS is a structural framework for dynamic web apps.&lt;!--more--&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&quot;directive&quot;&gt;Directive&lt;/h2&gt;
-
-&lt;p&gt;扩展html，给html添加声明语句，以便实现自己的需求。对于页面中html元素以&lt;code&gt;ng&lt;/code&gt;为前缀的属性名称，&lt;code&gt;ng&lt;/code&gt;是angular的命名空间，&lt;code&gt;-&lt;/code&gt;后面的部分都是Directive。常用的如：&lt;code&gt;ng-app&lt;/code&gt;，&lt;code&gt;ng-cotroller&lt;/code&gt;，&lt;code&gt;ng-repeat&lt;/code&gt;，&lt;code&gt;ng-model&lt;/code&gt;，&lt;code&gt;ng-click&lt;/code&gt;等等。&lt;/p&gt;
-
-&lt;p&gt;另外，还有一些关于表单的directive，如&lt;code&gt;input[email]&lt;/code&gt;，&lt;code&gt;input[url]&lt;/code&gt;等。&lt;/p&gt;
-
-&lt;p&gt;有的时候，直接写入html的方式并不能满足我们处理浏览器事件或者修改dom的需求，于是我们需要使用directive方法来改变view，用法：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;module.directive(&#39;directiveName&#39;, directiveFactoryFunction);&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;scope&quot;&gt;scope&lt;/h2&gt;
-
-&lt;p&gt;为把model里的data暴露给view，我们需要将$scope对象传给controller。$scope是controller与view之间的纽带。而&lt;code&gt;ng-controller&lt;/code&gt;能够负责的dom范围，就是controller中$scope的有效区域（正确传递数据，传递正确的数据）。&lt;/p&gt;
-
-&lt;h2 id=&quot;service&quot;&gt;service&lt;/h2&gt;
-
-&lt;p&gt;services都是单例的（不知可否参考设计模式中的单例模式去理解），angular中的service有：&lt;code&gt;$location&lt;/code&gt;，&lt;code&gt;route&lt;/code&gt;，&lt;code&gt;$http&lt;/code&gt;。&lt;/p&gt;
-
-&lt;p&gt;当一个app中有一堆controller，其中一些controller实现类似的逻辑（如一个查询功能：发送服务器请求－解析服务器返回的内容存入对象－将对象添加到$scope以显示到view），这时我们就可以定义一个那些controller共用的service，这样做的好处是：1、可以在controller中共享它们，从而减少重复的代码，方便阅读；2、需要的话，多个controller之间能够进行交流，分享状态…&lt;/p&gt;
-
-&lt;p&gt;三种方式去创建一个service：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Services&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;语法: module.service( ‘serviceName’, function );&lt;/p&gt;
-
-&lt;p&gt;用法：不可配置，内部通过new实例化对象，给this添加属性，然后返回this。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Factories&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;语法: module.factory( ‘factoryName’, function );&lt;/p&gt;
-
-&lt;p&gt;用法：不可配置，内部直接创建一个对象，为它添加属性，然后返回这个对象。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Providers&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;语法: module.provider( ‘providerName’, function );&lt;/p&gt;
-
-&lt;p&gt;用法：可配置，内部通过$get方法返回一个实例对象。&lt;/p&gt;
-
-&lt;p&gt;备注：controller使用serviceName／factoryName／providerName作为参数，通过angular的依赖注入特性获取结果。&lt;/p&gt;
-
-&lt;h2 id=&quot;filter&quot;&gt;filter&lt;/h2&gt;
-
-&lt;p&gt;声明data被显示给用户的格式，语法：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt; { { expression | filterName : parameter1 : ...parameterN } }&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;如&lt;code&gt;{ {12.9 | currency | number:0 } }&lt;/code&gt;显示为&lt;code&gt;$13&lt;/code&gt;。常用的filter还有&lt;code&gt;json&lt;/code&gt;，&lt;code&gt;lowercase&lt;/code&gt;，&lt;code&gt;orderBy&lt;/code&gt;等等。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;filtername&lt;/code&gt;也可以是自定义的处理数据（转化格式）方法的方法名。&lt;/p&gt;
-
-&lt;h2 id=&quot;routelocation&quot;&gt;route&amp;amp;location&lt;/h2&gt;
-
-&lt;p&gt;Ajax应用比较明显的缺点就是，window不能记住页面（局部）url，虽然有一系列解决方案（iframe，onhashchange，pushState结合location.href等），但需要做很多额外的工作。&lt;/p&gt;
-
-&lt;p&gt;angularjs中，可以通过&lt;code&gt;$route&lt;/code&gt;和&lt;code&gt;$location&lt;/code&gt;来改变view（选择加载哪一个view）。如下面这段代码，通过调用&lt;code&gt;$routeProvider&lt;/code&gt;的方法创建route，当发现url变成某一个&lt;code&gt;url&lt;/code&gt;时，&lt;code&gt;aController&lt;/code&gt;关联的&lt;code&gt;ng-controller&lt;/code&gt;元素将load &lt;code&gt;/path/to/tempate&lt;/code&gt;里的模板。如果没有找到匹配的模板，执行&lt;code&gt;otherwise&lt;/code&gt;中的代码。（使用代码时需要web服务器）&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;module.config(function($routeProvider) {
-    $routeProvider.
-    when(&#39;url&#39;, {controller:aController, templateUrl:&#39;/path/to/tempate&#39;}). 
-    when(...other mappings for your app...).
-    ...
-    otherwise(...what to do if nothing else matches...);
-)};&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;每一个template里只有局部代码，链接&lt;code&gt;a&lt;/code&gt;元素的&lt;code&gt;href&lt;/code&gt;与&lt;code&gt;route&lt;/code&gt;中的&lt;code&gt;url&lt;/code&gt;相关，index.html模板通过&lt;code&gt;ng-view&lt;/code&gt;元素来标识哪部分是需要局部加载上来的。&lt;/p&gt;
-
-&lt;h2 id=&quot;http&quot;&gt;http&lt;/h2&gt;
-
-&lt;p&gt;&lt;code&gt;$http&lt;/code&gt;是一个service，angular提供了一些方法使我们可以方便地从服务器获取数据。&lt;/p&gt;
-
-&lt;p&gt;比如一个从server获取数据并且显示到view的例子：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;function ShoppingController($scope, $http) { 
-    $http.get(&#39;/products&#39;).success(function(data, status, headers, config) {
-        $scope.items = data;
-    });
-}&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;html中值为&lt;code&gt;ShoppingController&lt;/code&gt;的&lt;code&gt;ng-controller&lt;/code&gt;里面就能通过&lt;code&gt;ng-repeat&lt;/code&gt;方式动态创建html，并且使用&lt;code&gt;item&lt;/code&gt;每一项的数据。&lt;/p&gt;
-
-&lt;h1 id=&quot;section-1&quot;&gt;优势&lt;/h1&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;angularjs扩展了html，缓解了编写ajax应用的痛苦。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&quot;mvc&quot;&gt;MVC&lt;/h2&gt;
-
-&lt;p&gt;Model包含app当前状态的数据，用对象来定义如：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var someText = &#39;&#39;;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;View显示数据，在dom中这样展示：&lt;code&gt;{ {someText} }&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;Controller用来关联M和V，使用&lt;code&gt;$scope&lt;/code&gt;对象来传递／操作Model，创建方法如下：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;function TextController($scope) { 
-   $scope.someText = someText;
-}&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;MVC中，焦点应该被放在Model上：应该定义怎样的对象？怎样从服务器接收和保存对象？等等，花些时间考虑这些问题。&lt;/p&gt;
-
-&lt;h2 id=&quot;section-2&quot;&gt;数据绑定&lt;/h2&gt;
-
-&lt;p&gt;利用数据绑定特性，以非常精短的代码，在操作数据的同时实现页面的自动局部刷新。&lt;/p&gt;
-
-&lt;p&gt;如下的例子中，当点击button，items数组的对应位置（index）首先被删除，由于div的数量由items决定（ng-repeat），因此当对数组items的删除操作完成时，dom也随之刷新。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;div ng-repeat=&#39;item in items&#39;&amp;gt;
-    &amp;lt;span&amp;gt;{ {item.title} }&amp;lt;/span&amp;gt;
-    &amp;lt;input ng-model=&#39;item.quantity&#39;&amp;gt;
-    &amp;lt;span&amp;gt;{ {item.price | currency} }&amp;lt;/span&amp;gt; 
-    &amp;lt;span&amp;gt;{ {item.price * item.quantity | currency} }&amp;lt;/span&amp;gt; 
-    &amp;lt;button ng-click=&quot;remove($index)&quot;&amp;gt;Remove&amp;lt;/button&amp;gt;
-&amp;lt;/div&amp;gt;
-
-function CartController($scope) { 
-    $scope.items = [
-        {title: &#39;Paint pots&#39;, quantity: 8, price: 3.95},
-        {title: &#39;Polka dots&#39;, quantity: 17, price: 12.95},
-        {title: &#39;Pebbles&#39;, quantity: 5, price: 6.95}
-    ];
-    $scope.remove = function(index) { 
-        $scope.items.splice(index, 1);
-    } 
-}&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;section-3&quot;&gt;依赖注入&lt;/h2&gt;
-
-&lt;p&gt;angular要求我们遵循编码规则，按照规定去写代码，使用规定的参数名，这样来自动获取需要的内容。&lt;/p&gt;
-
-&lt;p&gt;比如controller中通过serviceName来获取service的返回值。&lt;/p&gt;
-</description>
-        <pubDate>Thu, 09 Jul 2015 10:22:00 +0800</pubDate>
-        <link>http://insekkei.com/blogs//blogs/angular/js/2015/07/09/angular.js-%E8%AF%AD%E6%B3%95%E6%B5%85%E6%9E%90.html</link>
-        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/angular/js/2015/07/09/angular.js-%E8%AF%AD%E6%B3%95%E6%B5%85%E6%9E%90.html</guid>
-        
-        
-        <category>angular</category>
-        
-        <category>js</category>
-        
-      </item>
-    
-      <item>
-        <title>新手接触gulp</title>
-        <description>&lt;p&gt;因工作需要第一次接触到&lt;a href=&quot;http://gulpjs.com/&quot;&gt;gulp&lt;/a&gt;（在前端混真的很惭愧…），在此记录下对gulp的认识。&lt;/p&gt;
-
-&lt;h1 id=&quot;section&quot;&gt;概念：&lt;/h1&gt;
-
-&lt;pre&gt;&lt;code&gt;Gulp.js是一个基于node.js的自动化构建工具，开发者可以使用它在项目开发过程中自动执行常见任务。 &amp;lt;!--more--&amp;gt; # 全局安装：
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;$ npm install –global gulp&lt;/p&gt;
-
-&lt;h1 id=&quot;gulpfilejs&quot;&gt;gulpfile.js文件：&lt;/h1&gt;
-
-&lt;p&gt;在项目的根目录下创建。默认任务（什么也不做）：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var gulp = require(&#39;gulp&#39;);
-
-gulp.task(&#39;default&#39;, function() {
-  // place code for your default task here
-});&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&quot;gulp&quot;&gt;运行 gulp&lt;/h1&gt;
-
-&lt;p&gt;$ gulp&lt;/p&gt;
-
-&lt;h1 id=&quot;gulpapi&quot;&gt;来看看gulp的API！&lt;/h1&gt;
-
-&lt;p&gt;分为四个大的部分：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;gulp.src：定义被操作的源文件（可用*来指定目录、文件类型）&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;gulp.task：定义任务，例如压缩、优化、编译等等&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;gulp.dest：在指定目录写入（执行任务后）生成的文件&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;gulp.watch：当一个文件被修改时，执行某个任务&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;*简单来说就是：哪些文件（src）？进行怎样的操作（task）？结果怎么写入（dest）？&lt;/p&gt;
-
-&lt;h1 id=&quot;section-1&quot;&gt;举个例子！&lt;/h1&gt;
-
-&lt;p&gt;创建一个监听所有类型为less的文件的任务，当任何一个less文件被修改时，执行less-pro这个任务。*&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;gulp.task(&#39;watch-less&#39;, function () {
-
-    gulp.watch(&#39;less/*.less&#39;, [&#39;less-pro&#39;]);
-
-});&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;less-pro任务片段如下：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;gulp.task(&#39;less-pro&#39;, function () {
-
-	console.log(&#39;开始编译&#39;);
-
-    //编译过程...
-
-    console.log(&#39;结束编译&#39;);
-
-	});&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;如上watch less的例子中，执行：&lt;/p&gt;
-
-&lt;p&gt;$ gulp watch-less&lt;/p&gt;
-
-&lt;p&gt;就可以实现实时监控less文件改变并且进行编译的目的了。&lt;/p&gt;
-
-&lt;h1 id=&quot;gulphttpgulpjscomplugins&quot;&gt;gulp有很多简洁而强大的&lt;a href=&quot;http://gulpjs.com/plugins/&quot;&gt;插件&lt;/a&gt;！&lt;/h1&gt;
-</description>
-        <pubDate>Sat, 04 Jul 2015 16:54:00 +0800</pubDate>
-        <link>http://insekkei.com/blogs//blogs/gulp/js/2015/07/04/%E6%96%B0%E6%89%8B%E6%8E%A5%E8%A7%A6gulp.html</link>
-        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/gulp/js/2015/07/04/%E6%96%B0%E6%89%8B%E6%8E%A5%E8%A7%A6gulp.html</guid>
-        
-        
-        <category>gulp</category>
         
         <category>js</category>
         

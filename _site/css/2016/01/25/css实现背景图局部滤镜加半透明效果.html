@@ -6,12 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>web前端笔记</title>
-  <meta name="description" content="绿螘新醅酒，红泥小火炉。<br>晚来天欲雪，能饮一杯无？
-">
+  <title>css实现背景图片局部滤镜加半透明效果</title>
+  <meta name="description" content="实现效果预览：Daipu Architects 中间区域。html：&lt;div class="wrapper"&gt;    &lt;div class="overlay"&gt;        &lt;div class="overlay-con"&gt;        &lt;/div&gt;    &l...">
 
   <link rel="stylesheet" href="/blogs/css/main.css">
-  <link rel="canonical" href="http://insekkei.com/blogs//blogs/blogs/page2/">
+  <link rel="canonical" href="http://insekkei.com/blogs//blogs/css/2016/01/25/css%E5%AE%9E%E7%8E%B0%E8%83%8C%E6%99%AF%E5%9B%BE%E5%B1%80%E9%83%A8%E6%BB%A4%E9%95%9C%E5%8A%A0%E5%8D%8A%E9%80%8F%E6%98%8E%E6%95%88%E6%9E%9C.html">
   <link rel="alternate" type="application/rss+xml" title="web前端笔记" href="http://insekkei.com/blogs//blogs/feed.xml" />
   <link rel="icon" type="image/png" href="/blogs/images/icon.png">
 </head>
@@ -61,145 +60,94 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="home">
+        <div class="post">
 
-  <h1 class="page-heading">笔记目录</h1>
+  <header class="post-header">
+    <h1 class="post-title">css实现背景图片局部滤镜加半透明效果</h1>
+    <p class="post-meta">Jan 25, 2016</p>
+  </header>
 
-  <ul class="post-list">
-    
-      <li>
-        <span class="post-meta">Jul 29, 2015</span>
+  <article class="post-content">
+    <p>实现效果预览：<a href="http://www.daipuarchitects.com/?cat=14">Daipu Architects</a> 中间区域。</p>
 
-        <h2>
-          <a class="post-link" href="/blogs/jquery/js/2015/07/29/jquery%E4%B9%8Bradio-checkbox.html">jquery和dom中操作radio和checkbox</a>
-        </h2>
-        <p class="excerpt">
-  DOM对象才能使用DOM中的方法，jquery对象不可以使用dom中的方法。
+<p>html：</p>
 
+<pre><code>&lt;div class="wrapper"&gt;
+    &lt;div class="overlay"&gt;
+        &lt;div class="overlay-con"&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
 
-DOM对象可以和jquery对象互相转换：
+<p>父级div，一般背景图会覆盖浏览器可视区域：<!--more--></p>
 
-jquery对象转dom对象：
+<pre><code>.wrapper{
+    ...
+    width: 100%;
+    height: 100%;
+    background: url(image.png);
+    background-size: cover;
+    ...
+}
+</code></pre>
 
-$(selector).get(index);
-// or
-$(selector)[index];
+<p>模糊背景层，固定宽度，高度为js计算得出，:after设置模糊效果，如果在child上设置，包含文字也会模糊掉:</p>
 
+<pre><code>.overlay{
+    ...
+    width: 750px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    margin-left: -375px;
+    background: inherit;
+    ...
 
-dom对象转jquery对象：
+    &amp;:after {
+        content: "";
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: inherit;
+        z-index: 0;
+        -webkit-filter: blur(3px);
+    }
+}
+</code></pre>
 
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jul 9, 2015</span>
+<p>文字层div：</p>
 
-        <h2>
-          <a class="post-link" href="/blogs/angular/js/2015/07/09/angular.js-%E8%AF%AD%E6%B3%95%E6%B5%85%E6%9E%90.html">angular.js语法浅析</a>
-        </h2>
-        <p class="excerpt">声明：本文所有的双花括号，为了防止被jekyll当作本身变量编译，都在括号之间增加了空格，原本应该是没有空格的。
+<pre><code>.overlay-con {
+    background: rgba(255,255,255,.6);
+    position: relative;
+    z-index: 1;
+}
+</code></pre>
 
-概念
+<p>总结：没想到<code>background:inherit</code>会带来这么大的惊喜～</p>
 
+  </article>
 
-  AngularJS is a structural framework for dynamic web apps.
-
-
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jul 4, 2015</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/gulp/js/2015/07/04/%E6%96%B0%E6%89%8B%E6%8E%A5%E8%A7%A6gulp.html">新手接触gulp</a>
-        </h2>
-        <p class="excerpt">因工作需要第一次接触到gulp（在前端混真的很惭愧…），在此记录下对gulp的认识。
-
-概念：
-
-Gulp.js是一个基于node.js的自动化构建工具，开发者可以使用它在项目开发过程中自动执行常见任务。
-
-
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jun 16, 2015</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/js/function/2015/06/16/js%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D%E5%8F%8A%E8%AE%A1%E7%AE%97%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%AD%97%E7%AC%A6%E7%9A%84%E4%B8%AA%E6%95%B0.html">js数组去重 及 计算字符串中字符的个数</a>
-        </h2>
-        <p class="excerpt">1、数组去重。
-
-方法一：
-
-var arr = [1,2,3,4,5,1,3,12,55,22];
-function getArray(a){
-
-
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jun 16, 2015</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/js/function/2015/06/16/Javascript-%E5%8F%8D%E5%BA%8F%E8%BE%93%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2.html">Javascript反序输出字符串</a>
-        </h2>
-        <p class="excerpt">这是一个我在至少4次web前端笔试或者面试中遇到过的题目，就这么一行字的题目，最近一次看到却还让我如遭五雷轰顶，罪过，罪过。
-
-解决方案一：
-
- &gt;'abcd ed'.split('').reverse().join(''); 
-
-
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jun 16, 2015</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/js/common/2015/06/16/Javascript-stopBubble.html">Javascript stop bubble</a>
-        </h2>
-        <p class="excerpt">js阻止冒泡方法：
-
-var stopBubble = function (e) {
-	//如果提供了事件对象，则这是一个非IE浏览器
-	if(e &amp;&amp; e.stopPropagation) {
-		//因此它支持W3C的stopPropagation()方法
-
-
-</p>
-      </li>
-    
-  </ul>
-
-  <!-- Pagination links -->
-  
-  <div class="pagination">
-    
-      <a class="prevpage" href="/blogs/index.html">&laquo; Prev</a>
-    
-
-    
-      
-        <a href="/blogs/index.html">1</a>
-      
-    
-      
-        <em>2</em>
-      
-    
-
-    
-      <span>Next &raquo;</span>
-    
-  </div>
-  
-
-  <p class="rss-subscribe">subscribe <a href="/blogs/feed.xml">via RSS</a></p>
+  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="css实现背景图片局部滤镜加半透明效果"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"blogs2015"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	<!-- 多说公共JS代码 end -->
 
 </div>
 

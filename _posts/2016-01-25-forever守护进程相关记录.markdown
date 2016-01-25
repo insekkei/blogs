@@ -1,0 +1,96 @@
+---
+layout: post
+title:  "forever守护进程相关记录"
+date:   2016-01-25 16:35
+categories: node forever phantomjs
+---
+
+## 安装forever
+
+    $ npm install forever -g
+
+## 使用forever
+
+### 用法一：
+
+例如：后台定时运行一个phantomjs截图的任务。
+
+phantmjs截图的代码写在pagename.js中：
+<!--more-->
+    var page = require('webpage').create();
+
+    page.open('pageurl', function() {
+        page.render('imagePath');
+        phantom.exit();
+    });
+    ...
+
+定时任务写在capturePage.js中：
+
+    var childProcess = require('child_process');
+
+    getImageDaily();
+
+    function getImageDaily() {
+        getImageByDate(date, function () {
+            // 一小时后再更新
+            setTimeout(function () {
+                getImageDaily();
+            }, 60*60000);
+        }, function (error, stdout) {
+            ...
+        });
+    }
+
+    getImageByDate(date) {
+        childProcess.exec('phantomjs pagename.js', function (error, stdout, stderr) {
+            ...
+        });
+    }
+    
+    app.listen(port || 8888);
+
+执行`$ forever start capturePage.js`后，查看node进程：
+
+    $ ps aux|grep node
+
+    xxx           13169   0.0  0.4  3058580  33252   ??  S     5:02PM   0:00.22 /usr/local/bin/node /Users/baidu/Documents/xxx/capturePage.js
+    xxx           13168   0.0  0.5  3057732  39420   ??  Ss    5:02PM   0:00.37 /usr/local/bin/node /usr/local/lib/node_modules/forever/bin/monitor capturePage.js
+
+多出了一个monitor的进程，然后，杀死13169即capturePage.js的进程：
+
+    $ kill 13169
+    $ ps aux|grep node
+
+    xxx           13176   0.0  0.4  3058580  33144   ??  S     5:05PM   0:00.22 /usr/local/bin/node /Users/baidu/Documents/xxx/capturePage.js
+    xxx           13168   0.0  0.5  3057732  39740   ??  Ss    5:02PM   0:00.38 /usr/local/bin/node /usr/local/lib/node_modules/forever/bin/monitor capturePage.js
+
+可以看到，杀死capturePage.js之后，capturePage.js重启了，进程号不同了。
+
+### 用法二：安装forever-monitor，编码式监控capturePage.js
+
+    $ npm install forever-monitor
+
+新建文档monitor.js：
+
+    var forever = require('forever-monitor');
+
+    var child = new (forever.Monitor)('capturePage.js', {
+        max: 3,
+        silent: true,
+        args: []
+    });
+
+    child.on('exit', function () {
+        console.log('your-filename.js has exited after 3 restarts');
+    });
+
+    child.start();
+
+后台执行monitor.js
+
+    $ node monitor.js &
+
+优点是，自主可控，缺点是，自己写的，功能不会很完善，当然比不上forever命令，还有日志管理等等。
+
+资料参考：[forever-monitor](https://github.com/foreverjs/forever-monitor)、[forever](https://github.com/foreverjs/forever)、[phantomjs](http://phantomjs.org/screen-capture.html)

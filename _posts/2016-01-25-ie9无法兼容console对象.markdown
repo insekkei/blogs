@@ -1,0 +1,40 @@
+---
+layout: post
+title:  "IE9不打开控制台无法正常执行js"
+date:   2016-01-25 17:32
+categories: IE js
+---
+
+接手一个系统项目，必须运行在windows下，浏览器要求IE9。
+
+调试脚本的过程中使用过`console.log()`，同时页面包含一个`setInterval()`方法，每隔300毫秒自动获取接口传过来的数据， 获取到正确的数据之后，停止定时器。<!--more-->
+
+chrome中测试无误，然而转到IE9中之后，死活无法等到数据，便想打开控制台看看有没有报错，然而每每一打开控制台几乎瞬间数据就传过来了！试了好多次，确定不是机缘未到，抱着怀疑的心理搜索了一下“ie9 控制台打开才执行js”，果然很多人都遇到过这个问题，但是，故事的结局往往出人意料：
+
+> IE仅在开启developer tools的时候，脚本才能访问到console这个对象。
+
+这真是一个让人忍不住想吐槽的设定...
+
+对此情况，解决方案有：
+
+* 生产环境下移除或者注释掉`console.log()` 。
+
+* 为避免报错，这样声明`console`：
+
+        var console = console || {
+            log : function () {
+                return;
+            }
+        }
+
+* 自定义封装个方法调用：
+
+        function log(msg){
+            if (window.console){
+                console.log(msg);
+            }
+        }
+
+
+更多内容：[https://msdn.microsoft.com/zh-cn/library/dn255006.aspx](https://msdn.microsoft.com/zh-cn/library/dn255006(v=vs.85).aspx)
+
