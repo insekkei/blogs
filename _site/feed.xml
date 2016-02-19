@@ -6,8 +6,8 @@
 </description>
     <link>http://insekkei.com/blogs//blogs/</link>
     <atom:link href="http://insekkei.com/blogs//blogs/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 19 Feb 2016 13:49:17 +0800</pubDate>
-    <lastBuildDate>Fri, 19 Feb 2016 13:49:17 +0800</lastBuildDate>
+    <pubDate>Fri, 19 Feb 2016 13:57:50 +0800</pubDate>
+    <lastBuildDate>Fri, 19 Feb 2016 13:57:50 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -122,8 +122,8 @@ Router.run(routes, Router.HistoryLocation, (Root) =&amp;gt; {
 &lt;p&gt;&lt;a href=&quot;https://github.com/reactjs/react-router&quot;&gt;更多关于React-router&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Fri, 19 Feb 2016 11:40:00 +0800</pubDate>
-        <link>http://insekkei.com/blogs//blogs/react/js/2016/02/19/React-Router.html</link>
-        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/react/js/2016/02/19/React-Router.html</guid>
+        <link>http://insekkei.com/blogs//blogs/react/js/2016/02/19/react-router.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/react/js/2016/02/19/react-router.html</guid>
         
         
         <category>react</category>
