@@ -10,7 +10,7 @@
   <meta name="description" content="  React Router keeps your UI in sync with the URL. It has a simple API with powerful features like lazy code loading, dynamic route matching, and location tr...">
 
   <link rel="stylesheet" href="/blogs/css/main.css">
-  <link rel="canonical" href="http://insekkei.com/blogs//blogs/react/2016/02/19/React-Router.html">
+  <link rel="canonical" href="http://insekkei.com/blogs//blogs/react/js/2016/02/19/React-Router.html">
   <link rel="alternate" type="application/rss+xml" title="web前端笔记" href="http://insekkei.com/blogs//blogs/feed.xml" />
   <link rel="icon" type="image/png" href="/blogs/images/icon.png">
 </head>
@@ -74,8 +74,8 @@
 
 <h2 id="npm--more--">使用npm安装<!--more--></h2>
 
-<pre>$ npm install --save react-router
-</pre>
+<pre><code>$ npm install --save react-router
+</code></pre>
 
 <h2 id="layoutroutehandler">在Layout中使用RouteHandler</h2>
 
@@ -83,7 +83,7 @@
   <p>A Layout is something that describes an entire page structure, such as a fixed navigation, viewport, sidebar, and footer.</p>
 </blockquote>
 
-<pre>var React = require('react');
+<pre><code>var React = require('react');
 var RouteHandler = require('react-router').RouteHandler;
 var Link = require('react-router').Link;
 
@@ -128,11 +128,11 @@ var PlatformNav = React.createClass({
 
 ...
 module.exports = Layout;
-</pre>
+</code></pre>
 
 <h2 id="index">index页</h2>
 
-<pre>var Index = React.createClass({
+<pre><code>var Index = React.createClass({
     render: function() {
         return (
             &lt;div&gt;
@@ -143,11 +143,11 @@ module.exports = Layout;
 });
 
 module.exports = Index;
-</pre>
+</code></pre>
 
 <h2 id="appjs">在app.js中配置路由</h2>
 
-<pre>var Layout = require('./components/Layout');
+<pre><code>var Layout = require('./components/Layout');
 var Index = require('./components/Index');
 
 // 引入需要的组件
@@ -171,7 +171,7 @@ var routes = (
 Router.run(routes, Router.HistoryLocation, (Root) =&gt; {
     React.render(&lt;Root/&gt;, document.body);
 });
-</pre>
+</code></pre>
 
 <p>这样，点击nav中的“首页”链接时，浏览器地址栏中会出现’index’，同时页面上能看到“Welcome”。而刷新页面时，也能根据给当前url分配的组件Index，加载想要看到的内容。</p>
 
