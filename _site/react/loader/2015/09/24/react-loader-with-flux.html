@@ -76,12 +76,13 @@
 
 <p>In the view:</p>
 
-<pre><code>&lt;Loader loaded={!this.state.data.isLoading} ... /&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;Loader loaded={!this.state.data.isLoading} ... /&gt;
 </code></pre>
+</div>
 
 <p>When send a xhr request:</p>
 
-<pre><code>...
+<div class="highlighter-rouge"><pre class="highlight"><code>...
 componentDidMount: function () {
     sampleStore.addChangeListener(this._change);
 
@@ -93,10 +94,11 @@ componentDidMount: function () {
 },
 ..
 </code></pre>
+</div>
 
 <p>And in SampleActions.js:</p>
 
-<pre><code>...
+<div class="highlighter-rouge"><pre class="highlight"><code>...
 setIsLoading: function (params) {
     PlatformDispatcher.dispatch({
         actionType: 'order_statistic_set_isLoading',
@@ -105,10 +107,11 @@ setIsLoading: function (params) {
 },
 ...
 </code></pre>
+</div>
 
 <p>Then, in sampleStore.js:</p>
 
-<pre><code>PlatformDispatcher.register(function (payload) {
+<div class="highlighter-rouge"><pre class="highlight"><code>PlatformDispatcher.register(function (payload) {
     var actionType = payload.actionType;
 
     switch (actionType) {
@@ -146,6 +149,7 @@ OrderStatisticStore.prototype = assign({}, EventEmitter.prototype, {
     ...
 });
 </code></pre>
+</div>
 
 <p>如果再配合bootstrap-react的loading button state，也是美呆了…</p>
 

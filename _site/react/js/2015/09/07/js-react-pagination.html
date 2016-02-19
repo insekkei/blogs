@@ -86,7 +86,7 @@
 
 <h1 id="section">组件将被这样使用：</h1>
 
-<pre><code>&lt;Pagination currentPn={currentPn}
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;Pagination currentPn={currentPn}
         pageCount={pageCount}
         pageSize={pageSize}
         dataSize={dataSize}
@@ -98,20 +98,22 @@
 &gt;
 &lt;/Pagination&gt;
 </code></pre>
+</div>
 
-<p>点击每一个list中的页码链接，执行<code>this.changePn</code>方法：</p>
+<p>点击每一个list中的页码链接，执行<code class="highlighter-rouge">this.changePn</code>方法：</p>
 
-<pre><code>changePn: function (e) {
+<div class="highlighter-rouge"><pre class="highlight"><code>changePn: function (e) {
     e.preventDefault();
     ExampleActions.setPageNumber({
         pageNumber: e.target.innerHTML
     });
 }
 </code></pre>
+</div>
 
 <p>上下页翻页方法：</p>
 
-<pre><code>prevPn: function (e) {
+<div class="highlighter-rouge"><pre class="highlight"><code>prevPn: function (e) {
     e.preventDefault();
     ExampleActions.setPageNumber({
         pageNumber: currentPn － 1
@@ -124,10 +126,11 @@ nextPn: function (e, currentPn) {
     });
 }
 </code></pre>
+</div>
 
 <p>首页和末页方法：</p>
 
-<pre><code>firstPn: function (e) {
+<div class="highlighter-rouge"><pre class="highlight"><code>firstPn: function (e) {
     e.preventDefault();
     ExampleActions.setPageNumber({
         pageNumber: 1
@@ -140,6 +143,7 @@ lastPn: function (e, currentPn) {
     });
 }
 </code></pre>
+</div>
 
 <p>上述五个方法执行后，通过action调用dispatcher，dispatcher调用store，store中loadData，重新render组件这个过程更新页面中展示的数据。</p>
 
@@ -147,7 +151,7 @@ lastPn: function (e, currentPn) {
 
 <p>定义变量：</p>
 
-<pre><code>var pageList = '';
+<div class="highlighter-rouge"><pre class="highlight"><code>var pageList = '';
 var pageListArr = [];
 var prevPage = '';
 var nextPage = '';
@@ -155,10 +159,11 @@ var firstPage = '';
 var lastPage = '';
 var thisProps = this.props;
 </code></pre>
+</div>
 
 <p>展示页码list并不难，取到上面使用组件时传递过来的属性，将pageCount肢解，遍历，加入标签组装就可以完成这个任务：</p>
 
-<pre><code>for (var i = 0; i &lt; thisProps.pageCount; i++) {
+<div class="highlighter-rouge"><pre class="highlight"><code>for (var i = 0; i &lt; thisProps.pageCount; i++) {
     pageListArr.push(i);
 };
 pageList = pageListArr.map(function (item) {
@@ -179,10 +184,11 @@ pageList = pageListArr.map(function (item) {
     }
 });
 </code></pre>
+</div>
 
 <p>上下页翻页链接，要判断是否可点击，首页和末页类似，但不需要判断状态：</p>
 
-<pre><code>// 上一页
+<div class="highlighter-rouge"><pre class="highlight"><code>// 上一页
 prevPage = (function () {
     if (thisProps.currentPn === 1) {
         return (
@@ -226,10 +232,11 @@ nextPage = (function () {
     }
 })();
 </code></pre>
+</div>
 
 <p>组装：</p>
 
-<pre><code>&lt;ul className="pagination pull-right"&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;ul className="pagination pull-right"&gt;
     {firstPage}
     {prevPage}
     {pageList}
@@ -237,6 +244,7 @@ nextPage = (function () {
     {lastPage}
 &lt;/ul&gt;
 </code></pre>
+</div>
 
 <h1 id="section-2">显示省略号</h1>
 
@@ -265,7 +273,7 @@ nextPage = (function () {
 
 <p>两种实现思路：</p>
 
-<p>1、四种不同的情况下，直接拼装包含<code>...</code>的html代码</p>
+<p>1、四种不同的情况下，直接拼装包含<code class="highlighter-rouge">...</code>的html代码</p>
 
 <p>2、四种不同的情况下，先拼装pageListArr这个变量，再遍历生成html代码</p>
 
@@ -273,7 +281,7 @@ nextPage = (function () {
 
 <p>添加变量：</p>
 
-<pre><code>// 假设当前页码总在中间显示，pageTab就是当前页码到省略号之间的数量，比如1...4,5,6,7,8...100，pageTab就是2
+<div class="highlighter-rouge"><pre class="highlight"><code>// 假设当前页码总在中间显示，pageTab就是当前页码到省略号之间的数量，比如1...4,5,6,7,8...100，pageTab就是2
 var pageTab = 4;
 
 // 左边的省略号，在第1页之后
@@ -282,10 +290,11 @@ var leftEllipse = '';
 // 右边的省略号，在第100页之前
 var rightEllipse = '';
 </code></pre>
+</div>
 
 <p>总页数小于11，全部显示（这里可以做成可配置的）：</p>
 
-<pre><code>if (thisProps.pageCount &lt; 11) {
+<div class="highlighter-rouge"><pre class="highlight"><code>if (thisProps.pageCount &lt; 11) {
 
     // 注意pageListArr要先清空
     pageListArr = [];
@@ -300,10 +309,11 @@ var rightEllipse = '';
     rightEllipse = '';
 }
 </code></pre>
+</div>
 
-<p>总页码数大于11时，有<code>...</code>出现：</p>
+<p>总页码数大于11时，有<code class="highlighter-rouge">...</code>出现：</p>
 
-<pre><code>if (thisProps.pageCount &gt; 10) {
+<div class="highlighter-rouge"><pre class="highlight"><code>if (thisProps.pageCount &gt; 10) {
     // 当前页减去pageTab小于1，右边显示省略号，左边不显示
     if (thisProps.currentPn - pageTab &lt; 1) {
 
@@ -344,10 +354,11 @@ var rightEllipse = '';
     }
 }
 </code></pre>
+</div>
 
 <p>首页和末页：</p>
 
-<pre><code>// 首页
+<div class="highlighter-rouge"><pre class="highlight"><code>// 首页
 firstPage = (function () {
     if (thisProps.currentPn === 1) {
         return (
@@ -383,10 +394,11 @@ lastPage = (function () {
     }
 })();
 </code></pre>
+</div>
 
-<p>装入<code>ul</code>：</p>
+<p>装入<code class="highlighter-rouge">ul</code>：</p>
 
-<pre><code>&lt;ul className="pagination pull-right"&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;ul className="pagination pull-right"&gt;
     {prevPage}
     {firstPage}
     {leftEllipse}
@@ -396,10 +408,11 @@ lastPage = (function () {
     {nextPage}
 &lt;/ul&gt;
 </code></pre>
+</div>
 
 <p>总的组织结构：</p>
 
-<pre><code>var Pagination = React.createClass({
+<div class="highlighter-rouge"><pre class="highlight"><code>var Pagination = React.createClass({
     render: function () {
         ...算法／过程...
         return (
@@ -410,6 +423,7 @@ lastPage = (function () {
     }
 });
 </code></pre>
+</div>
 
 <p>另外，传递过来的dataSize、pageSize还可以展示出来，写一个总结：本页共有xx条数据，等等..</p>
 

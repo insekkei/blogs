@@ -74,8 +74,9 @@
 
 <h2 id="npm--more--">使用npm安装<!--more--></h2>
 
-<pre><code>$ npm install --save react-router
+<div class="highlighter-rouge"><pre class="highlight"><code>$ npm install --save react-router
 </code></pre>
+</div>
 
 <h2 id="layoutroutehandler">在Layout中使用RouteHandler</h2>
 
@@ -83,7 +84,7 @@
   <p>A Layout is something that describes an entire page structure, such as a fixed navigation, viewport, sidebar, and footer.</p>
 </blockquote>
 
-<pre><code>var React = require('react');
+<div class="highlighter-rouge"><pre class="highlight"><code>var React = require('react');
 var RouteHandler = require('react-router').RouteHandler;
 var Link = require('react-router').Link;
 
@@ -129,10 +130,11 @@ var PlatformNav = React.createClass({
 ...
 module.exports = Layout;
 </code></pre>
+</div>
 
 <h2 id="index">index页</h2>
 
-<pre><code>var Index = React.createClass({
+<div class="highlighter-rouge"><pre class="highlight"><code>var Index = React.createClass({
     render: function() {
         return (
             &lt;div&gt;
@@ -144,10 +146,11 @@ module.exports = Layout;
 
 module.exports = Index;
 </code></pre>
+</div>
 
 <h2 id="appjs">在app.js中配置路由</h2>
 
-<pre><code>var Layout = require('./components/Layout');
+<div class="highlighter-rouge"><pre class="highlight"><code>var Layout = require('./components/Layout');
 var Index = require('./components/Index');
 
 // 引入需要的组件
@@ -172,6 +175,7 @@ Router.run(routes, Router.HistoryLocation, (Root) =&gt; {
     React.render(&lt;Root/&gt;, document.body);
 });
 </code></pre>
+</div>
 
 <p>这样，点击nav中的“首页”链接时，浏览器地址栏中会出现’index’，同时页面上能看到“Welcome”。而刷新页面时，也能根据给当前url分配的组件Index，加载想要看到的内容。</p>
 

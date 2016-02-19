@@ -70,7 +70,7 @@
   <article class="post-content">
     <p>接手一个系统项目，必须运行在windows下，浏览器要求IE9。</p>
 
-<p>调试脚本的过程中使用过<code>console.log()</code>，同时页面包含一个<code>setInterval()</code>方法，每隔300毫秒自动获取接口传过来的数据， 获取到正确的数据之后，停止定时器。<!--more--></p>
+<p>调试脚本的过程中使用过<code class="highlighter-rouge">console.log()</code>，同时页面包含一个<code class="highlighter-rouge">setInterval()</code>方法，每隔300毫秒自动获取接口传过来的数据， 获取到正确的数据之后，停止定时器。<!--more--></p>
 
 <p>chrome中测试无误，然而转到IE9中之后，死活无法等到数据，便想打开控制台看看有没有报错，然而每每一打开控制台几乎瞬间数据就传过来了！试了好多次，确定不是机缘未到，抱着怀疑的心理搜索了一下“ie9 控制台打开才执行js”，果然很多人都遇到过这个问题，但是，故事的结局往往出人意料：</p>
 
@@ -84,27 +84,29 @@
 
 <ul>
   <li>
-    <p>生产环境下移除或者注释掉<code>console.log()</code> 。</p>
+    <p>生产环境下移除或者注释掉<code class="highlighter-rouge">console.log()</code> 。</p>
   </li>
   <li>
-    <p>为避免报错，这样声明<code>console</code>：</p>
+    <p>为避免报错，这样声明<code class="highlighter-rouge">console</code>：</p>
 
-    <pre><code>  var console = console || {
+    <div class="highlighter-rouge"><pre class="highlight"><code>  var console = console || {
       log : function () {
           return;
       }
   }
 </code></pre>
+    </div>
   </li>
   <li>
     <p>自定义封装个方法调用：</p>
 
-    <pre><code>  function log(msg){
+    <div class="highlighter-rouge"><pre class="highlight"><code>  function log(msg){
       if (window.console){
           console.log(msg);
       }
   }
 </code></pre>
+    </div>
   </li>
 </ul>
 

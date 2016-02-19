@@ -70,8 +70,9 @@
   <article class="post-content">
     <h2 id="forever">安装forever</h2>
 
-<pre><code>$ npm install forever -g
+<div class="highlighter-rouge"><pre class="highlight"><code>$ npm install forever -g
 </code></pre>
+</div>
 
 <h2 id="forever-1">使用forever</h2>
 
@@ -83,16 +84,17 @@
 <!--more-->
     var page = require(‘webpage’).create();</p>
 
-<pre><code>page.open('pageurl', function() {
+<div class="highlighter-rouge"><pre class="highlight"><code>page.open('pageurl', function() {
     page.render('imagePath');
     phantom.exit();
 });
 ...
 </code></pre>
+</div>
 
 <p>定时任务写在capturePage.js中：</p>
 
-<pre><code>var childProcess = require('child_process');
+<div class="highlighter-rouge"><pre class="highlight"><code>var childProcess = require('child_process');
 
 getImageDaily();
 
@@ -115,34 +117,38 @@ getImageByDate(date) {
 
 app.listen(port || 8888);
 </code></pre>
+</div>
 
-<p>执行<code>$ forever start capturePage.js</code>后，查看node进程：</p>
+<p>执行<code class="highlighter-rouge">$ forever start capturePage.js</code>后，查看node进程：</p>
 
-<pre><code>$ ps aux|grep node
+<div class="highlighter-rouge"><pre class="highlight"><code>$ ps aux|grep node
 
 xxx           13169   0.0  0.4  3058580  33252   ??  S     5:02PM   0:00.22 /usr/local/bin/node /Users/baidu/Documents/xxx/capturePage.js
 xxx           13168   0.0  0.5  3057732  39420   ??  Ss    5:02PM   0:00.37 /usr/local/bin/node /usr/local/lib/node_modules/forever/bin/monitor capturePage.js
 </code></pre>
+</div>
 
 <p>多出了一个monitor的进程，然后，杀死13169即capturePage.js的进程：</p>
 
-<pre><code>$ kill 13169
+<div class="highlighter-rouge"><pre class="highlight"><code>$ kill 13169
 $ ps aux|grep node
 
 xxx           13176   0.0  0.4  3058580  33144   ??  S     5:05PM   0:00.22 /usr/local/bin/node /Users/baidu/Documents/xxx/capturePage.js
 xxx           13168   0.0  0.5  3057732  39740   ??  Ss    5:02PM   0:00.38 /usr/local/bin/node /usr/local/lib/node_modules/forever/bin/monitor capturePage.js
 </code></pre>
+</div>
 
 <p>可以看到，杀死capturePage.js之后，capturePage.js重启了，进程号不同了。</p>
 
 <h3 id="forever-monitorcapturepagejs">用法二：安装forever-monitor，编码式监控capturePage.js</h3>
 
-<pre><code>$ npm install forever-monitor
+<div class="highlighter-rouge"><pre class="highlight"><code>$ npm install forever-monitor
 </code></pre>
+</div>
 
 <p>新建文档monitor.js：</p>
 
-<pre><code>var forever = require('forever-monitor');
+<div class="highlighter-rouge"><pre class="highlight"><code>var forever = require('forever-monitor');
 
 var child = new (forever.Monitor)('capturePage.js', {
     max: 3,
@@ -156,11 +162,13 @@ child.on('exit', function () {
 
 child.start();
 </code></pre>
+</div>
 
 <p>后台执行monitor.js</p>
 
-<pre><code>$ node monitor.js &amp;
+<div class="highlighter-rouge"><pre class="highlight"><code>$ node monitor.js &amp;
 </code></pre>
+</div>
 
 <p>优点是，自主可控，缺点是，自己写的，功能不会很完善，当然比不上forever命令，还有日志管理等等。</p>
 

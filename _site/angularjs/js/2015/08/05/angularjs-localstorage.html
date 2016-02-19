@@ -96,7 +96,7 @@ bower install angular-local-storage
 <pre><code>&lt;html ng-app="todoApp"&gt;
 </code></pre>
 
-<h2 id="bodytodocontroller">body中的数据由<code>TodoController</code>来控制：</h2>
+<h2 id="bodytodocontroller">body中的数据由<code class="highlighter-rouge">TodoController</code>来控制：</h2>
 
 <pre><code>&lt;body ng-controller="TodoController"&gt;
 </code></pre>
@@ -109,13 +109,13 @@ bower install angular-local-storage
 &lt;/form&gt;
 </code></pre>
 
-<p><code>form</code>提交表单时（<code>ng-submit</code>）执行<code>add()</code>方法，输入框的内容通过<code>ng-model</code>与<code>todoItem</code>关联，使用：</p>
+<p><code class="highlighter-rouge">form</code>提交表单时（<code class="highlighter-rouge">ng-submit</code>）执行<code class="highlighter-rouge">add()</code>方法，输入框的内容通过<code class="highlighter-rouge">ng-model</code>与<code class="highlighter-rouge">todoItem</code>关联，使用：</p>
 
 <pre><code>...$scope.todoItem...</code></pre>
 
 <h2 id="list">添加备忘list</h2>
 
-<p>每条备忘中包含的信息：内容<code>content</code>、日期<code>creDate</code>、删除按钮。</p>
+<p>每条备忘中包含的信息：内容<code class="highlighter-rouge">content</code>、日期<code class="highlighter-rouge">creDate</code>、删除按钮。</p>
 
 <pre><code>&lt;ul&gt;
 	&lt;li ng-repeat="todo in todoList"&gt;
@@ -127,30 +127,33 @@ bower install angular-local-storage
 &lt;/ul&gt;
 </code></pre>
 
-<p><code>ng-repeat</code>用来循环输出每一条备忘，<code>ng-model</code>指定当前<code>input</code>的值即备忘内容<code>content</code>，<code>ng-click</code>将<code>remove</code>按钮和<code>remove(index)</code>方法关联。</p>
+<p><code class="highlighter-rouge">ng-repeat</code>用来循环输出每一条备忘，<code class="highlighter-rouge">ng-model</code>指定当前<code class="highlighter-rouge">input</code>的值即备忘内容<code class="highlighter-rouge">content</code>，<code class="highlighter-rouge">ng-click</code>将<code class="highlighter-rouge">remove</code>按钮和<code class="highlighter-rouge">remove(index)</code>方法关联。</p>
 
 <h1 id="todojs">todo.js</h1>
 
 <p>声明app</p>
 
-<pre><code>var todoApp=angular.module('todoApp',[]);
+<div class="highlighter-rouge"><pre class="highlight"><code>var todoApp=angular.module('todoApp',[]);
 </code></pre>
+</div>
 
 <p>定义controller</p>
 
-<pre><code>todoApp.controller('TodoController', function($scope) {
+<div class="highlighter-rouge"><pre class="highlight"><code>todoApp.controller('TodoController', function($scope) {
 	...
 });
 </code></pre>
+</div>
 
 <p>定义todoList</p>
 
-<pre><code>$scope.todoList = [];
+<div class="highlighter-rouge"><pre class="highlight"><code>$scope.todoList = [];
 </code></pre>
+</div>
 
 <p>add方法</p>
 
-<pre><code>$scope.add = function() {
+<div class="highlighter-rouge"><pre class="highlight"><code>$scope.add = function() {
 	// 如果输入框有值
     if ($scope.todoItem) {
     	// 定义一个空对象
@@ -165,50 +168,56 @@ bower install angular-local-storage
     }
 }
 </code></pre>
+</div>
 
 <p>remove方法</p>
 
-<pre><code>// 删除index位置开始的1个数组元素
+<div class="highlighter-rouge"><pre class="highlight"><code>// 删除index位置开始的1个数组元素
 $scope.remove = function(index) {
     $scope.todoList.splice(index, 1);
 }
 </code></pre>
+</div>
 
 <h1 id="todojslocalstorage">改造todo.js，使用localstorage持久化</h1>
 
 <p>两种思路：</p>
 
 <ul>
-  <li>分别在<code>$scope.todoList</code>查询、添加、删除时同步操作<code>localstorage</code>；</li>
-  <li>监听<code>$scope.todoList</code>，当它改变时把<code>$scope.todoList</code>赋值给<code>localstorage</code>.</li>
+  <li>分别在<code class="highlighter-rouge">$scope.todoList</code>查询、添加、删除时同步操作<code class="highlighter-rouge">localstorage</code>；</li>
+  <li>监听<code class="highlighter-rouge">$scope.todoList</code>，当它改变时把<code class="highlighter-rouge">$scope.todoList</code>赋值给<code class="highlighter-rouge">localstorage</code>.</li>
 </ul>
 
-<p>第一种方法明显麻烦很多，但当时不知道<code>$scope.$watch</code>可以做到监听…这里使用<code>$scope.$watch</code>：</p>
+<p>第一种方法明显麻烦很多，但当时不知道<code class="highlighter-rouge">$scope.$watch</code>可以做到监听…这里使用<code class="highlighter-rouge">$scope.$watch</code>：</p>
 
 <p>添加localstorage模块</p>
 
-<pre><code>var todoApp=angular.module('todoApp',['LocalStorageModule']);
+<div class="highlighter-rouge"><pre class="highlight"><code>var todoApp=angular.module('todoApp',['LocalStorageModule']);
 ...
 </code></pre>
+</div>
 
 <p>controller上传入服务</p>
 
-<pre><code>todoApp.controller('TodoController', function($scope, localStorageService) {
+<div class="highlighter-rouge"><pre class="highlight"><code>todoApp.controller('TodoController', function($scope, localStorageService) {
 ...
 </code></pre>
+</div>
 
-<p>从localstorage中get数据，如果不为空，赋值给<code>$scope.todoList</code></p>
+<p>从localstorage中get数据，如果不为空，赋值给<code class="highlighter-rouge">$scope.todoList</code></p>
 
-<pre><code>var todoInStore = localStorageService.get('todoList');
+<div class="highlighter-rouge"><pre class="highlight"><code>var todoInStore = localStorageService.get('todoList');
 $scope.todoList = todoInStore || [];
 </code></pre>
+</div>
 
-<p>监听$scope.todoList，当它改变时，使用localstorage的<code>set()</code>方法</p>
+<p>监听$scope.todoList，当它改变时，使用localstorage的<code class="highlighter-rouge">set()</code>方法</p>
 
-<pre><code>$scope.$watch('todoList', function () {
+<div class="highlighter-rouge"><pre class="highlight"><code>$scope.$watch('todoList', function () {
     localStorageService.set('todoList', $scope.todoList);
 }, true);
 </code></pre>
+</div>
 
 <h1 id="over">over</h1>
 
@@ -227,7 +236,7 @@ $scope.todoList = todoInStore || [];
     <p>isSupported：检测浏览器是否支持localStorage</p>
   </li>
   <li>
-    <p>cookie：操作cookie的方法同localStorage，包含<code>set</code>、<code>get</code>、<code>remove</code>、<code>clearAll</code>。</p>
+    <p>cookie：操作cookie的方法同localStorage，包含<code class="highlighter-rouge">set</code>、<code class="highlighter-rouge">get</code>、<code class="highlighter-rouge">remove</code>、<code class="highlighter-rouge">clearAll</code>。</p>
   </li>
 </ul>
 

@@ -82,7 +82,7 @@
 <pre><code> &lt;"-d,e, ,d,c,b,a"
 </code></pre>
 
-<p>注意<code>join(seperator)</code>方法是通过指定的字符连接数组所有元素，默认连接符是<code>.</code>。</p>
+<p>注意<code class="highlighter-rouge">join(seperator)</code>方法是通过指定的字符连接数组所有元素，默认连接符是<code class="highlighter-rouge">.</code>。</p>
 
 <p><em>解决方案二：</em></p>
 
@@ -90,7 +90,7 @@
 &lt;-"de dcba"
 </code></pre>
 
-<p><code>sort(sortby)</code>方法，如果没有sortby参数，返回数组按照字母顺序，即字符编码顺序进行排列。现在，按照<code>sort()</code>方法的说明，return 1，也就是一个大于0的数，表示排序后的数组中a应该出现在b之后。</p>
+<p><code class="highlighter-rouge">sort(sortby)</code>方法，如果没有sortby参数，返回数组按照字母顺序，即字符编码顺序进行排列。现在，按照<code class="highlighter-rouge">sort()</code>方法的说明，return 1，也就是一个大于0的数，表示排序后的数组中a应该出现在b之后。</p>
 
 <p><em>解决方案三：</em></p>
 
@@ -106,14 +106,14 @@ map()方法会给数组中的每个元素都按顺序调用一次 callback 函�
 &lt;-[2, 8, 18]
 </code></pre>
 
-<p>方案三使用了<code>array.map(callback[, thisArg])</code>，并且，字符串被当作数组来使用…，callback中第一个参数是数组中当前被传递的元素，这里即字符串中当前被传递的字符，第二个参数是当前被传递元素的索引，第三个参数是调用map方法的数组。
+<p>方案三使用了<code class="highlighter-rouge">array.map(callback[, thisArg])</code>，并且，字符串被当作数组来使用…，callback中第一个参数是数组中当前被传递的元素，这里即字符串中当前被传递的字符，第二个参数是当前被传递元素的索引，第三个参数是调用map方法的数组。
 例1，获取每个字符串对应的ASCLL码：</p>
 
 <pre><code>&gt;Array.prototype.map.call("Hello World", function(x) { return x.charCodeAt(0); }) 
 &lt;-[72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100]
 </code></pre>
 
-<p>通常情况下，map 方法中的 <code>callback</code> 函数只需要接受一个参数，就是正在被遍历的数组元素本身。但这并不意味着 <code>map</code> 只给 <code>callback</code> 传了一个参数，第三个参数callback会忽视，但第二个参数<code>index</code>会被使用。</p>
+<p>通常情况下，map 方法中的 <code class="highlighter-rouge">callback</code> 函数只需要接受一个参数，就是正在被遍历的数组元素本身。但这并不意味着 <code class="highlighter-rouge">map</code> 只给 <code class="highlighter-rouge">callback</code> 传了一个参数，第三个参数callback会忽视，但第二个参数<code class="highlighter-rouge">index</code>会被使用。</p>
 
 <p>例2，进制数转换：</p>
 
@@ -121,7 +121,7 @@ map()方法会给数组中的每个元素都按顺序调用一次 callback 函�
 &lt;-[1, NaN, NaN]
 </code></pre>
 
-<p>例2中，<code>parseInt()</code>方法有两个参数，<code>element</code>和<code>进制数</code>，于是它将<code>index</code>视为了进制数。因此正确的方法应该是：</p>
+<p>例2中，<code class="highlighter-rouge">parseInt()</code>方法有两个参数，<code class="highlighter-rouge">element</code>和<code class="highlighter-rouge">进制数</code>，于是它将<code class="highlighter-rouge">index</code>视为了进制数。因此正确的方法应该是：</p>
 
 <pre><code>&gt;function returnInt(element){ return parseInt(element,10); }
 &gt;["1", "2", "3"].map(returnInt);

@@ -78,9 +78,9 @@
 
 <h2 id="directive">Directive</h2>
 
-<p>扩展html，给html添加声明语句，以便实现自己的需求。对于页面中html元素以<code>ng</code>为前缀的属性名称，<code>ng</code>是angular的命名空间，<code>-</code>后面的部分都是Directive。常用的如：<code>ng-app</code>，<code>ng-cotroller</code>，<code>ng-repeat</code>，<code>ng-model</code>，<code>ng-click</code>等等。</p>
+<p>扩展html，给html添加声明语句，以便实现自己的需求。对于页面中html元素以<code class="highlighter-rouge">ng</code>为前缀的属性名称，<code class="highlighter-rouge">ng</code>是angular的命名空间，<code class="highlighter-rouge">-</code>后面的部分都是Directive。常用的如：<code class="highlighter-rouge">ng-app</code>，<code class="highlighter-rouge">ng-cotroller</code>，<code class="highlighter-rouge">ng-repeat</code>，<code class="highlighter-rouge">ng-model</code>，<code class="highlighter-rouge">ng-click</code>等等。</p>
 
-<p>另外，还有一些关于表单的directive，如<code>input[email]</code>，<code>input[url]</code>等。</p>
+<p>另外，还有一些关于表单的directive，如<code class="highlighter-rouge">input[email]</code>，<code class="highlighter-rouge">input[url]</code>等。</p>
 
 <p>有的时候，直接写入html的方式并不能满足我们处理浏览器事件或者修改dom的需求，于是我们需要使用directive方法来改变view，用法：</p>
 
@@ -88,11 +88,11 @@
 
 <h2 id="scope">scope</h2>
 
-<p>为把model里的data暴露给view，我们需要将$scope对象传给controller。$scope是controller与view之间的纽带。而<code>ng-controller</code>能够负责的dom范围，就是controller中$scope的有效区域（正确传递数据，传递正确的数据）。</p>
+<p>为把model里的data暴露给view，我们需要将$scope对象传给controller。$scope是controller与view之间的纽带。而<code class="highlighter-rouge">ng-controller</code>能够负责的dom范围，就是controller中$scope的有效区域（正确传递数据，传递正确的数据）。</p>
 
 <h2 id="service">service</h2>
 
-<p>services都是单例的（不知可否参考设计模式中的单例模式去理解），angular中的service有：<code>$location</code>，<code>route</code>，<code>$http</code>。</p>
+<p>services都是单例的（不知可否参考设计模式中的单例模式去理解），angular中的service有：<code class="highlighter-rouge">$location</code>，<code class="highlighter-rouge">route</code>，<code class="highlighter-rouge">$http</code>。</p>
 
 <p>当一个app中有一堆controller，其中一些controller实现类似的逻辑（如一个查询功能：发送服务器请求－解析服务器返回的内容存入对象－将对象添加到$scope以显示到view），这时我们就可以定义一个那些controller共用的service，这样做的好处是：1、可以在controller中共享它们，从而减少重复的代码，方便阅读；2、需要的话，多个controller之间能够进行交流，分享状态…</p>
 
@@ -130,15 +130,15 @@
 
 <pre><code> { { expression | filterName : parameter1 : ...parameterN } }</code></pre>
 
-<p>如<code>{ {12.9 | currency | number:0 } }</code>显示为<code>$13</code>。常用的filter还有<code>json</code>，<code>lowercase</code>，<code>orderBy</code>等等。</p>
+<p>如<code class="highlighter-rouge"><span class="p">{</span><span class="w"> </span><span class="err">{12.9</span><span class="w"> </span><span class="err">|</span><span class="w"> </span><span class="err">currency</span><span class="w"> </span><span class="err">|</span><span class="w"> </span><span class="err">number:0</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="err">}</span></code>显示为<code class="highlighter-rouge">$13</code>。常用的filter还有<code class="highlighter-rouge">json</code>，<code class="highlighter-rouge">lowercase</code>，<code class="highlighter-rouge">orderBy</code>等等。</p>
 
-<p><code>filtername</code>也可以是自定义的处理数据（转化格式）方法的方法名。</p>
+<p><code class="highlighter-rouge">filtername</code>也可以是自定义的处理数据（转化格式）方法的方法名。</p>
 
 <h2 id="routelocation">route&amp;location</h2>
 
 <p>Ajax应用比较明显的缺点就是，window不能记住页面（局部）url，虽然有一系列解决方案（iframe，onhashchange，pushState结合location.href等），但需要做很多额外的工作。</p>
 
-<p>angularjs中，可以通过<code>$route</code>和<code>$location</code>来改变view（选择加载哪一个view）。如下面这段代码，通过调用<code>$routeProvider</code>的方法创建route，当发现url变成某一个<code>url</code>时，<code>aController</code>关联的<code>ng-controller</code>元素将load <code>/path/to/tempate</code>里的模板。如果没有找到匹配的模板，执行<code>otherwise</code>中的代码。（使用代码时需要web服务器）</p>
+<p>angularjs中，可以通过<code class="highlighter-rouge">$route</code>和<code class="highlighter-rouge">$location</code>来改变view（选择加载哪一个view）。如下面这段代码，通过调用<code class="highlighter-rouge">$routeProvider</code>的方法创建route，当发现url变成某一个<code class="highlighter-rouge">url</code>时，<code class="highlighter-rouge">aController</code>关联的<code class="highlighter-rouge">ng-controller</code>元素将load <code class="highlighter-rouge">/path/to/tempate</code>里的模板。如果没有找到匹配的模板，执行<code class="highlighter-rouge">otherwise</code>中的代码。（使用代码时需要web服务器）</p>
 
 <pre><code>module.config(function($routeProvider) {
     $routeProvider.
@@ -148,11 +148,11 @@
     otherwise(...what to do if nothing else matches...);
 )};</code></pre>
 
-<p>每一个template里只有局部代码，链接<code>a</code>元素的<code>href</code>与<code>route</code>中的<code>url</code>相关，index.html模板通过<code>ng-view</code>元素来标识哪部分是需要局部加载上来的。</p>
+<p>每一个template里只有局部代码，链接<code class="highlighter-rouge">a</code>元素的<code class="highlighter-rouge">href</code>与<code class="highlighter-rouge">route</code>中的<code class="highlighter-rouge">url</code>相关，index.html模板通过<code class="highlighter-rouge">ng-view</code>元素来标识哪部分是需要局部加载上来的。</p>
 
 <h2 id="http">http</h2>
 
-<p><code>$http</code>是一个service，angular提供了一些方法使我们可以方便地从服务器获取数据。</p>
+<p><code class="highlighter-rouge">$http</code>是一个service，angular提供了一些方法使我们可以方便地从服务器获取数据。</p>
 
 <p>比如一个从server获取数据并且显示到view的例子：</p>
 
@@ -162,7 +162,7 @@
     });
 }</code></pre>
 
-<p>html中值为<code>ShoppingController</code>的<code>ng-controller</code>里面就能通过<code>ng-repeat</code>方式动态创建html，并且使用<code>item</code>每一项的数据。</p>
+<p>html中值为<code class="highlighter-rouge">ShoppingController</code>的<code class="highlighter-rouge">ng-controller</code>里面就能通过<code class="highlighter-rouge">ng-repeat</code>方式动态创建html，并且使用<code class="highlighter-rouge">item</code>每一项的数据。</p>
 
 <h1 id="section-1">优势</h1>
 
@@ -174,12 +174,13 @@
 
 <p>Model包含app当前状态的数据，用对象来定义如：</p>
 
-<pre><code>var someText = '';
+<div class="highlighter-rouge"><pre class="highlight"><code>var someText = '';
 </code></pre>
+</div>
 
-<p>View显示数据，在dom中这样展示：<code>{ {someText} }</code></p>
+<p>View显示数据，在dom中这样展示：<code class="highlighter-rouge"><span class="p">{</span><span class="w"> </span><span class="err">{someText</span><span class="p">}</span><span class="w"> </span><span class="err">}</span></code></p>
 
-<p>Controller用来关联M和V，使用<code>$scope</code>对象来传递／操作Model，创建方法如下：</p>
+<p>Controller用来关联M和V，使用<code class="highlighter-rouge">$scope</code>对象来传递／操作Model，创建方法如下：</p>
 
 <pre><code>function TextController($scope) { 
    $scope.someText = someText;

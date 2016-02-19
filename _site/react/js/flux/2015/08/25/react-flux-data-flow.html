@@ -94,7 +94,7 @@
 
 <p>Flux是facebook推出的一个组织web应用开发的架构，它只是一种模式，一种设计思想，因此，对于不同的js库，必然会有不同的实现方式，react只是其中一种。</p>
 
-<p>在flux中，view和controller是一体的，同时它增加的两层内容：dispatcher和stores，前者负责创建actions，然后将actions按照名称（<code>actionType</code>）分发给stores，stores中对数据进行修改，触发一些change相关的方法，将改动渲染到view层（一般先是最高层级的组件收到新的数据，再把这些数据传递到子组件中）。简单说就是：</p>
+<p>在flux中，view和controller是一体的，同时它增加的两层内容：dispatcher和stores，前者负责创建actions，然后将actions按照名称（<code class="highlighter-rouge">actionType</code>）分发给stores，stores中对数据进行修改，触发一些change相关的方法，将改动渲染到view层（一般先是最高层级的组件收到新的数据，再把这些数据传递到子组件中）。简单说就是：</p>
 
 <p>Action -&gt; Dispatcher -&gt; Store -&gt; View…</p>
 

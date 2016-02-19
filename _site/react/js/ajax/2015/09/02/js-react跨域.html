@@ -71,16 +71,16 @@
     <h1 id="section">同源策略</h1>
 
 <blockquote>
-  <p><a href="https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy">同源策略</a>限制了一个源（origin）中加载文本或脚本与来自其它源（origin）中资源的交互方式。如果两个页面拥有相同的 <code>协议（protocol）</code>，<code>端口</code>（如果指定），和 <code>主机</code>，那么这两个页面就属于同一个源（origin）。<!--more--></p>
+  <p><a href="https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy">同源策略</a>限制了一个源（origin）中加载文本或脚本与来自其它源（origin）中资源的交互方式。如果两个页面拥有相同的 <code class="highlighter-rouge">协议（protocol）</code>，<code class="highlighter-rouge">端口</code>（如果指定），和 <code class="highlighter-rouge">主机</code>，那么这两个页面就属于同一个源（origin）。<!--more--></p>
 </blockquote>
 
 <p>在使用XMLHttpRequest时会受到同源策略的约束。</p>
 
-<p>浏览器发送的请求header中包含一个<code>Origin</code>，而服务器返回给浏览器的响应header中包含一个<code>Access-Control-Allow-Origin</code>，因此：</p>
+<p>浏览器发送的请求header中包含一个<code class="highlighter-rouge">Origin</code>，而服务器返回给浏览器的响应header中包含一个<code class="highlighter-rouge">Access-Control-Allow-Origin</code>，因此：</p>
 
 <ul>
   <li>
-    <p>可以通过设置<code>Access-Control-Allow-Origin:</code>来允许跨域请求，origin的值可以设置为｀*｀，表示接受来自任何站点的跨域请求，也可以设置为特定的域，表示只有这个域能跨域请求到服务器上的数据。</p>
+    <p>可以通过设置<code class="highlighter-rouge">Access-Control-Allow-Origin:</code>来允许跨域请求，origin的值可以设置为｀*｀，表示接受来自任何站点的跨域请求，也可以设置为特定的域，表示只有这个域能跨域请求到服务器上的数据。</p>
   </li>
   <li>
     <p>使用<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS">cors(Cross-Origin Resource Sharing)</a>可以实现跨域访问，但cors只支持现代浏览器。</p>
@@ -89,40 +89,44 @@
 
 <h1 id="jsonp">jsonp</h1>
 
-<p>jsonp（json with padding），一种包含在函数调用中的json。解决跨域请求比较可靠的一种思路是：设置<code>dataType</code>为<code>jsonp</code>。</p>
+<p>jsonp（json with padding），一种包含在函数调用中的json。解决跨域请求比较可靠的一种思路是：设置<code class="highlighter-rouge">dataType</code>为<code class="highlighter-rouge">jsonp</code>。</p>
 
 <p>普通的json格式：</p>
 
-<pre><code>{'name': 'insekkei'}
-</code></pre>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="err">'name':</span><span class="w"> </span><span class="err">'insekkei'</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
 
 <p>jsonp格式：</p>
 
-<pre><code>callback(
+<div class="highlighter-rouge"><pre class="highlight"><code>callback(
     {'name': 'insekkei'}
 );
 </code></pre>
+</div>
 
-<p>即：调用jsonp回调函数callback，并将返回的json作为参数传入这个回调函数。<code>callback</code>是jsonp请求默认的回调函数名称，会在请求url中追加<code>?callback=?</code>，也可以自定义这个名称：</p>
+<p>即：调用jsonp回调函数callback，并将返回的json作为参数传入这个回调函数。<code class="highlighter-rouge">callback</code>是jsonp请求默认的回调函数名称，会在请求url中追加<code class="highlighter-rouge">?callback=?</code>，也可以自定义这个名称：</p>
 
-<pre><code>dataType : 'jsonp',
+<div class="highlighter-rouge"><pre class="highlight"><code>dataType : 'jsonp',
 jsonp: 'callbackName'
 </code></pre>
+</div>
 
 <p>这时服务器需要返回的数据格式为：</p>
 
-<pre><code>callbackName(
+<div class="highlighter-rouge"><pre class="highlight"><code>callbackName(
     {'name': 'insekkei'}
 );
 </code></pre>
+</div>
 
-<p>显而易见，jsonp不仅需要客户端js进行配置，也需要服务器端返回数据格式的配合。不过，<code>jsonp只支持get请求...</code>。</p>
+<p>显而易见，jsonp不仅需要客户端js进行配置，也需要服务器端返回数据格式的配合。不过，<code class="highlighter-rouge">jsonp只支持get请求...</code>。</p>
 
 <h1 id="superagent">superagent</h1>
 
 <p>react中需要ajax请求时，可以使用<a href="https://cnodejs.org/topic/5378720ed6e2d16149fa16bd">superagent</a>这个模块，例如一个get请求：</p>
 
-<pre><code>var request = require('superagent');
+<div class="highlighter-rouge"><pre class="highlight"><code>var request = require('superagent');
 
 request
     .get(url)
@@ -132,19 +136,22 @@ request
         // do something
     });
 </code></pre>
+</div>
 
 <p>post方法：</p>
 
-<pre><code>request
+<div class="highlighter-rouge"><pre class="highlight"><code>request
     .post(url)
     .send(dataObj)
     ...
 </code></pre>
+</div>
 
 <p>然而有时候需要跨域请求数据，如果只是使用上面的方法，控制台会出现类似如下提示：</p>
 
-<pre><code>XMLHttpRequest cannot load http://xxx.xx.... No 'Access-Control-Allow-Origin' header is present on the requested resource. Origin 'http://yyy.yy...' is therefore not allowed access.
+<div class="highlighter-rouge"><pre class="highlight"><code>XMLHttpRequest cannot load http://xxx.xx.... No 'Access-Control-Allow-Origin' header is present on the requested resource. Origin 'http://yyy.yy...' is therefore not allowed access.
 </code></pre>
+</div>
 
 <h1 id="superagent-jsonp">superagent-jsonp</h1>
 
@@ -152,12 +159,13 @@ request
 
 <p>安装：</p>
 
-<pre><code>npm i superagent-jsonp --save
+<div class="highlighter-rouge"><pre class="highlight"><code>npm i superagent-jsonp --save
 </code></pre>
+</div>
 
 <p>使用：</p>
 
-<pre><code>var request = require('superagent');
+<div class="highlighter-rouge"><pre class="highlight"><code>var request = require('superagent');
 var superagent = require('superagent');
 require('superagent-jsonp')(request);
 
@@ -168,6 +176,7 @@ request
         // do something...
     });
 </code></pre>
+</div>
 
 
   </article>

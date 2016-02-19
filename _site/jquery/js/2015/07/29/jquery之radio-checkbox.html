@@ -76,40 +76,45 @@
 
 <h1 id="jquerydom">jquery对象转dom对象：</h1>
 
-<pre><code>$(selector).get(index);
+<div class="highlighter-rouge"><pre class="highlight"><code>$(selector).get(index);
 // or
 $(selector)[index];
 </code></pre>
+</div>
 
 <h1 id="domjquery--more--">dom对象转jquery对象：<!--more--></h1>
 
-<pre><code>// dom对象
+<div class="highlighter-rouge"><pre class="highlight"><code>// dom对象
 var object = document.getElementById('object');
 // jquery对象
 var $object = $(object);
 </code></pre>
+</div>
 
 <h1 id="jqueryradiocheckboxjquery">jquery判断radio或者checkbox是否被选中，需要jquery类型的对象。</h1>
 
-<pre><code>// 返回true or false
+<div class="highlighter-rouge"><pre class="highlight"><code>// 返回true or false
 $('selector').is(':checked');
 </code></pre>
+</div>
 
 <h1 id="domradiocheckboxdom">DOM方式判断radio或者checkbox是否被选中，需要用dom类型的对象。</h1>
 
-<pre><code>// 返回true or false
+<div class="highlighter-rouge"><pre class="highlight"><code>// 返回true or false
 $('selector')[0].checked;
 // or
 $('selector').get(0).checked;
 </code></pre>
+</div>
 
 <h1 id="jqueryradiocheckbox">jquery操作radio或者checkbox使它们被选中</h1>
 
-<pre><code>//For versions higher than 1.6, use:
+<div class="highlighter-rouge"><pre class="highlight"><code>//For versions higher than 1.6, use:
 $('#radio_1').prop('checked', true)
 //For versions of jQuery prior to 1.6, use:
 $('#radio_1').attr('checked', 'checked');
 </code></pre>
+</div>
 
   </article>
 

@@ -14,6 +14,6 @@ markdown: kramdown
 # paginate settings
 paginate: 10
 paginate_path: "/blogs/page:num"
-
+gems: [jekyll-paginate]
 
 excerpt_separator: "<!--more-->"
