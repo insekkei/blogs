@@ -6,12 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>web前端笔记</title>
-  <meta name="description" content="绿螘新醅酒，红泥小火炉。<br>晚来天欲雪，能饮一杯无？
-">
+  <title>react router使用</title>
+  <meta name="description" content="  React Router keeps your UI in sync with the URL. It has a simple API with powerful features like lazy code loading, dynamic route matching, and location tr...">
 
   <link rel="stylesheet" href="/blogs/css/main.css">
-  <link rel="canonical" href="http://insekkei.com/blogs//blogs/">
+  <link rel="canonical" href="http://insekkei.com/blogs//blogs/react/2016/02/19/React-Router.html">
   <link rel="alternate" type="application/rss+xml" title="web前端笔记" href="http://insekkei.com/blogs//blogs/feed.xml" />
   <link rel="icon" type="image/png" href="/blogs/images/icon.png">
 </head>
@@ -61,212 +60,141 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="home">
+        <div class="post">
 
-  <h1 class="page-heading">笔记目录</h1>
+  <header class="post-header">
+    <h1 class="post-title">react router使用</h1>
+    <p class="post-meta">Feb 19, 2016</p>
+  </header>
 
-  <ul class="post-list">
-    
-      <li>
-        <span class="post-meta">Feb 19, 2016</span>
+  <article class="post-content">
+    <blockquote>
+  <p>React Router keeps your UI in sync with the URL. It has a simple API with powerful features like lazy code loading, dynamic route matching, and location transition handling built right in.</p>
+</blockquote>
 
-        <h2>
-          <a class="post-link" href="/blogs/react/2016/02/19/React-Router.html">react router使用</a>
-        </h2>
-        <p class="excerpt">
-  React Router keeps your UI in sync with the URL. It has a simple API with powerful features like lazy code loading, dynamic route matching, and location transition handling built right in.
+<h2 id="npm--more--">使用npm安装<!--more--></h2>
 
+<pre><code>$ npm install --save react-router
+</code></pre>
 
-使用npm安装
+<h2 id="layoutroutehandler">在Layout中使用RouteHandler</h2>
 
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jan 25, 2016</span>
+<blockquote>
+  <p>A Layout is something that describes an entire page structure, such as a fixed navigation, viewport, sidebar, and footer.</p>
+</blockquote>
 
-        <h2>
-          <a class="post-link" href="/blogs/ie/js/2016/01/25/ie9%E6%97%A0%E6%B3%95%E5%85%BC%E5%AE%B9console%E5%AF%B9%E8%B1%A1.html">IE9不打开控制台无法正常执行js</a>
-        </h2>
-        <p class="excerpt">接手一个系统项目，必须运行在windows下，浏览器要求IE9。
+<pre><code>var React = require('react');
+var RouteHandler = require('react-router').RouteHandler;
+var Link = require('react-router').Link;
 
-调试脚本的过程中使用过console.log()，同时页面包含一个setInterval()方法，每隔300毫秒自动获取接口传过来的数据， 获取到正确的数据之后，停止定时器。
+...
 
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jan 25, 2016</span>
+var Layout = React.createClass({
+    ...
+    render: function () {
+        return (
+            &lt;div className="wrapper"&gt;
+                &lt;PlatformHeader/&gt;
+                &lt;PlatformNav/&gt;
+                &lt;PlatformContent/&gt;
+            &lt;/div&gt;
+        );
+    }
+});
 
-        <h2>
-          <a class="post-link" href="/blogs/css/2016/01/25/css%E5%AE%9E%E7%8E%B0%E8%83%8C%E6%99%AF%E5%9B%BE%E5%B1%80%E9%83%A8%E6%BB%A4%E9%95%9C%E5%8A%A0%E5%8D%8A%E9%80%8F%E6%98%8E%E6%95%88%E6%9E%9C.html">css实现背景图片局部滤镜加半透明效果</a>
-        </h2>
-        <p class="excerpt">实现效果预览：Daipu Architects 中间区域。
+// RouteHandler是react router的核心组件之一，代表与当前路由（url）匹配的组件。
+var PlatformContent = React.createClass({
+    render: function() {
+        return (
+            &lt;div className='main'&gt;
+                &lt;RouteHandler/&gt;
+            &lt;/div&gt;
+        );
+    }
+});
 
-html：
+// PlatformNav中有url链接（路由需求），例如index
+var PlatformNav = React.createClass({
+    render: function() {
+        return (
+            &lt;div className='nav'&gt;
+                ...
+                &lt;Link to="index"&gt;首页&lt;/Link&gt;
+                ...
+            &lt;/div&gt;
+        );
+    }
+});
 
-&lt;div class="wrapper"&gt;
-    &lt;div class="overlay"&gt;
-        &lt;div class="overlay-con"&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
+...
+module.exports = Layout;
+</code></pre>
 
+<h2 id="index">index页</h2>
 
-父级div，一般背景图会覆盖浏览器可视区域：
+<pre><code>var Index = React.createClass({
+    render: function() {
+        return (
+            &lt;div&gt;
+                Welcome!
+            &lt;/div&gt;
+        );
+    }
+});
 
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jan 25, 2016</span>
+module.exports = Index;
+</code></pre>
 
-        <h2>
-          <a class="post-link" href="/blogs/node/forever/phantomjs/2016/01/25/forever%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%E7%9B%B8%E5%85%B3%E8%AE%B0%E5%BD%95.html">forever守护进程相关记录</a>
-        </h2>
-        <p class="excerpt">安装forever
+<h2 id="appjs">在app.js中配置路由</h2>
 
-$ npm install forever -g
+<pre><code>var Layout = require('./components/Layout');
+var Index = require('./components/Index');
 
+// 引入需要的组件
+var Router = require('react-router').Router;
+var Route  = require('react-router').Route;
+var DefaultRoute = require('react-router').DefaultRoute; // 默认路由，首页
 
-使用forever
+// 或使用es6
+import { Router, Route, DefaultRoute } from 'react-router'
 
-用法一：
+// 设置路由，handler中是组件名称，path写url
+var routes = (
+    &lt;Route&gt;
+        &lt;Route path="/" handler={Layout}&gt;
+            &lt;DefaultRoute handler={Index}/&gt;
+            &lt;Route path='index' name='index' handler={Index}/&gt;
+        &lt;/Route&gt;
+    &lt;/Route&gt;
+);
 
-例如：后台定时运行一个phantomjs截图的任务。
+Router.run(routes, Router.HistoryLocation, (Root) =&gt; {
+    React.render(&lt;Root/&gt;, document.body);
+});
+</code></pre>
 
-phantmjs截图的代码写在pagename.js中：
+<p>这样，点击nav中的“首页”链接时，浏览器地址栏中会出现’index’，同时页面上能看到“Welcome”。而刷新页面时，也能根据给当前url分配的组件Index，加载想要看到的内容。</p>
 
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Dec 21, 2015</span>
+<p><a href="https://github.com/reactjs/react-router">更多关于React-router</a></p>
 
-        <h2>
-          <a class="post-link" href="/blogs/gulp/browserity/2015/12/21/gulp%E6%89%93%E5%8C%85%E7%BC%96%E8%AF%91%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8C%96.html">gulp打包编译速度优化</a>
-        </h2>
-        <p class="excerpt">
-  保持对新技术的好奇心，深入研究当前工作使用的技术，同时进行一些输出，例如写博客，做开源，研究分享，写书等的，没有输出的学习就是耍流氓。
-——来自知乎
+  </article>
 
-
-做项目时使用了browserify，但每次修改编译时间都很长，十几秒的样子？
-
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Sep 24, 2015</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/react/loader/2015/09/24/react-loader-with-flux.html">flux中使用react-loder</a>
-        </h2>
-        <p class="excerpt">
-  做一个react的项目，需要loading菊花的效果，找到了react-loader，然而README中只有一些不明觉厉的伪代码…
-
-
-经过多番尝试，终于做出来了一款flux的小菊花…三木君说，这种方法藕合度挺高的。然而我目前想不到更好（kuai，四声）
-
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Sep 7, 2015</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/react/js/2015/09/07/js-react-pagination.html">用react完成一个带省略号的分页</a>
-        </h2>
-        <p class="excerpt">分页其实想起来很容易：不过就是从后台拿一些数据来——当前页码、总页数、总条目数、每页显示的数量等等。
-
-本篇将完成一个具备以下简单功能的react组件（结合Flux）：
-
-
-  
-    页码list
-  
-  
-    首页、末页、上下页
-  
-  
-    页码数量过多时用省略号指引
-  
-
-
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Sep 2, 2015</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/react/js/ajax/2015/09/02/js-react%E8%B7%A8%E5%9F%9F.html">react ajax跨域请求</a>
-        </h2>
-        <p class="excerpt">同源策略
-
-
-  同源策略限制了一个源（origin）中加载文本或脚本与来自其它源（origin）中资源的交互方式。如果两个页面拥有相同的 协议（protocol），端口（如果指定），和 主机，那么这两个页面就属于同一个源（origin）。
-
-
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Aug 25, 2015</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/react/js/flux/2015/08/25/react-flux-data-flow.html">react&flux之BasicSelect组件实现</a>
-        </h2>
-        <p class="excerpt">应工作需求，用到flux，为了解react设计思想及其flux强调的数据流，查找了各种在线资料，终于可以开工了。然而编码的时候时常产生一种怀疑：我真的是一个前端？
-
-React
-
-对于react，我是从这里开始了解的，然而这儿仅仅能了解到react的语法。
-
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Aug 25, 2015</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/bootstrap/js/2015/08/25/bootstrap-select-with-ajax-data.html">bootstrap-select.js使用ajax get到的option数据</a>
-        </h2>
-        <p class="excerpt">
-  第一次用到，搜了很多博文都没用，一篇抄一篇而且整得特复杂…还是官方文档比较给力，然而最近红杏什么的都没法用了，代理jquery到国内cdn后才能正确显示效果，非常之坑…有些东西遮遮掩掩真的有用吗？
-
-
-bootstrap-select.js官方文档
-
-</p>
-      </li>
-    
-  </ul>
-
-  <!-- Pagination links -->
-  
-  <div class="pagination">
-    
-      <span>&laquo; Prev</span>
-    
-
-    
-      
-        <em>1</em>
-      
-    
-      
-        <a href="/blogs/blogs/page2">2</a>
-      
-    
-
-    
-      <a class="nextpage" href="/blogs/blogs/page2">Next &raquo;</a>
-    
-  </div>
-  
-
-  <p class="rss-subscribe">subscribe <a href="/blogs/feed.xml">via RSS</a></p>
+  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="react router使用"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"blogs2015"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	<!-- 多说公共JS代码 end -->
 
 </div>
 

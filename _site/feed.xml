@@ -6,9 +6,129 @@
 </description>
     <link>http://insekkei.com/blogs//blogs/</link>
     <atom:link href="http://insekkei.com/blogs//blogs/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 25 Jan 2016 18:40:45 +0800</pubDate>
-    <lastBuildDate>Mon, 25 Jan 2016 18:40:45 +0800</lastBuildDate>
+    <pubDate>Fri, 19 Feb 2016 12:12:22 +0800</pubDate>
+    <lastBuildDate>Fri, 19 Feb 2016 12:12:22 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>react router使用</title>
+        <description>&lt;blockquote&gt;
+  &lt;p&gt;React Router keeps your UI in sync with the URL. It has a simple API with powerful features like lazy code loading, dynamic route matching, and location transition handling built right in.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;npm--more--&quot;&gt;使用npm安装&lt;!--more--&gt;&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;$ npm install --save react-router
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;layoutroutehandler&quot;&gt;在Layout中使用RouteHandler&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;A Layout is something that describes an entire page structure, such as a fixed navigation, viewport, sidebar, and footer.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;var React = require(&#39;react&#39;);
+var RouteHandler = require(&#39;react-router&#39;).RouteHandler;
+var Link = require(&#39;react-router&#39;).Link;
+
+...
+
+var Layout = React.createClass({
+    ...
+    render: function () {
+        return (
+            &amp;lt;div className=&quot;wrapper&quot;&amp;gt;
+                &amp;lt;PlatformHeader/&amp;gt;
+                &amp;lt;PlatformNav/&amp;gt;
+                &amp;lt;PlatformContent/&amp;gt;
+            &amp;lt;/div&amp;gt;
+        );
+    }
+});
+
+// RouteHandler是react router的核心组件之一，代表与当前路由（url）匹配的组件。
+var PlatformContent = React.createClass({
+    render: function() {
+        return (
+            &amp;lt;div className=&#39;main&#39;&amp;gt;
+                &amp;lt;RouteHandler/&amp;gt;
+            &amp;lt;/div&amp;gt;
+        );
+    }
+});
+
+// PlatformNav中有url链接（路由需求），例如index
+var PlatformNav = React.createClass({
+    render: function() {
+        return (
+            &amp;lt;div className=&#39;nav&#39;&amp;gt;
+                ...
+                &amp;lt;Link to=&quot;index&quot;&amp;gt;首页&amp;lt;/Link&amp;gt;
+                ...
+            &amp;lt;/div&amp;gt;
+        );
+    }
+});
+
+...
+module.exports = Layout;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;index&quot;&gt;index页&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;var Index = React.createClass({
+    render: function() {
+        return (
+            &amp;lt;div&amp;gt;
+                Welcome!
+            &amp;lt;/div&amp;gt;
+        );
+    }
+});
+
+module.exports = Index;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;appjs&quot;&gt;在app.js中配置路由&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;var Layout = require(&#39;./components/Layout&#39;);
+var Index = require(&#39;./components/Index&#39;);
+
+// 引入需要的组件
+var Router = require(&#39;react-router&#39;).Router;
+var Route  = require(&#39;react-router&#39;).Route;
+var DefaultRoute = require(&#39;react-router&#39;).DefaultRoute; // 默认路由，首页
+
+// 或使用es6
+import { Router, Route, DefaultRoute } from &#39;react-router&#39;
+
+// 设置路由，handler中是组件名称，path写url
+var routes = (
+    &amp;lt;Route&amp;gt;
+        &amp;lt;Route path=&quot;/&quot; handler={Layout}&amp;gt;
+            &amp;lt;DefaultRoute handler={Index}/&amp;gt;
+            &amp;lt;Route path=&#39;index&#39; name=&#39;index&#39; handler={Index}/&amp;gt;
+        &amp;lt;/Route&amp;gt;
+    &amp;lt;/Route&amp;gt;
+);
+
+Router.run(routes, Router.HistoryLocation, (Root) =&amp;gt; {
+    React.render(&amp;lt;Root/&amp;gt;, document.body);
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这样，点击nav中的“首页”链接时，浏览器地址栏中会出现’index’，同时页面上能看到“Welcome”。而刷新页面时，也能根据给当前url分配的组件Index，加载想要看到的内容。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/reactjs/react-router&quot;&gt;更多关于React-router&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Fri, 19 Feb 2016 11:40:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/react/2016/02/19/React-Router.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/react/2016/02/19/React-Router.html</guid>
+        
+        
+        <category>react</category>
+        
+      </item>
     
       <item>
         <title>IE9不打开控制台无法正常执行js</title>
@@ -1314,183 +1434,6 @@ render: function () {
         
         
         <category>bootstrap</category>
-        
-        <category>js</category>
-        
-      </item>
-    
-      <item>
-        <title>angularjs结合localstorage完成一个简单的备忘录</title>
-        <description>&lt;blockquote&gt;
-  &lt;p&gt;学习一种新的框架真的是痛并快乐着…而当确定了一个清晰的目标，向着这个目标努力时，成就感带来的快感将远大于茫然不解时的痛苦。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;——&amp;gt;&lt;a href=&quot;http://insekkei.com/todolist&quot;&gt;预览效果&lt;/a&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;section&quot;&gt;准备工作&lt;/h1&gt;
-&lt;!--more--&gt;
-&lt;p&gt;用bower安装需要的js：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;bower install angular
-bower install angular-local-storage
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;html中引用bower_components下对应的js文件：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;script src=&quot;js/angular.min.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
-&amp;lt;script src=&quot;js/angular-local-storage.js&quot;&amp;gt;&amp;lt;/script&amp;gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;说明：npm也可以，直接下载相应js文件或者用cdn也是ok的…&lt;/p&gt;
-
-&lt;h1 id=&quot;angularjs-directivehttpinsekkeicomblogsangularjs20150709angularjs-e8afade6b395e6b585e69e90htmlindexhtml&quot;&gt;通过&lt;a href=&quot;http://insekkei.com/blogs/angular/js/2015/07/09/angular.js-%E8%AF%AD%E6%B3%95%E6%B5%85%E6%9E%90.html&quot;&gt;angularjs Directive&lt;/a&gt;扩展index.html&lt;/h1&gt;
-
-&lt;h2 id=&quot;angular&quot;&gt;angular接管整个页面：&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;html ng-app=&quot;todoApp&quot;&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;bodytodocontroller&quot;&gt;body中的数据由&lt;code&gt;TodoController&lt;/code&gt;来控制：&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;body ng-controller=&quot;TodoController&quot;&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;form&quot;&gt;添加备忘的form：&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;form ng-submit=&quot;add()&quot;&amp;gt;
-	&amp;lt;input placeholder=&quot;What you want to do...&quot; type=&quot;text&quot; ng-model=&quot;todoItem&quot; name=&quot;totoItem&quot;&amp;gt;
-	&amp;lt;input type=&quot;submit&quot; id=&quot;submit&quot; value=&quot;add&quot;&amp;gt;
-&amp;lt;/form&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;form&lt;/code&gt;提交表单时（&lt;code&gt;ng-submit&lt;/code&gt;）执行&lt;code&gt;add()&lt;/code&gt;方法，输入框的内容通过&lt;code&gt;ng-model&lt;/code&gt;与&lt;code&gt;todoItem&lt;/code&gt;关联，使用：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;...$scope.todoItem...&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;list&quot;&gt;添加备忘list&lt;/h2&gt;
-
-&lt;p&gt;每条备忘中包含的信息：内容&lt;code&gt;content&lt;/code&gt;、日期&lt;code&gt;creDate&lt;/code&gt;、删除按钮。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;ul&amp;gt;
-	&amp;lt;li ng-repeat=&quot;todo in todoList&quot;&amp;gt;
-		&amp;lt;time&amp;gt;{ {todo.creDate} }&amp;lt;/time&amp;gt;
-		&amp;lt;input type=&quot;text&quot; ng-model=&quot;todo.content&quot;&amp;gt;
-		&amp;lt;span&amp;gt;{ {todo.content} }&amp;lt;/span&amp;gt;
-		&amp;lt;input type=&quot;button&quot; value=&quot;remove&quot; ng-click=&quot;remove($index)&quot;&amp;gt;
-	&amp;lt;/li&amp;gt;
-&amp;lt;/ul&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;ng-repeat&lt;/code&gt;用来循环输出每一条备忘，&lt;code&gt;ng-model&lt;/code&gt;指定当前&lt;code&gt;input&lt;/code&gt;的值即备忘内容&lt;code&gt;content&lt;/code&gt;，&lt;code&gt;ng-click&lt;/code&gt;将&lt;code&gt;remove&lt;/code&gt;按钮和&lt;code&gt;remove(index)&lt;/code&gt;方法关联。&lt;/p&gt;
-
-&lt;h1 id=&quot;todojs&quot;&gt;todo.js&lt;/h1&gt;
-
-&lt;p&gt;声明app&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var todoApp=angular.module(&#39;todoApp&#39;,[]);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;定义controller&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;todoApp.controller(&#39;TodoController&#39;, function($scope) {
-	...
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;定义todoList&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$scope.todoList = [];
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;add方法&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$scope.add = function() {
-	// 如果输入框有值
-    if ($scope.todoItem) {
-    	// 定义一个空对象
-        var todoInfo = {};
-        // 对象的三个属性：时间为创建时时间
-        todoInfo.creDate = new Date().getMonth() + &#39;/&#39; + new Date().getDate();
-        todoInfo.content = $scope.todoItem;
-        todoInfo.status = &#39;active&#39;;
-
-        // 将todoInfo添加到todoList头部
-        $scope.todoList.unshift(todoInfo);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;remove方法&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;// 删除index位置开始的1个数组元素
-$scope.remove = function(index) {
-    $scope.todoList.splice(index, 1);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&quot;todojslocalstorage&quot;&gt;改造todo.js，使用localstorage持久化&lt;/h1&gt;
-
-&lt;p&gt;两种思路：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;分别在&lt;code&gt;$scope.todoList&lt;/code&gt;查询、添加、删除时同步操作&lt;code&gt;localstorage&lt;/code&gt;；&lt;/li&gt;
-  &lt;li&gt;监听&lt;code&gt;$scope.todoList&lt;/code&gt;，当它改变时把&lt;code&gt;$scope.todoList&lt;/code&gt;赋值给&lt;code&gt;localstorage&lt;/code&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;第一种方法明显麻烦很多，但当时不知道&lt;code&gt;$scope.$watch&lt;/code&gt;可以做到监听…这里使用&lt;code&gt;$scope.$watch&lt;/code&gt;：&lt;/p&gt;
-
-&lt;p&gt;添加localstorage模块&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var todoApp=angular.module(&#39;todoApp&#39;,[&#39;LocalStorageModule&#39;]);
-...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;controller上传入服务&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;todoApp.controller(&#39;TodoController&#39;, function($scope, localStorageService) {
-...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;从localstorage中get数据，如果不为空，赋值给&lt;code&gt;$scope.todoList&lt;/code&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var todoInStore = localStorageService.get(&#39;todoList&#39;);
-$scope.todoList = todoInStore || [];
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;监听$scope.todoList，当它改变时，使用localstorage的&lt;code&gt;set()&lt;/code&gt;方法&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$scope.$watch(&#39;todoList&#39;, function () {
-    localStorageService.set(&#39;todoList&#39;, $scope.todoList);
-}, true);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&quot;over&quot;&gt;over&lt;/h1&gt;
-
-&lt;p&gt;这样就实现了一个简版的备忘录，只要缓存没有被清理，备忘会一直在。&lt;/p&gt;
-
-&lt;p&gt;另外angular local storage还提供了一些方法供开发者使用：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;remove(key)：匹配key删除localStorage条目&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;clearAll()：删除全部localStorage&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;isSupported：检测浏览器是否支持localStorage&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;cookie：操作cookie的方法同localStorage，包含&lt;code&gt;set&lt;/code&gt;、&lt;code&gt;get&lt;/code&gt;、&lt;code&gt;remove&lt;/code&gt;、&lt;code&gt;clearAll&lt;/code&gt;。&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-</description>
-        <pubDate>Wed, 05 Aug 2015 14:59:00 +0800</pubDate>
-        <link>http://insekkei.com/blogs//blogs/angularjs/js/2015/08/05/angularjs-localstorage.html</link>
-        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/angularjs/js/2015/08/05/angularjs-localstorage.html</guid>
-        
-        
-        <category>angularjs</category>
         
         <category>js</category>
         
