@@ -9,101 +9,104 @@ categories: react
 
 ## 使用npm安装<!--more-->
 
-    $ npm install --save react-router
+<pre></code>$ npm install --save react-router
+</code></pre>
 
 ## 在Layout中使用RouteHandler
 
 > A Layout is something that describes an entire page structure, such as a fixed navigation, viewport, sidebar, and footer.
 
-    var React = require('react');
-    var RouteHandler = require('react-router').RouteHandler;
-    var Link = require('react-router').Link;
+<pre></code>var React = require('react');
+var RouteHandler = require('react-router').RouteHandler;
+var Link = require('react-router').Link;
 
+...
+
+var Layout = React.createClass({
     ...
+    render: function () {
+        return (
+            &lt;div className="wrapper"&gt;
+                &lt;PlatformHeader/&gt;
+                &lt;PlatformNav/&gt;
+                &lt;PlatformContent/&gt;
+            &lt;/div&gt;
+        );
+    }
+});
 
-    var Layout = React.createClass({
-        ...
-        render: function () {
-            return (
-                <div className="wrapper">
-                    <PlatformHeader/>
-                    <PlatformNav/>
-                    <PlatformContent/>
-                </div>
-            );
-        }
-    });
+// RouteHandler是react router的核心组件之一，代表与当前路由（url）匹配的组件。
+var PlatformContent = React.createClass({
+    render: function() {
+        return (
+            &lt;div className='main'&gt;
+                &lt;RouteHandler/&gt;
+            &lt;/div&gt;
+        );
+    }
+});
 
-    // RouteHandler是react router的核心组件之一，代表与当前路由（url）匹配的组件。
-    var PlatformContent = React.createClass({
-        render: function() {
-            return (
-                <div className='main'>
-                    <RouteHandler/>
-                </div>
-            );
-        }
-    });
+// PlatformNav中有url链接（路由需求），例如index
+var PlatformNav = React.createClass({
+    render: function() {
+        return (
+            &lt;div className='nav'&gt;
+                ...
+                &lt;Link to="index"&gt;首页&lt;/Link&gt;
+                ...
+            &lt;/div&gt;
+        );
+    }
+});
 
-    // PlatformNav中有url链接（路由需求），例如index
-    var PlatformNav = React.createClass({
-        render: function() {
-            return (
-                <div className='nav'>
-                    ...
-                    <Link to="index">首页</Link>
-                    ...
-                </div>
-            );
-        }
-    });
-
-    ...
-    module.exports = Layout;
-
+...
+module.exports = Layout;
+</code></pre>
 
 
 ## index页
 
-    var Index = React.createClass({
-        render: function() {
-            return (
-                <div>
-                    Welcome!
-                </div>
-            );
-        }
-    });
+<pre></code>var Index = React.createClass({
+    render: function() {
+        return (
+            &lt;div&gt;
+                Welcome!
+            &lt;/div&gt;
+        );
+    }
+});
 
-    module.exports = Index;
+module.exports = Index;
+</code></pre>
 
 ## 在app.js中配置路由
 
-    var Layout = require('./components/Layout');
-    var Index = require('./components/Index');
+<pre></code>var Layout = require('./components/Layout');
+var Index = require('./components/Index');
 
-    // 引入需要的组件
-    var Router = require('react-router').Router;
-    var Route  = require('react-router').Route;
-    var DefaultRoute = require('react-router').DefaultRoute; // 默认路由，首页
+// 引入需要的组件
+var Router = require('react-router').Router;
+var Route  = require('react-router').Route;
+var DefaultRoute = require('react-router').DefaultRoute; // 默认路由，首页
 
-    // 或使用es6
-    import { Router, Route, DefaultRoute } from 'react-router'
+// 或使用es6
+import { Router, Route, DefaultRoute } from 'react-router'
 
-    // 设置路由，handler中是组件名称，path写url
-    var routes = (
-        <Route>
-            <Route path="/" handler={Layout}>
-                <DefaultRoute handler={Index}/>
-                <Route path='index' name='index' handler={Index}/>
-            </Route>
-        </Route>
-    );
+// 设置路由，handler中是组件名称，path写url
+var routes = (
+    &lt;Route&gt;
+        &lt;Route path="/" handler={Layout}&gt;
+            &lt;DefaultRoute handler={Index}/&gt;
+            &lt;Route path='index' name='index' handler={Index}/&gt;
+        &lt;/Route&gt;
+    &lt;/Route&gt;
+);
 
-    Router.run(routes, Router.HistoryLocation, (Root) => {
-        React.render(<Root/>, document.body);
-    });
-    
+Router.run(routes, Router.HistoryLocation, (Root) =&gt; {
+    React.render(&lt;Root/&gt;, document.body);
+});
+</code></pre>
+
 这样，点击nav中的“首页”链接时，浏览器地址栏中会出现'index'，同时页面上能看到“Welcome”。而刷新页面时，也能根据给当前url分配的组件Index，加载想要看到的内容。
 
 [更多关于React-router](https://github.com/reactjs/react-router)
