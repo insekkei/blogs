@@ -6,9 +6,105 @@
 </description>
     <link>http://insekkei.com/blogs//blogs/</link>
     <atom:link href="http://insekkei.com/blogs//blogs/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 19 Apr 2016 14:09:17 +0800</pubDate>
-    <lastBuildDate>Tue, 19 Apr 2016 14:09:17 +0800</lastBuildDate>
+    <pubDate>Tue, 19 Apr 2016 14:29:30 +0800</pubDate>
+    <lastBuildDate>Tue, 19 Apr 2016 14:29:30 +0800</lastBuildDate>
     <generator>Jekyll v3.1.1</generator>
+    
+      <item>
+        <title>echarts多图时页面resize事件以及重绘需要判断</title>
+        <description>&lt;h1 id=&quot;resize&quot;&gt;resize事件&lt;/h1&gt;
+
+&lt;p&gt;当页面上有&amp;gt;1个图表时，&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;window.onresize = myChart.resize;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;并不能使所有的图响应浏览器resize事件，只有一个随机的图能随着resize。&lt;/p&gt;
+
+&lt;p&gt;于是参考&lt;a href=&quot;https://facebook.github.io/react/tips/dom-event-listeners.html&quot;&gt;DOM Event Listeners in a Component&lt;/a&gt;里所写，添加了resize事件：&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;...
+getInitialState() {
+    let innerWidth = window.innerWidth;
+    let acWidth;
+    if (innerWidth &amp;gt; 991) {
+        acWidth = (innerWidth - 144) / 3;
+    }
+    else {
+        acWidth = innerWidth - 60;
+    }
+    return {
+        width: acWidth
+    };
+},
+handleResize() {
+    let innerWidth = window.innerWidth;
+    let acWidth;
+    if (innerWidth &amp;gt; 991) {
+        acWidth = (innerWidth - 144) / 3;
+    }
+    else {
+        acWidth = innerWidth - 60;
+    }
+    this.setState({
+        width: acWidth
+    });
+},
+componentDidMount() {
+    window.addEventListener(&#39;resize&#39;, this.handleResize);
+},
+componentWillUnmount() {
+    window.removeEventListener(&#39;resize&#39;, this.handleResize);
+},
+render() {
+    const { width } = this.state;
+    let option = {
+        // 根据echarts配置项手册配置option
+    }
+    return &amp;lt;Chart data-source={option} height=&quot;300&quot; width={width}/&amp;gt;;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;这样，当浏览器窗口缩放时，所有图都会随着重新渲染。但是出现了又一个问题：&lt;/p&gt;
+
+&lt;h1 id=&quot;section&quot;&gt;判断是否需要重新渲染&lt;/h1&gt;
+
+&lt;p&gt;很多时候的重新渲染都是不必要的，如果开启了echarts的animation，就可以看到，页面中其它组件的状态变化也会使echarts重新渲染一遍。&lt;/p&gt;
+
+&lt;p&gt;此时需要&lt;code class=&quot;highlighter-rouge&quot;&gt;shouldComponentUpdate&lt;/code&gt;来限制重绘：&lt;/p&gt;
+
+&lt;p&gt;Chart组件中添加以下代码：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;shouldComponentUpdate: function(nextProps, nextState) {
+    let renderFlag = true;
+
+    if ((this.props.width === nextProps.width)
+        &amp;amp;&amp;amp; (JSON.stringify(nextProps[&#39;data-source&#39;]) === JSON.stringify(this.props[&#39;data-source&#39;]))) {
+        renderFlag = false;
+    }
+    return renderFlag;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;shouldComponentUpdate&lt;/code&gt;的方法返回false时，不重绘。如此，当宽度和数据都没有变化的时候，图将不会重新渲染；页面上图比较多的时候，这样做非常有必要。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/reactjs/react-router&quot;&gt;更多关于React-router&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Tue, 19 Apr 2016 14:20:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/react/js/echarts/2016/04/19/echarts-react-shouldupdate.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/react/js/echarts/2016/04/19/echarts-react-shouldupdate.html</guid>
+        
+        
+        <category>react</category>
+        
+        <category>js</category>
+        
+        <category>echarts</category>
+        
+      </item>
     
       <item>
         <title>react router 2使用</title>
@@ -1217,348 +1313,6 @@ request
         <category>js</category>
         
         <category>ajax</category>
-        
-      </item>
-    
-      <item>
-        <title>react&amp;flux之BasicSelect组件实现</title>
-        <description>&lt;p&gt;应工作需求，用到flux，为了解react设计思想及其flux强调的数据流，查找了各种在线资料，终于可以开工了。然而编码的时候时常产生一种怀疑：我真的是一个前端？&lt;/p&gt;
-
-&lt;h1 id=&quot;react&quot;&gt;React&lt;/h1&gt;
-
-&lt;p&gt;对于react，我是从&lt;a href=&quot;http://facebook.github.io/react/docs/getting-started.html&quot;&gt;这里&lt;/a&gt;开始了解的，然而这儿仅仅能了解到react的语法。&lt;!--more--&gt;&lt;/p&gt;
-
-&lt;p&gt;对于习惯了html＋css＋js文件的我来说，乍一看到react的代码，第一反应是：html写在js中？这不就是前端一直强调的“结构、样式、行为分离”思想的反面教材吗？不能再颠覆啊！我感到无所适从。&lt;/p&gt;
-
-&lt;p&gt;于是，我想应该先了解下react的设计思想，因此，我跳过了&lt;a href=&quot;http://facebook.github.io/react/docs/tutorial.html&quot;&gt;Tudorial&lt;/a&gt;，从&lt;a href=&quot;http://facebook.github.io/react/docs/thinking-in-react.html&quot;&gt;Thinking in React&lt;/a&gt;开始看起。&lt;/p&gt;
-
-&lt;p&gt;在&lt;a href=&quot;http://facebook.github.io/react/docs/thinking-in-react.html&quot;&gt;Thinking in React&lt;/a&gt;页面我看到了一个很实用的栗子，然后快速地抓住了使用react编码的两个关键字：拆分、组件复用。&lt;/p&gt;
-
-&lt;p&gt;因此，即使很多东西比如select、radio button、弹窗、react都没有都需要从0开始写，就组件复用这一处优点，它也是值得被使用的。&lt;/p&gt;
-
-&lt;h1 id=&quot;flux&quot;&gt;flux&lt;/h1&gt;
-
-&lt;p&gt;什么是flux？&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;比起框架，flux更像是一种模式。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;React只是引入了虚拟DOM的机制，在view层实现可复用的web前端组件，但她并没有什么数据绑定，依赖诸如这些特性，于是单纯用react的话，数据怎么管理？&lt;/p&gt;
-
-&lt;p&gt;Flux是facebook推出的一个组织web应用开发的架构，它只是一种模式，一种设计思想，因此，对于不同的js库，必然会有不同的实现方式，react只是其中一种。&lt;/p&gt;
-
-&lt;p&gt;在flux中，view和controller是一体的，同时它增加的两层内容：dispatcher和stores，前者负责创建actions，然后将actions按照名称（&lt;code class=&quot;highlighter-rouge&quot;&gt;actionType&lt;/code&gt;）分发给stores，stores中对数据进行修改，触发一些change相关的方法，将改动渲染到view层（一般先是最高层级的组件收到新的数据，再把这些数据传递到子组件中）。简单说就是：&lt;/p&gt;
-
-&lt;p&gt;Action -&amp;gt; Dispatcher -&amp;gt; Store -&amp;gt; View…&lt;/p&gt;
-
-&lt;p&gt;与angular双向数据绑定不同，flux中数据流向永远是单向的，因此带来的好处是：我不必思考当前数据应该传递给谁。&lt;/p&gt;
-
-&lt;p&gt;实战总是比理论让人理解得更加深刻。于是在写了几个查询数据的模块之后，将一点心得在这里记录下来，方便以后查看。&lt;/p&gt;
-
-&lt;h1 id=&quot;select&quot;&gt;一个select组件实例&lt;/h1&gt;
-
-&lt;p&gt;这里将通过一个select组件的实现过程描述flux的数据流。&lt;/p&gt;
-
-&lt;h2 id=&quot;configjs&quot;&gt;静态数据：config.js&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code&gt;terminalArr: [
-    {
-        key: &#39;x&#39;,
-        val: &#39;0&#39;
-    },
-    {
-        key: &#39;xx&#39;,
-        val: &#39;1&#39;
-    },
-    {
-        key: &#39;xxx&#39;,
-        val: &#39;2&#39;
-    }
-]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;examplejs&quot;&gt;Example.js&lt;/h2&gt;
-
-&lt;p&gt;顶层view组件，监测stores变化，并将新的queryObj传递给组件的formData属性，由顶级组件向下分发数据。&lt;/p&gt;
-
-&lt;p&gt;注意对props和state的理解：组件内部使用state，组件之间的通信靠props，比如这里，queryObj数据是Example的state（是在Example内部setState的），queryObj被传递给了ExampleForm这个高层组件，这时候，这个queryObj就变成了ExampleForm的props数据了。然后，ExampleForm内部的Select等组件就都可以使用formData了，通过同样的属性赋值方法传递给下游的组件去使用。&lt;/p&gt;
-
-&lt;pre&gt;var Example = React.createClass({
-	
-    componentDidMount: function () {
-        exampleStore.addChangeListener(this._change);
-
-        if (this.isMounted()) {
-            exampleStore.loadData();
-        }
-    },
-    componentWillUnmount: function () {
-        exampleStore.removeChangeListener(this._change);
-    },
-    _change: function () {
-        // 只要store有变化，emit(&#39;change&#39;)执行了，就setState
-        this.setState(exampleStore.queryObj);
-    },
-    render: function () {
-        return (
-        	&amp;lt;div&amp;gt;
-        		...
-                &amp;lt;ExampleForm formData={this.state.queryObj}/&amp;gt;
-                ...
-            &amp;lt;/div&amp;gt;
-        );
-    }
-});
-&lt;/pre&gt;
-
-&lt;p&gt;中间组件，从formData中取出特定数据，传递给再下游的组件作为属性（props）值。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var ExampleForm = React.createClass({
-    render: function () {
-        var formData = this.props.formData;
-        return (
-            &amp;lt;form&amp;gt;
-                ...
-                &amp;lt;TerminalsSelect terminal={formData.terminal}&amp;gt;&amp;lt;/Terminals&amp;gt;
-                ...
-            &amp;lt;/form&amp;gt;
-        );
-    }
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;继续向下，当select change时，调用action中的方法，其中select使用了已经定义好的BasicSelect组件，因此需要传递一些参数。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var TerminalsSelect =  React.createClass({
-    changeTerminalHandler: function (e) {
-        // view -&amp;gt; action
-        // 如果在这里直接通过this.setState方法去更新terminal的值，也可以达到相同的目的，但数据流向就出现问题了。
-        ExampleActions.setTerminal({
-            terminal: e.target.value
-        });
-    },
-    render: function () {
-        return (
-            &amp;lt;div className=&quot;form-group&quot;&amp;gt;
-                &amp;lt;label htmlFor=&quot;terminal&quot; className=&quot;form-control-static&quot;&amp;gt;Terminal：&amp;lt;/label&amp;gt;
-                &amp;lt;BasicSelect
-                    &amp;lt;!-- option数据 --&amp;gt;
-                    optionData={terminalArr}
-                    &amp;lt;!-- 引用的config里的数据的字段名（不是所有数据都是val,key） --&amp;gt;
-                    optKey=&quot;key&quot;
-                    optVal=&quot;val&quot;
-                    &amp;lt;!-- 将上层组件获取到的formData.terminal传递给BasicSelect --&amp;gt;
-                    defaultVal={this.props.terminal}
-                    &amp;lt;!-- select name --&amp;gt;
-                    nameText=&quot;terminal&quot;
-                    &amp;lt;!-- change方法 --&amp;gt;
-                    changeHandler={this.changeTerminalHandler}
-                &amp;gt;&amp;lt;/BasicSelect&amp;gt;
-            &amp;lt;/div&amp;gt;
-        );
-    }
-});
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;最底层的组件：为了能够最大程度复用，所有文字内容都避免写死而是以变量（参考上一段代码html注释）传入。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var BasicSelect = React.createClass({
-render: function () {
-        // option内容
-        var optionContent;
-        // option html字段
-        var optKey = this.props.optKey;
-        // option value字段
-        var optVal = this.props.optVal;
-
-        // 遍历optionData的值（此处是terminalArr），返回所有option html代码
-        optionContent = this.props.optionData.map(function (item) {
-            return (
-                &amp;lt;option value={item[optVal]}&amp;gt;{item[optKey]}&amp;lt;/option&amp;gt;
-            );
-        });
-
-        // select
-        return (
-            &amp;lt;select 
-                className=&quot;form-control&quot;
-                defaultValue={this.props.defaultVal}
-                name={this.props.nameText}
-                onChange={this.props.changeHandler}
-            &amp;gt;
-                &amp;lt;option value=&quot;&quot;&amp;gt;全部&amp;lt;/option&amp;gt;
-                {optionContent}
-            &amp;lt;/select&amp;gt;
-        );
-    }
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;exampleactionsjs&quot;&gt;ExampleActions.js&lt;/h2&gt;
-
-&lt;p&gt;Dispatcher注册一个action，把这个action分发给example_set_terminal。&lt;/p&gt;
-
-&lt;p&gt;module.exports = new Dispatcher();&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;setTerminal: function (params) {
-    // action -&amp;gt; dispatcher
-    PlatformDispatcher.dispatch({
-        actionType: &#39;example_set_terminal&#39;,
-        item: params
-    });
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;examplestorejs&quot;&gt;ExampleStore.js&lt;/h2&gt;
-
-&lt;p&gt;store响应dispatcher分发出来的action。接收example_set_terminal，调用具体set方法。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;PlatformDispatcher.register(function (payload) {
-    var actionType = payload.actionType;
-
-    switch (actionType) {
-    	...
-        case &#39;example_set_terminal&#39;:
-            // dispatcher -&amp;gt; store
-            exampleStore.setTerminal(payload.item);
-            break;
-        ...
-    }
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;调用方法，改变store&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;ExampleStore.prototype = assign({}, EventEmitter.prototype, {
-
-    ...
-
-    // store -&amp;gt; view
-    setTerminal: function (params) {
-        // 这部分里，每当params被修改，queryObj就会被更新，相应的，
-        // Example.js部分顶级组件接收的formData也会更新，继而更新所有组件中的数据。
-        this.queryObj.terminal = params.terminal;
-        this.emit(&#39;change&#39;);
-    },
-    addChangeListener: function (action) {
-        this.on(&#39;change&#39;, action);
-    },
-    removeChangeListener: function (action) {
-        this.removeListener(&#39;change&#39;, action);
-    },
-    emitChange: function () {
-        this.emit(&#39;change&#39;);
-    }
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;至此，一个flux下实现select组件的栗子就完成了，然而，如果要级联呢？怎么办？&lt;/p&gt;
-
-&lt;h1 id=&quot;select-1&quot;&gt;select级联&lt;/h1&gt;
-
-&lt;p&gt;比如我们要实现一级目录和二级目录的级联，数据结构是这样的：&lt;/p&gt;
-
-&lt;h2 id=&quot;configjs-1&quot;&gt;config.js&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code&gt;dirs: [
-    {children:[{dirName:&#39;xx&#39;,dirId:&#39;secondDir0&#39;},
-    {dirName:&#39;xx&#39;,dirId:&#39;secondDir1&#39;},
-    {dirName:&#39;xx&#39;,dirId:&#39;secondDir2&#39;},
-    {dirName:&#39;xx&#39;,dirId:&#39;secondDir3&#39;},
-    {dirName:&#39;xx&#39;,dirId:&#39;secondDir4&#39;},
-    {dirName:&#39;xx&#39;,dirId:&#39;secondDir5&#39;},
-    {dirName:&#39;xx&#39;,dirId:&#39;secondDir6&#39;},
-    {dirName:&#39;xx&#39;,dirId:&#39;secondDir7&#39;},
-    {dirName:&#39;xx&#39;,dirId:&#39;secondDir8&#39;}],dirName:&#39;情感&#39;,dirId:&#39;firstDir0&#39;},
-    ...
-    // first1...2...3...
-]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&quot;examplejs-1&quot;&gt;Example.js&lt;/h1&gt;
-
-&lt;p&gt;此时，ExampleForm组件之下，使用一个DirsContent组件，传入上层分发下来的数据：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;DirsContent firstDir={formData.firstDir}
-    secondDir={formData.secondDir}
-&amp;gt;
-&amp;lt;/DirsContent&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;实现DirsContent组件：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var DirsContent = React.createClass({
-
-    // 两个select的change方法，action、store中类似上面terminal的写法
-    changeFirstDirHandler: function (e) {
-        ExampleActions.setFirstDir({
-            firstDir: e.target.value
-        });
-    },
-    changeSecondDirHandler: function (e) {
-        ExampleActions.setSecondDir({
-            secondDir: e.target.value
-        });
-    },
-    render: function () {
-        var firstDir = this.props.firstDir;
-        var secondDir = this.props.secondDir;
-        // 二级目录select选项初始为空
-        secondDirsArr = [];
-        // 如果选择了一级目录
-        if (firstDir) {
-        	// 二级目录取对应的children字段的值（以firstDir0、firstDir1、firstDir2...最后一位的数字为索引）
-            secondDirsArr = dirsArr[firstDir.split(&#39;Dir&#39;)[1]].children;
-        }
-        return (
-            &amp;lt;div className=&quot;form-group&quot;&amp;gt;
-                &amp;lt;div className=&quot;form-group&quot;&amp;gt;
-                    &amp;lt;label htmlFor=&quot;&quot; className=&quot;form-control-static&quot;&amp;gt;一级目录：&amp;lt;/label&amp;gt;
-                    &amp;lt;BasicSelect
-                    	&amp;lt;!-- 一级目录的数据，可以直接从config中获取 --&amp;gt;
-                        optionData={dirsArr}
-                        optKey=&quot;dirName&quot;
-                        optVal=&quot;dirId&quot;
-                        changeHandler={this.changeFirstDirHandler}
-                        nameText=&quot;firstDir&quot;
-                        defaultVal={firstDir}
-                    &amp;gt;&amp;lt;/BasicSelect&amp;gt;
-                &amp;lt;/div&amp;gt;
-
-                &amp;lt;div className=&quot;form-group&quot;&amp;gt;
-                    &amp;lt;label htmlFor=&quot;&quot; className=&quot;form-control-static&quot;&amp;gt;二级目录：&amp;lt;/label&amp;gt;
-                    &amp;lt;BasicSelect
-                    	&amp;lt;!-- 二级目录的数据，为render方法中计算出来的数据 --&amp;gt;
-                        optionData={secondDirsArr}
-                        optKey=&quot;dirName&quot;
-                        optVal=&quot;dirId&quot;
-                        defaultVal={secondDir}
-                        nameText=&quot;secondDir&quot;
-                        changeHandler={this.changeSecondDirHandler}
-                    &amp;gt;&amp;lt;/BasicSelect&amp;gt;
-                &amp;lt;/div&amp;gt;
-            &amp;lt;/div&amp;gt;
-        );
-    }
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&quot;section&quot;&gt;补充&lt;/h1&gt;
-
-&lt;p&gt;到现在为止，写了五个大同小异的查询数据模块，猿生第一次写这么多的js代码（用了React不得不写这么多啊…），从开始的迷茫到逐渐拨开云雾见到彩虹，感谢&lt;a href=&quot;http://yansm.github.io/fromone&quot;&gt;三木君&lt;/a&gt;耐心的帮助和清晰的讲解。学习一种新的东西，或许，可以先上手再理解…&lt;/p&gt;
-</description>
-        <pubDate>Tue, 25 Aug 2015 14:03:00 +0800</pubDate>
-        <link>http://insekkei.com/blogs//blogs/react/js/flux/2015/08/25/react-flux-data-flow.html</link>
-        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/react/js/flux/2015/08/25/react-flux-data-flow.html</guid>
-        
-        
-        <category>react</category>
-        
-        <category>js</category>
-        
-        <category>flux</category>
         
       </item>
     
