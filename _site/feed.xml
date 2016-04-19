@@ -6,9 +6,114 @@
 </description>
     <link>http://insekkei.com/blogs//blogs/</link>
     <atom:link href="http://insekkei.com/blogs//blogs/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 19 Apr 2016 14:29:30 +0800</pubDate>
-    <lastBuildDate>Tue, 19 Apr 2016 14:29:30 +0800</lastBuildDate>
+    <pubDate>Tue, 19 Apr 2016 17:06:13 +0800</pubDate>
+    <lastBuildDate>Tue, 19 Apr 2016 17:06:13 +0800</lastBuildDate>
     <generator>Jekyll v3.1.1</generator>
+    
+      <item>
+        <title>echarts中需要保持legend的selected状态</title>
+        <description>&lt;h1 id=&quot;section&quot;&gt;背景：&lt;/h1&gt;
+
+&lt;p&gt;图表随着时间“自动更新”时，假如deSelect了某一项数据，在下次数据来临、图刷新时，依然deSelect这个数据项。&lt;/p&gt;
+
+&lt;h1 id=&quot;section-1&quot;&gt;思路：&lt;/h1&gt;
+
+&lt;p&gt;在公共的Chart组件中：
+&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;...
+getInitialState() {
+    return {
+        selected: {}
+    }
+},
+componentDidUpdate() {
+    const el = this.getDOMNode();
+    const myChart = echarts.init(el);
+
+    const { selected } = this.state;
+    // 如果没有改变select状态，selected将为空
+    const ifSelected = this.isEmpty(selected);
+
+    if (ifSelected) {
+        myChart.setOption(this.props[&#39;data-source&#39;]);
+    }
+    else {
+        // 手动设置legend.selected
+        this.props[&#39;data-source&#39;].legend.selected = selected;
+        myChart.setOption(this.props[&#39;data-source&#39;]);
+    }
+
+    const _this = this;
+    // echarts添加事件监测
+    myChart.on(&#39;legendselectchanged&#39;, function(obj) {
+        var selected = obj.selected;
+        var legend = obj.name;
+        _this.setState({
+            selected: selected
+        });
+    });
+},
+isEmpty(obj) {
+    for (var name in obj) {
+        return false;
+    }
+    return true;
+},
+...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://echarts.baidu.com/api.html#events&quot;&gt;更多事件API&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Tue, 19 Apr 2016 16:57:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/react/js/echarts/2016/04/19/echarts-%E4%BF%AE%E6%94%B9legend%E7%9A%84select%E7%8A%B6%E6%80%81.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/react/js/echarts/2016/04/19/echarts-%E4%BF%AE%E6%94%B9legend%E7%9A%84select%E7%8A%B6%E6%80%81.html</guid>
+        
+        
+        <category>react</category>
+        
+        <category>js</category>
+        
+        <category>echarts</category>
+        
+      </item>
+    
+      <item>
+        <title>react native初次会面</title>
+        <description>&lt;p&gt;preparation: XCode&lt;/p&gt;
+
+&lt;h1 id=&quot;install&quot;&gt;install&lt;/h1&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo npm install -g react-native-cli
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h1 id=&quot;init-a-project&quot;&gt;init a project&lt;/h1&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ react-native init `${projectname}`
+$ cd `${projectname}`
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h1 id=&quot;start&quot;&gt;start&lt;/h1&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ react-native run-ios
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://facebook.github.io/react-native/docs/getting-started.html&quot;&gt;read more&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Tue, 19 Apr 2016 16:07:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/react-native/2016/04/19/first-step-to-reactnative.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/react-native/2016/04/19/first-step-to-reactnative.html</guid>
+        
+        
+        <category>react-native</category>
+        
+      </item>
     
       <item>
         <title>echarts多图时页面resize事件以及重绘需要判断</title>
@@ -811,508 +916,6 @@ OrderStatisticStore.prototype = assign({}, EventEmitter.prototype, {
         <category>react</category>
         
         <category>loader</category>
-        
-      </item>
-    
-      <item>
-        <title>用react完成一个带省略号的分页</title>
-        <description>&lt;p&gt;分页其实想起来很容易：不过就是从后台拿一些数据来——当前页码、总页数、总条目数、每页显示的数量等等。&lt;/p&gt;
-
-&lt;p&gt;本篇将完成一个具备以下简单功能的react组件（结合Flux）：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;页码list&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;首页、末页、上下页&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;页码数量过多时用省略号指引&lt;!--more--&gt;&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;section&quot;&gt;组件将被这样使用：&lt;/h1&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;Pagination currentPn={currentPn}
-        pageCount={pageCount}
-        pageSize={pageSize}
-        dataSize={dataSize}
-        clickHandler={this.changePn}
-        prevHandler={this.prevPn}
-        nextHandler={this.nextPn}
-        firstHandler={this.firstPn}
-        lastHandler={this.lastPn}
-&amp;gt;
-&amp;lt;/Pagination&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;点击每一个list中的页码链接，执行&lt;code class=&quot;highlighter-rouge&quot;&gt;this.changePn&lt;/code&gt;方法：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;changePn: function (e) {
-    e.preventDefault();
-    ExampleActions.setPageNumber({
-        pageNumber: e.target.innerHTML
-    });
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;上下页翻页方法：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;prevPn: function (e) {
-    e.preventDefault();
-    ExampleActions.setPageNumber({
-        pageNumber: currentPn － 1
-    });
-},
-nextPn: function (e, currentPn) {
-    e.preventDefault();
-    ExampleActions.setPageNumber({
-        pageNumber: currentPn ＋ 1
-    });
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;首页和末页方法：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;firstPn: function (e) {
-    e.preventDefault();
-    ExampleActions.setPageNumber({
-        pageNumber: 1
-    });
-},
-lastPn: function (e, currentPn) {
-    e.preventDefault();
-    ExampleActions.setPageNumber({
-        pageNumber: pageCount
-    });
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;上述五个方法执行后，通过action调用dispatcher，dispatcher调用store，store中loadData，重新render组件这个过程更新页面中展示的数据。&lt;/p&gt;
-
-&lt;h1 id=&quot;section-1&quot;&gt;组件将被这样实现：&lt;/h1&gt;
-
-&lt;p&gt;定义变量：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;var pageList = &#39;&#39;;
-var pageListArr = [];
-var prevPage = &#39;&#39;;
-var nextPage = &#39;&#39;;
-var firstPage = &#39;&#39;;
-var lastPage = &#39;&#39;;
-var thisProps = this.props;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;展示页码list并不难，取到上面使用组件时传递过来的属性，将pageCount肢解，遍历，加入标签组装就可以完成这个任务：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;for (var i = 0; i &amp;lt; thisProps.pageCount; i++) {
-    pageListArr.push(i);
-};
-pageList = pageListArr.map(function (item) {
-    // 判断是否当前页
-    if (item === thisProps.currentPn) {
-        return (
-            &amp;lt;li className=&quot;active&quot;&amp;gt;&amp;lt;a href=&quot;&quot; onClick={thisProps.clickHandler}&amp;gt;
-                {item}&amp;lt;/a&amp;gt;
-            &amp;lt;/li&amp;gt;
-        );
-    }
-    else {
-        return (
-            &amp;lt;li&amp;gt;&amp;lt;a href=&quot;&quot; onClick={thisProps.clickHandler}&amp;gt;
-                {item}&amp;lt;/a&amp;gt;
-            &amp;lt;/li&amp;gt;
-        );
-    }
-});
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;上下页翻页链接，要判断是否可点击，首页和末页类似，但不需要判断状态：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 上一页
-prevPage = (function () {
-    if (thisProps.currentPn === 1) {
-        return (
-            &amp;lt;li className=&quot;disabled&quot;&amp;gt;
-              &amp;lt;span&amp;gt;
-                &amp;lt;span aria-hidden=&quot;true&quot;&amp;gt;上一页&amp;lt;/span&amp;gt;
-              &amp;lt;/span&amp;gt;
-            &amp;lt;/li&amp;gt;
-        );
-    }
-    else {
-        return (
-            &amp;lt;li&amp;gt;
-              &amp;lt;a href=&quot;#&quot; aria-label=&quot;Previous&quot; onClick={thisProps.prevHandler}&amp;gt;
-                &amp;lt;span aria-hidden=&quot;true&quot;&amp;gt;上一页&amp;lt;/span&amp;gt;
-              &amp;lt;/a&amp;gt;
-            &amp;lt;/li&amp;gt;
-        );
-    }
-})();
-
-// 下一页
-nextPage = (function () {
-    if (thisProps.currentPn === thisProps.pageCount) {
-        return (
-            &amp;lt;li className=&quot;disabled&quot;&amp;gt;
-              &amp;lt;span&amp;gt;
-                &amp;lt;span aria-hidden=&quot;true&quot;&amp;gt;下一页&amp;lt;/span&amp;gt;
-              &amp;lt;/span&amp;gt;
-            &amp;lt;/li&amp;gt;
-        );
-    }
-    else {
-        return (
-            &amp;lt;li&amp;gt;
-              &amp;lt;a href=&quot;#&quot; aria-label=&quot;Next&quot; onClick={thisProps.nextHandler}&amp;gt;
-                &amp;lt;span aria-hidden=&quot;true&quot;&amp;gt;下一页&amp;lt;/span&amp;gt;
-              &amp;lt;/a&amp;gt;
-            &amp;lt;/li&amp;gt;
-        );
-    }
-})();
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;组装：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;ul className=&quot;pagination pull-right&quot;&amp;gt;
-    {firstPage}
-    {prevPage}
-    {pageList}
-    {nextPage}
-    {lastPage}
-&amp;lt;/ul&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h1 id=&quot;section-2&quot;&gt;显示省略号&lt;/h1&gt;
-
-&lt;p&gt;考虑四种情况：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;左边右边都不需要省略号&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;左边有省略号，右边没有&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;左边没有省略号，右边有&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;左右两边都需要省略号&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;再考虑：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;“首页”和“末页”可以用“1”“100（假设是最后一页的页码）”放在list中代替，因为不管有没有省略号，1和100始终都要显示出来。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;两种实现思路：&lt;/p&gt;
-
-&lt;p&gt;1、四种不同的情况下，直接拼装包含&lt;code class=&quot;highlighter-rouge&quot;&gt;...&lt;/code&gt;的html代码&lt;/p&gt;
-
-&lt;p&gt;2、四种不同的情况下，先拼装pageListArr这个变量，再遍历生成html代码&lt;/p&gt;
-
-&lt;p&gt;考虑到react中store影响view这个特性，我决定采用第二种方法（我不会告诉你其实我先尝试了第一种方法，然后拼装变量和字符串快要崩溃…jsx都不完全懂，还是默默地去操作变量吧…何况这样真的比较清爽…）&lt;/p&gt;
-
-&lt;p&gt;添加变量：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 假设当前页码总在中间显示，pageTab就是当前页码到省略号之间的数量，比如1...4,5,6,7,8...100，pageTab就是2
-var pageTab = 4;
-
-// 左边的省略号，在第1页之后
-var leftEllipse = &#39;&#39;;
-
-// 右边的省略号，在第100页之前
-var rightEllipse = &#39;&#39;;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;总页数小于11，全部显示（这里可以做成可配置的）：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if (thisProps.pageCount &amp;lt; 11) {
-
-    // 注意pageListArr要先清空
-    pageListArr = [];
-
-    // 从第二页开始显示，到倒数第二页
-    for (var i = 1; i &amp;lt; thisProps.pageCount-1; i++) {
-        pageListArr.push(i);
-    };
-
-    //左右都没有省略号
-    leftEllipse = &#39;&#39;;
-    rightEllipse = &#39;&#39;;
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;总页码数大于11时，有&lt;code class=&quot;highlighter-rouge&quot;&gt;...&lt;/code&gt;出现：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if (thisProps.pageCount &amp;gt; 10) {
-    // 当前页减去pageTab小于1，右边显示省略号，左边不显示
-    if (thisProps.currentPn - pageTab &amp;lt; 1) {
-
-        pageListArr = [];
-
-        for (var i = 1; i &amp;lt; 10; i++) {
-            pageListArr.push(i);
-        };
-
-        leftEllipse = &#39;&#39;;
-        rightEllipse = &amp;lt;li&amp;gt;&amp;lt;span&amp;gt;...&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;;
-    }
-
-    // 当前页减去pageTab大于1 且 当前页加上pageTab小于总页数，两边都显示省略号
-    if ((thisProps.currentPn - pageTab &amp;gt; 1) &amp;amp;&amp;amp; ((thisProps.currentPn + pageTab) &amp;lt; thisProps.pageCount)) {
-
-        pageListArr = [];
-
-        for (var i = thisProps.currentPn - pageTab; i &amp;lt; thisProps.currentPn + pageTab; i++) {
-            pageListArr.push(i);
-        };
-
-        leftEllipse = &amp;lt;li&amp;gt;&amp;lt;span&amp;gt;...&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;;
-        rightEllipse = &amp;lt;li&amp;gt;&amp;lt;span&amp;gt;...&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;
-    }
-
-    // 当前页码加上pageTab大于总页数，右边不显示省略号，左边显示
-    if ((thisProps.currentPn + pageTab) &amp;gt; (thisProps.pageCount)) {
-
-        pageListArr = [];
-
-        for (var i = thisProps.pageCount - (pageTab*2 + 1); i &amp;lt; thisProps.pageCount; i++) {
-            pageListArr.push(i);
-        };
-
-        leftEllipse = &amp;lt;li&amp;gt;&amp;lt;span&amp;gt;...&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;;
-        rightEllipse = &#39;&#39;;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;首页和末页：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 首页
-firstPage = (function () {
-    if (thisProps.currentPn === 1) {
-        return (
-            &amp;lt;li className=&quot;active&quot;&amp;gt;&amp;lt;a href=&quot;&quot; onClick={thisProps.firstHandler}&amp;gt;
-                1&amp;lt;/a&amp;gt;
-            &amp;lt;/li&amp;gt;
-        );
-    }
-    else {
-        return (
-            &amp;lt;li&amp;gt;&amp;lt;a href=&quot;&quot; onClick={thisProps.firstHandler}&amp;gt;
-                1&amp;lt;/a&amp;gt;
-            &amp;lt;/li&amp;gt;
-        );
-    }
-})();
-
-// 末页
-lastPage = (function () {
-    if (thisProps.currentPn === thisProps.pageCount) {
-        return (
-            &amp;lt;li className=&quot;active&quot;&amp;gt;&amp;lt;a href=&quot;&quot; onClick={thisProps.lastHandler}&amp;gt;
-                {thisProps.pageCount}&amp;lt;/a&amp;gt;
-            &amp;lt;/li&amp;gt;
-        );
-    }
-    else {
-        return (
-            &amp;lt;li&amp;gt;&amp;lt;a href=&quot;&quot; onClick={thisProps.lastHandler}&amp;gt;
-                {thisProps.pageCount}&amp;lt;/a&amp;gt;
-            &amp;lt;/li&amp;gt;
-        );
-    }
-})();
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;装入&lt;code class=&quot;highlighter-rouge&quot;&gt;ul&lt;/code&gt;：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;ul className=&quot;pagination pull-right&quot;&amp;gt;
-    {prevPage}
-    {firstPage}
-    {leftEllipse}
-    {pageList}
-    {rightEllipse}
-    {lastPage}
-    {nextPage}
-&amp;lt;/ul&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;总的组织结构：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;var Pagination = React.createClass({
-    render: function () {
-        ...算法／过程...
-        return (
-            &amp;lt;ul&amp;gt;
-                ...组装结果...
-            &amp;lt;/ul&amp;gt;
-        );
-    }
-});
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;另外，传递过来的dataSize、pageSize还可以展示出来，写一个总结：本页共有xx条数据，等等..&lt;/p&gt;
-
-&lt;p&gt;pageSize也可以做成select形式的，用户可以调整每页展示的数量…&lt;/p&gt;
-
-&lt;p&gt;备注：分页样式使用bootstrap。&lt;/p&gt;
-</description>
-        <pubDate>Mon, 07 Sep 2015 19:18:00 +0800</pubDate>
-        <link>http://insekkei.com/blogs//blogs/react/js/2015/09/07/js-react-pagination.html</link>
-        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/react/js/2015/09/07/js-react-pagination.html</guid>
-        
-        
-        <category>react</category>
-        
-        <category>js</category>
-        
-      </item>
-    
-      <item>
-        <title>react ajax跨域请求</title>
-        <description>&lt;h1 id=&quot;section&quot;&gt;同源策略&lt;/h1&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;&lt;a href=&quot;https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy&quot;&gt;同源策略&lt;/a&gt;限制了一个源（origin）中加载文本或脚本与来自其它源（origin）中资源的交互方式。如果两个页面拥有相同的 &lt;code class=&quot;highlighter-rouge&quot;&gt;协议（protocol）&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;端口&lt;/code&gt;（如果指定），和 &lt;code class=&quot;highlighter-rouge&quot;&gt;主机&lt;/code&gt;，那么这两个页面就属于同一个源（origin）。&lt;!--more--&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;在使用XMLHttpRequest时会受到同源策略的约束。&lt;/p&gt;
-
-&lt;p&gt;浏览器发送的请求header中包含一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Origin&lt;/code&gt;，而服务器返回给浏览器的响应header中包含一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Access-Control-Allow-Origin&lt;/code&gt;，因此：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;可以通过设置&lt;code class=&quot;highlighter-rouge&quot;&gt;Access-Control-Allow-Origin:&lt;/code&gt;来允许跨域请求，origin的值可以设置为｀*｀，表示接受来自任何站点的跨域请求，也可以设置为特定的域，表示只有这个域能跨域请求到服务器上的数据。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;使用&lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS&quot;&gt;cors(Cross-Origin Resource Sharing)&lt;/a&gt;可以实现跨域访问，但cors只支持现代浏览器。&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;jsonp&quot;&gt;jsonp&lt;/h1&gt;
-
-&lt;p&gt;jsonp（json with padding），一种包含在函数调用中的json。解决跨域请求比较可靠的一种思路是：设置&lt;code class=&quot;highlighter-rouge&quot;&gt;dataType&lt;/code&gt;为&lt;code class=&quot;highlighter-rouge&quot;&gt;jsonp&lt;/code&gt;。&lt;/p&gt;
-
-&lt;p&gt;普通的json格式：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&#39;name&#39;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&#39;insekkei&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;jsonp格式：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;callback(
-    {&#39;name&#39;: &#39;insekkei&#39;}
-);
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;即：调用jsonp回调函数callback，并将返回的json作为参数传入这个回调函数。&lt;code class=&quot;highlighter-rouge&quot;&gt;callback&lt;/code&gt;是jsonp请求默认的回调函数名称，会在请求url中追加&lt;code class=&quot;highlighter-rouge&quot;&gt;?callback=?&lt;/code&gt;，也可以自定义这个名称：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dataType : &#39;jsonp&#39;,
-jsonp: &#39;callbackName&#39;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;这时服务器需要返回的数据格式为：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;callbackName(
-    {&#39;name&#39;: &#39;insekkei&#39;}
-);
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;显而易见，jsonp不仅需要客户端js进行配置，也需要服务器端返回数据格式的配合。不过，&lt;code class=&quot;highlighter-rouge&quot;&gt;jsonp只支持get请求...&lt;/code&gt;。&lt;/p&gt;
-
-&lt;h1 id=&quot;superagent&quot;&gt;superagent&lt;/h1&gt;
-
-&lt;p&gt;react中需要ajax请求时，可以使用&lt;a href=&quot;https://cnodejs.org/topic/5378720ed6e2d16149fa16bd&quot;&gt;superagent&lt;/a&gt;这个模块，例如一个get请求：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;var request = require(&#39;superagent&#39;);
-
-request
-    .get(url)
-    .set(&#39;Accept&#39;, &#39;application/json&#39;)
-    .query(paramObj)
-    .end(function(res){
-        // do something
-    });
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;post方法：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;request
-    .post(url)
-    .send(dataObj)
-    ...
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;然而有时候需要跨域请求数据，如果只是使用上面的方法，控制台会出现类似如下提示：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;XMLHttpRequest cannot load http://xxx.xx.... No &#39;Access-Control-Allow-Origin&#39; header is present on the requested resource. Origin &#39;http://yyy.yy...&#39; is therefore not allowed access.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h1 id=&quot;superagent-jsonp&quot;&gt;superagent-jsonp&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.npmjs.com/package/superagent-jsonp&quot;&gt;superagent-jsonp&lt;/a&gt;为superagent添加了jsonp方法。&lt;/p&gt;
-
-&lt;p&gt;安装：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;npm i superagent-jsonp --save
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;使用：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;var request = require(&#39;superagent&#39;);
-var superagent = require(&#39;superagent&#39;);
-require(&#39;superagent-jsonp&#39;)(request);
-
-request
-    .get(url)
-    .jsonp()
-    .end(function(){
-        // do something...
-    });
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-</description>
-        <pubDate>Wed, 02 Sep 2015 10:10:00 +0800</pubDate>
-        <link>http://insekkei.com/blogs//blogs/react/js/ajax/2015/09/02/js-react%E8%B7%A8%E5%9F%9F.html</link>
-        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/react/js/ajax/2015/09/02/js-react%E8%B7%A8%E5%9F%9F.html</guid>
-        
-        
-        <category>react</category>
-        
-        <category>js</category>
-        
-        <category>ajax</category>
         
       </item>
     

@@ -51,6 +51,8 @@
         
           
         
+          
+        
       </div>
     </nav>
 
@@ -66,6 +68,46 @@
   <h1 class="page-heading">笔记目录</h1>
 
   <ul class="post-list">
+    
+      <li>
+        <span class="post-meta">Sep 7, 2015</span>
+
+        <h2>
+          <a class="post-link" href="/blogs/react/js/2015/09/07/js-react-pagination.html">用react完成一个带省略号的分页</a>
+        </h2>
+        <p class="excerpt">分页其实想起来很容易：不过就是从后台拿一些数据来——当前页码、总页数、总条目数、每页显示的数量等等。
+
+本篇将完成一个具备以下简单功能的react组件（结合Flux）：
+
+
+  
+    页码list
+  
+  
+    首页、末页、上下页
+  
+  
+    页码数量过多时用省略号指引
+  
+
+
+</p>
+      </li>
+    
+      <li>
+        <span class="post-meta">Sep 2, 2015</span>
+
+        <h2>
+          <a class="post-link" href="/blogs/react/js/ajax/2015/09/02/js-react%E8%B7%A8%E5%9F%9F.html">react ajax跨域请求</a>
+        </h2>
+        <p class="excerpt">同源策略
+
+
+  同源策略限制了一个源（origin）中加载文本或脚本与来自其它源（origin）中资源的交互方式。如果两个页面拥有相同的 协议（protocol），端口（如果指定），和 主机，那么这两个页面就属于同一个源（origin）。
+
+
+</p>
+      </li>
     
       <li>
         <span class="post-meta">Aug 25, 2015</span>
@@ -206,23 +248,6 @@ function getArray(a){
 </p>
       </li>
     
-      <li>
-        <span class="post-meta">Jun 16, 2015</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/js/common/2015/06/16/Javascript-stopBubble.html">Javascript stop bubble</a>
-        </h2>
-        <p class="excerpt">js阻止冒泡方法：
-
-var stopBubble = function (e) {
-	//如果提供了事件对象，则这是一个非IE浏览器
-	if(e &amp;&amp; e.stopPropagation) {
-		//因此它支持W3C的stopPropagation()方法
-
-
-</p>
-      </li>
-    
   </ul>
 
   <!-- Pagination links -->
@@ -241,9 +266,13 @@ var stopBubble = function (e) {
         <em>2</em>
       
     
+      
+        <a href="/blogs/blogs/page3">3</a>
+      
+    
 
     
-      <span>Next &raquo;</span>
+      <a class="nextpage" href="/blogs/blogs/page3">Next &raquo;</a>
     
   </div>
   

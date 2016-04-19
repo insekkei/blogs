@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Javascript stop bubble</title>
-  <meta name="description" content="js阻止冒泡方法：var stopBubble = function (e) {	//如果提供了事件对象，则这是一个非IE浏览器	if(e &amp;&amp; e.stopPropagation) {		//因此它支持W3C的stopPropagation()方法">
+  <title>echarts中需要保持legend的selected状态</title>
+  <meta name="description" content="背景：图表随着时间“自动更新”时，假如deSelect了某一项数据，在下次数据来临、图刷新时，依然deSelect这个数据项。思路：在公共的Chart组件中：">
 
   <link rel="stylesheet" href="/blogs/css/main.css">
-  <link rel="canonical" href="http://insekkei.com/blogs//blogs/js/common/2015/06/16/Javascript-stopBubble.html">
+  <link rel="canonical" href="http://insekkei.com/blogs//blogs/react/js/echarts/2016/04/19/echarts-%E4%BF%AE%E6%94%B9legend%E7%9A%84select%E7%8A%B6%E6%80%81.html">
   <link rel="alternate" type="application/rss+xml" title="web前端笔记" href="http://insekkei.com/blogs//blogs/feed.xml" />
   <link rel="icon" type="image/png" href="/blogs/images/icon.png">
 </head>
@@ -65,36 +65,69 @@
         <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">Javascript stop bubble</h1>
-    <p class="post-meta">Jun 16, 2015</p>
+    <h1 class="post-title">echarts中需要保持legend的selected状态</h1>
+    <p class="post-meta">Apr 19, 2016</p>
   </header>
 
   <article class="post-content">
-    <h1 id="js">js阻止冒泡方法：</h1>
+    <h1 id="section">背景：</h1>
 
-<pre><code>var stopBubble = function (e) {
-	//如果提供了事件对象，则这是一个非IE浏览器
-	if(e &amp;&amp; e.stopPropagation) {
-		//因此它支持W3C的stopPropagation()方法<!--more-->
-		e.stopPropagation();
-	} else {
-		//否则，我们需要使用IE的方式来取消事件冒泡 
-		window.event.cancelBubble = true;
-	}
-	return false;
-};
-</code></pre>
+<p>图表随着时间“自动更新”时，假如deSelect了某一项数据，在下次数据来临、图刷新时，依然deSelect这个数据项。</p>
 
-<p><em>用法：</em></p>
-<pre><code>$(...).click(function(e){
-	stopBubble(e);
-});
+<h1 id="section-1">思路：</h1>
+
+<p>在公共的Chart组件中：
+<!--more--></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>...
+getInitialState() {
+    return {
+        selected: {}
+    }
+},
+componentDidUpdate() {
+    const el = this.getDOMNode();
+    const myChart = echarts.init(el);
+
+    const { selected } = this.state;
+    // 如果没有改变select状态，selected将为空
+    const ifSelected = this.isEmpty(selected);
+
+    if (ifSelected) {
+        myChart.setOption(this.props['data-source']);
+    }
+    else {
+        // 手动设置legend.selected
+        this.props['data-source'].legend.selected = selected;
+        myChart.setOption(this.props['data-source']);
+    }
+
+    const _this = this;
+    // echarts添加事件监测
+    myChart.on('legendselectchanged', function(obj) {
+        var selected = obj.selected;
+        var legend = obj.name;
+        _this.setState({
+            selected: selected
+        });
+    });
+},
+isEmpty(obj) {
+    for (var name in obj) {
+        return false;
+    }
+    return true;
+},
+...
 </code></pre>
+</div>
+
+<p><a href="http://echarts.baidu.com/api.html#events">更多事件API</a></p>
 
   </article>
 
   <!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="" data-title="Javascript stop bubble"></div>
+	<div class="ds-thread" data-thread-key="" data-title="echarts中需要保持legend的selected状态"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

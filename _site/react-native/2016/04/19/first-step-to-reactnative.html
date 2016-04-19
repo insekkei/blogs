@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Javascript stop bubble</title>
-  <meta name="description" content="js阻止冒泡方法：var stopBubble = function (e) {	//如果提供了事件对象，则这是一个非IE浏览器	if(e &amp;&amp; e.stopPropagation) {		//因此它支持W3C的stopPropagation()方法">
+  <title>react native初次会面</title>
+  <meta name="description" content="preparation: XCodeinstall$ sudo npm install -g react-native-cliinit a project$ react-native init `${projectname}`$ cd `${projectname}`start$ react-native run...">
 
   <link rel="stylesheet" href="/blogs/css/main.css">
-  <link rel="canonical" href="http://insekkei.com/blogs//blogs/js/common/2015/06/16/Javascript-stopBubble.html">
+  <link rel="canonical" href="http://insekkei.com/blogs//blogs/react-native/2016/04/19/first-step-to-reactnative.html">
   <link rel="alternate" type="application/rss+xml" title="web前端笔记" href="http://insekkei.com/blogs//blogs/feed.xml" />
   <link rel="icon" type="image/png" href="/blogs/images/icon.png">
 </head>
@@ -65,36 +65,40 @@
         <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">Javascript stop bubble</h1>
-    <p class="post-meta">Jun 16, 2015</p>
+    <h1 class="post-title">react native初次会面</h1>
+    <p class="post-meta">Apr 19, 2016</p>
   </header>
 
   <article class="post-content">
-    <h1 id="js">js阻止冒泡方法：</h1>
+    <p>preparation: XCode</p>
 
-<pre><code>var stopBubble = function (e) {
-	//如果提供了事件对象，则这是一个非IE浏览器
-	if(e &amp;&amp; e.stopPropagation) {
-		//因此它支持W3C的stopPropagation()方法<!--more-->
-		e.stopPropagation();
-	} else {
-		//否则，我们需要使用IE的方式来取消事件冒泡 
-		window.event.cancelBubble = true;
-	}
-	return false;
-};
-</code></pre>
+<h1 id="install">install</h1>
 
-<p><em>用法：</em></p>
-<pre><code>$(...).click(function(e){
-	stopBubble(e);
-});
+<div class="highlighter-rouge"><pre class="highlight"><code>$ sudo npm install -g react-native-cli
 </code></pre>
+</div>
+
+<h1 id="init-a-project">init a project</h1>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ react-native init `${projectname}`
+$ cd `${projectname}`
+</code></pre>
+</div>
+
+<h1 id="start">start</h1>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ react-native run-ios
+</code></pre>
+</div>
+
+<!--more-->
+
+<p><a href="http://facebook.github.io/react-native/docs/getting-started.html">read more</a></p>
 
   </article>
 
   <!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="" data-title="Javascript stop bubble"></div>
+	<div class="ds-thread" data-thread-key="" data-title="react native初次会面"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
