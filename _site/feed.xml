@@ -6,9 +6,126 @@
 </description>
     <link>http://insekkei.com/blogs//blogs/</link>
     <atom:link href="http://insekkei.com/blogs//blogs/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 19 Feb 2016 14:22:42 +0800</pubDate>
-    <lastBuildDate>Fri, 19 Feb 2016 14:22:42 +0800</lastBuildDate>
+    <pubDate>Tue, 19 Apr 2016 14:09:17 +0800</pubDate>
+    <lastBuildDate>Tue, 19 Apr 2016 14:09:17 +0800</lastBuildDate>
     <generator>Jekyll v3.1.1</generator>
+    
+      <item>
+        <title>react router 2使用</title>
+        <description>&lt;blockquote&gt;
+  &lt;p&gt;React Router keeps your UI in sync with the URL. It has a simple API with powerful features like lazy code loading, dynamic route matching, and location transition handling built right in.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;npm--more--&quot;&gt;使用npm安装&lt;!--more--&gt;&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ npm install --save react-router
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;layout&quot;&gt;在Layout中使用&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;A Layout is something that describes an entire page structure, such as a fixed navigation, viewport, sidebar, and footer.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import { Link } from &#39;react-router&#39;
+
+...
+
+const Layout = React.createClass({
+    ...
+    render: function () {
+        return (
+            &amp;lt;div className=&quot;wrapper&quot;&amp;gt;
+                &amp;lt;PlatformHeader/&amp;gt;
+                &amp;lt;PlatformNav/&amp;gt;
+                &amp;lt;PlatformContent/&amp;gt;
+            &amp;lt;/div&amp;gt;
+        );
+    }
+});
+
+// this.props.children匹配当前加载的内容
+const PlatformContent = React.createClass({
+    render: function() {
+        return (
+            &amp;lt;div className=&#39;main&#39;&amp;gt;
+                {this.props.children}
+            &amp;lt;/div&amp;gt;
+        );
+    }
+});
+
+// PlatformNav中有url链接（路由需求），例如index
+var PlatformNav = React.createClass({
+    render: function() {
+        return (
+            &amp;lt;div className=&#39;nav&#39;&amp;gt;
+                ...
+                &amp;lt;Link to=&quot;index&quot;&amp;gt;首页&amp;lt;/Link&amp;gt;
+                ...
+            &amp;lt;/div&amp;gt;
+        );
+    }
+});
+
+...
+module.exports = Layout;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;index&quot;&gt;index页&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;var Index = React.createClass({
+    render: function() {
+        return (
+            &amp;lt;div&amp;gt;
+                Welcome!
+            &amp;lt;/div&amp;gt;
+        );
+    }
+});
+
+module.exports = Index;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;appjs&quot;&gt;在app.js中配置路由&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;var Layout = require(&#39;./components/Layout&#39;);
+var Index = require(&#39;./components/Index&#39;);
+
+// 引入需要的组件
+import { browserHistory, IndexRoute, Router, Route } from &#39;react-router&#39;;
+
+// 设置路由，component是组件名称，path写url
+const AppRoute = (
+    &amp;lt;Router history={browserHistory}&amp;gt;
+            &amp;lt;Route path=&quot;/namespace/&quot; component={Layout}&amp;gt;
+                &amp;lt;IndexRoute component={Index}/&amp;gt; 
+                &amp;lt;Route path=&#39;index&#39; component={Index}/&amp;gt;
+            &amp;lt;/Route&amp;gt;
+    &amp;lt;/Router&amp;gt;
+);
+
+ReactDOM.render(AppRoute, document.getElementById(&#39;xxx&#39;));
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/reactjs/react-router&quot;&gt;更多关于React-router&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Fri, 11 Mar 2016 14:40:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/react/js/router/2016/03/11/React-Router-2.0.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/react/js/router/2016/03/11/React-Router-2.0.html</guid>
+        
+        
+        <category>react</category>
+        
+        <category>js</category>
+        
+        <category>router</category>
+        
+      </item>
     
       <item>
         <title>react router使用</title>
@@ -126,13 +243,15 @@ Router.run(routes, Router.HistoryLocation, (Root) =&amp;gt; {
 &lt;p&gt;&lt;a href=&quot;https://github.com/reactjs/react-router&quot;&gt;更多关于React-router&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Fri, 19 Feb 2016 11:40:00 +0800</pubDate>
-        <link>http://insekkei.com/blogs//blogs/react/js/2016/02/19/React-Router.html</link>
-        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/react/js/2016/02/19/React-Router.html</guid>
+        <link>http://insekkei.com/blogs//blogs/react/js/router/2016/02/19/React-Router.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/react/js/router/2016/02/19/React-Router.html</guid>
         
         
         <category>react</category>
         
         <category>js</category>
+        
+        <category>router</category>
         
       </item>
     
@@ -1440,51 +1559,6 @@ render: function () {
         <category>js</category>
         
         <category>flux</category>
-        
-      </item>
-    
-      <item>
-        <title>bootstrap-select.js使用ajax get到的option数据</title>
-        <description>&lt;blockquote&gt;
-  &lt;p&gt;第一次用到，搜了很多博文都没用，一篇抄一篇而且整得特复杂…还是官方文档比较给力，然而最近红杏什么的都没法用了，代理jquery到国内cdn后才能正确显示效果，非常之坑…有些东西遮遮掩掩真的有用吗？&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://silviomoreto.github.io/bootstrap-select/&quot;&gt;bootstrap-select.js官方文档&lt;/a&gt;&lt;!--more--&gt;&lt;/p&gt;
-
-&lt;p&gt;html：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;select class=&quot;form-control selectpicker&quot;  data-live-search=&quot;true&quot;&amp;gt;
-	...
-&amp;lt;/select&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;js部分：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$.ajax({
-	// get请求地址
-    	url: basePath,
-    	dataType: &quot;json&quot;,
-    	success: function (data) {
-	    	var optArr = [];
-	        for (var i = 0; i &amp;lt; data.length; i++) {
-	            $(&#39;.selectpicker&#39;).append(&quot;&amp;lt;option value=&quot; + data[i].userName + &quot;&amp;gt;&quot; + data[i].userName + &quot;&amp;lt;/option&amp;gt;&quot;);
-	        }
-
-	        // 缺一不可
-	        $(&#39;#adeName&#39;).selectpicker(&#39;refresh&#39;);
-	        $(&#39;#adeName&#39;).selectpicker(&#39;render&#39;);
-    }
-});
-&lt;/code&gt;&lt;/pre&gt;
-</description>
-        <pubDate>Tue, 25 Aug 2015 11:38:00 +0800</pubDate>
-        <link>http://insekkei.com/blogs//blogs/bootstrap/js/2015/08/25/bootstrap-select-with-ajax-data.html</link>
-        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/bootstrap/js/2015/08/25/bootstrap-select-with-ajax-data.html</guid>
-        
-        
-        <category>bootstrap</category>
-        
-        <category>js</category>
         
       </item>
     

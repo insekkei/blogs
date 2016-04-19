@@ -95,18 +95,17 @@ pre,
 code {
   font-size: 15px;
   border-radius: 3px;
-  background-color: #535C59; }
+  background-color: #535C59;
+  display: block; }
 
 code {
-  padding: 1px 5px; }
+  padding: 8px 12px; }
 
 pre {
-  padding: 8px 12px;
+  padding: 0;
   overflow-x: scroll; }
   pre > code {
-    border: 0;
-    padding-right: 0;
-    padding-left: 0; }
+    border: 0; }
 
 /**
  * Wrapper
