@@ -6,24 +6,9 @@
 </description>
     <link>http://insekkei.com/blogs//blogs/</link>
     <atom:link href="http://insekkei.com/blogs//blogs/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 05 May 2016 17:51:37 +0800</pubDate>
-    <lastBuildDate>Thu, 05 May 2016 17:51:37 +0800</lastBuildDate>
+    <pubDate>Thu, 05 May 2016 17:53:16 +0800</pubDate>
+    <lastBuildDate>Thu, 05 May 2016 17:53:16 +0800</lastBuildDate>
     <generator>Jekyll v3.1.1</generator>
-    
-      <item>
-        <title>nocontent</title>
-        <description>
-</description>
-        <pubDate>Thu, 05 May 2016 17:50:00 +0800</pubDate>
-        <link>http://insekkei.com/blogs//blogs/react/context/2016/05/05/nocontent.html</link>
-        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/react/context/2016/05/05/nocontent.html</guid>
-        
-        
-        <category>react</category>
-        
-        <category>context</category>
-        
-      </item>
     
       <item>
         <title>react context传值</title>
@@ -773,6 +758,115 @@ child.start();
         <category>forever</category>
         
         <category>phantomjs</category>
+        
+      </item>
+    
+      <item>
+        <title>gulp打包编译速度优化</title>
+        <description>&lt;blockquote&gt;
+  &lt;p&gt;保持对新技术的好奇心，深入研究当前工作使用的技术，同时进行一些输出，例如写博客，做开源，研究分享，写书等的，没有输出的学习就是耍流氓。
+——来自知乎&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;做项目时使用了browserify，但每次修改编译时间都很长，十几秒的样子？&lt;!--more--&gt;反正感觉等待编译的时间已经远远超过了修改代码的时间，忍无可忍之时，开始寻找解决方案。&lt;/p&gt;
+
+&lt;p&gt;于是很快就找到了watchify，简单理解，就是增量编译。&lt;/p&gt;
+
+&lt;p&gt;修改之前：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;var source = require(&#39;vinyl-source-stream&#39;);
+var browserify = require(&#39;browserify&#39;);
+var streamify = require(&#39;gulp-streamify&#39;);
+
+gulp.task(&#39;browserify&#39;, function () {
+    var bundleStream = browserify(&#39;v1/js/app.js&#39;).bundle();
+
+    return bundleStream
+    .pipe(source(&#39;app.js&#39;))
+    .pipe(streamify(uglify()))
+    .pipe(gulp.dest(&#39;./dev/js/&#39;));
+});
+
+// after each change, execute browserify, make a long long progress...
+gulp.task(&#39;release&#39;, [&#39;browserify&#39;], function () {
+    return gulp.src(&#39;./dev/js/app.js&#39;)
+    .pipe(gulp.dest(&#39;../static/js/&#39;));
+});
+
+// watch everything
+gulp.task(&#39;watch&#39;, function () {
+    gulp.watch([&#39;v1/less/**/*&#39;], [&#39;css2js&#39;]);
+    gulp.watch([&#39;v1/js/**/*&#39;], [&#39;release&#39;]);
+});
+
+...
+gulp.task(&#39;default&#39;, [&#39;release&#39;, &#39;watch&#39;]);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;添加watchify：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;var watchify = require(&#39;watchify&#39;); 
+var source = require(&#39;vinyl-source-stream&#39;);
+var browserify = require(&#39;browserify&#39;);
+var streamify = require(&#39;gulp-streamify&#39;);
+var assign = require(&#39;lodash.assign&#39;);
+
+var bundleStream = watchify(browserify(assign({}, watchify.args, {
+    // required for watchify
+    cache: {},
+    // required for watchify
+    packageCache: {},
+    entries: [&#39;v1/js/app.js&#39;]
+}))); 
+
+gulp.task(&#39;browserify&#39;, bundle);
+// on any dep update, runs the bundler
+bundleStream.on(&#39;update&#39;, bundle);
+// output build logs to terminal
+bundleStream.on(&#39;log&#39;, gutil.log);
+
+function bundle() {  
+  return bundleStream.bundle()
+    // log errors if they happen
+    .on(&#39;error&#39;, gutil.log.bind(gutil, &#39;Browserify Error&#39;))
+    .pipe(source(&#39;app.js&#39;))
+    .pipe(streamify(uglify()))
+    .pipe(gulp.dest(&#39;./dev/js/&#39;));
+}
+
+// browserify will not need
+gulp.task(&#39;release&#39;, function () {
+    return gulp.src(&#39;./dev/js/app.js&#39;)
+    .pipe(gulp.dest(&#39;../static/js/&#39;));
+});
+
+gulp.task(&#39;watch&#39;, function () {
+    gulp.watch([&#39;v1/less/**/*&#39;], [&#39;css2js&#39;]);
+    // just watch one file produced by WATCHIFY
+    gulp.watch([&#39;./dev/js/app.js&#39;], [&#39;release&#39;]);
+});
+
+...
+// only at the beginning browserify being executed
+gulp.task(&#39;default&#39;, [&#39;browserify&#39;, &#39;watch&#39;]);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;延伸阅读及参考资料：&lt;/p&gt;
+
+&lt;p&gt;http://csspod.com/advanced-tips-for-using-gulp-js/&lt;/p&gt;
+
+&lt;p&gt;http://csspod.com/using-browserify-with-gulp/&lt;/p&gt;
+</description>
+        <pubDate>Mon, 21 Dec 2015 11:28:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/gulp/browserity/2015/12/21/gulp%E6%89%93%E5%8C%85%E7%BC%96%E8%AF%91%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8C%96.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/gulp/browserity/2015/12/21/gulp%E6%89%93%E5%8C%85%E7%BC%96%E8%AF%91%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8C%96.html</guid>
+        
+        
+        <category>gulp</category>
+        
+        <category>browserity</category>
         
       </item>
     
