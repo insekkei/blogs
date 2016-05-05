@@ -35,3 +35,5 @@ Layout.js中：<!--more-->
         ...
 
 
+[更多关于context](http://facebook.github.io/react/docs/context.html)
+[更多propTypes](http://facebook.github.io/react/docs/reusable-components.html)
