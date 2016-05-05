@@ -2,7 +2,7 @@
 layout: post
 title:  "react context传值"
 date:   2016-05-05 17:40
-categories: react-native
+categories: react context
 ---
 
 用react-router的时候，希望给{this.props.children}这个组件传一个layout里的用户名...
