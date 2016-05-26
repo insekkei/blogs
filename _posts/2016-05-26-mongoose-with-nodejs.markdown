@@ -9,7 +9,7 @@ categories: nodejs mongo
 
 于是可以把日志相关的数据保存在mongodb中。
 
-yog2的框架中，后端文件结构如下：
+yog2的框架中，后端文件结构如下：<!--more-->
 
     server | - action/api/xx.es
              - lib/dataFetch.es..
