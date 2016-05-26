@@ -6,12 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>web前端笔记</title>
-  <meta name="description" content="绿螘新醅酒，红泥小火炉。<br>晚来天欲雪，能饮一杯无？
-">
+  <title>nodejs中使用mongodb</title>
+  <meta name="description" content="需求背景：线上出问题时可以找出近期数据相关的操作历史，但日志只在内网访问。于是可以把日志相关的数据保存在mongodb中。yog2的框架中，后端文件结构如下：server | - action/api/xx.es         - lib/dataFetch.es..         - model | - s...">
 
   <link rel="stylesheet" href="/blogs/css/main.css">
-  <link rel="canonical" href="http://insekkei.com/blogs//blogs/archive.html">
+  <link rel="canonical" href="http://insekkei.com/blogs//blogs/nodejs/mongo/2016/05/26/mongoose-with-nodejs.html">
   <link rel="alternate" type="application/rss+xml" title="web前端笔记" href="http://insekkei.com/blogs//blogs/feed.xml" />
   <link rel="icon" type="image/png" href="/blogs/images/icon.png">
 </head>
@@ -63,180 +62,92 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="home">
+        <div class="post">
 
-  <h1 class="page-heading">文章归档</h1>
+  <header class="post-header">
+    <h1 class="post-title">nodejs中使用mongodb</h1>
+    <p class="post-meta">May 26, 2016</p>
+  </header>
 
-  <section id="archive">
-    <h3>This year's posts</h3>
-    
-      
-        <ul class="this">
-      
-        <li><time>26 May</time><a href="/blogs/nodejs/mongo/2016/05/26/mongoose-with-nodejs.html">nodejs中使用mongodb</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>05 May</time><a href="/blogs/react/context/2016/05/05/react-context.html">react context传值</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>19 Apr</time><a href="/blogs/react/js/echarts/2016/04/19/echarts-%E4%BF%AE%E6%94%B9legend%E7%9A%84select%E7%8A%B6%E6%80%81.html">echarts中需要保持legend的selected状态</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>19 Apr</time><a href="/blogs/react-native/2016/04/19/first-step-to-reactnative.html">react native初次会面</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>19 Apr</time><a href="/blogs/react/js/echarts/2016/04/19/echarts-react-shouldupdate.html">echarts多图时页面resize事件以及重绘需要判断</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>11 Mar</time><a href="/blogs/react/js/router/2016/03/11/React-Router-2.0.html">react router 2使用</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>19 Feb</time><a href="/blogs/react/js/router/2016/02/19/React-Router.html">react router使用</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>25 Jan</time><a href="/blogs/ie/js/2016/01/25/ie9%E6%97%A0%E6%B3%95%E5%85%BC%E5%AE%B9console%E5%AF%B9%E8%B1%A1.html">IE9不打开控制台无法正常执行js</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>25 Jan</time><a href="/blogs/css/2016/01/25/css%E5%AE%9E%E7%8E%B0%E8%83%8C%E6%99%AF%E5%9B%BE%E5%B1%80%E9%83%A8%E6%BB%A4%E9%95%9C%E5%8A%A0%E5%8D%8A%E9%80%8F%E6%98%8E%E6%95%88%E6%9E%9C.html">css实现背景图片局部滤镜加半透明效果</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>25 Jan</time><a href="/blogs/node/forever/phantomjs/2016/01/25/forever%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%E7%9B%B8%E5%85%B3%E8%AE%B0%E5%BD%95.html">forever守护进程相关记录</a></li>
-    
-      
-        
-        
-        
-          </ul>
-          <h3>2015</h3>
-          <ul class="past">
-        
-      
-        <li><time>21 Dec</time><a href="/blogs/gulp/browserity/2015/12/21/gulp%E6%89%93%E5%8C%85%E7%BC%96%E8%AF%91%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8C%96.html">gulp打包编译速度优化</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>24 Sep</time><a href="/blogs/react/loader/2015/09/24/react-loader-with-flux.html">flux中使用react-loder</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>07 Sep</time><a href="/blogs/react/js/2015/09/07/js-react-pagination.html">用react完成一个带省略号的分页</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>02 Sep</time><a href="/blogs/react/js/ajax/2015/09/02/js-react%E8%B7%A8%E5%9F%9F.html">react ajax跨域请求</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>25 Aug</time><a href="/blogs/react/js/flux/2015/08/25/react-flux-data-flow.html">react&flux之BasicSelect组件实现</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>25 Aug</time><a href="/blogs/bootstrap/js/2015/08/25/bootstrap-select-with-ajax-data.html">bootstrap-select.js使用ajax get到的option数据</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>05 Aug</time><a href="/blogs/angularjs/js/2015/08/05/angularjs-localstorage.html">angularjs结合localstorage完成一个简单的备忘录</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>29 Jul</time><a href="/blogs/jquery/js/2015/07/29/jquery%E4%B9%8Bradio-checkbox.html">jquery和dom中操作radio和checkbox</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>09 Jul</time><a href="/blogs/angular/js/2015/07/09/angular.js-%E8%AF%AD%E6%B3%95%E6%B5%85%E6%9E%90.html">angular.js语法浅析</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>04 Jul</time><a href="/blogs/gulp/js/2015/07/04/%E6%96%B0%E6%89%8B%E6%8E%A5%E8%A7%A6gulp.html">新手接触gulp</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>16 Jun</time><a href="/blogs/js/function/2015/06/16/js%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D%E5%8F%8A%E8%AE%A1%E7%AE%97%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%AD%97%E7%AC%A6%E7%9A%84%E4%B8%AA%E6%95%B0.html">js数组去重 及 计算字符串中字符的个数</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>16 Jun</time><a href="/blogs/js/function/2015/06/16/Javascript-%E5%8F%8D%E5%BA%8F%E8%BE%93%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2.html">Javascript反序输出字符串</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>16 Jun</time><a href="/blogs/js/common/2015/06/16/Javascript-stopBubble.html">Javascript stop bubble</a></li>
-    
-    </ul>
-  </section>
+  <article class="post-content">
+    <p>需求背景：线上出问题时可以找出近期数据相关的操作历史，但日志只在内网访问。</p>
 
-  <p class="rss-subscribe">subscribe <a href="/blogs/feed.xml">via RSS</a></p>
+<p>于是可以把日志相关的数据保存在mongodb中。</p>
+
+<p>yog2的框架中，后端文件结构如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>server | - action/api/xx.es
+         - lib/dataFetch.es..
+         - model | - schema/appfilterlog.es
+                   - appfilterlog.es
+         - config.es
+         - router.es
+</code></pre>
+</div>
+
+<p>首先定义表结构，model/schema/appfilterlog.es中：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'use strict';
+
+import * as mongoose from 'mongoose';
+let logSchema = mongoose.Schema({
+    time: Date,
+    operate: String,
+    operator: String,
+    requestData: String
+});
+
+let appfilterlog = mongoose.model('appfilterlog', logSchema, 'Appfilterlog');
+
+export default appfilterlog;
+</code></pre>
+</div>
+
+<p>存储数据的方法，在model/appfilterlog.es中，需要保存时间、操作（增加／删除／修改）、操作人、请求数据：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>'use strict';
+
+import appfilterlog from './schema/appfilterlog';
+
+export  async function newLog (operate, operator, requestData) {
+    appfilterlog.create({
+        time: new Date(),
+        operate: operate,
+        operator: operator,
+        requestData: requestData
+    });
+}
+</code></pre>
+</div>
+
+<p>在action中调用增加／删除／修改的参数时，也调用newLog的方法，例如action/api/add.es中：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>import {newLog} from '../../../../../../model/appfilterlog';
+...
+newLog('add', user.email, JSON.stringify(req.query));
+...
+</code></pre>
+</div>
+
+
+  </article>
+
+  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="nodejs中使用mongodb"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"blogs2015"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	<!-- 多说公共JS代码 end -->
 
 </div>
 
