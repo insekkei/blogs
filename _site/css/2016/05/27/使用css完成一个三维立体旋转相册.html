@@ -6,12 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>web前端笔记</title>
-  <meta name="description" content="绿螘新醅酒，红泥小火炉。<br>晚来天欲雪，能饮一杯无？
-">
+  <title>使用css完成一个三维立体旋转相册</title>
+  <meta name="description" content="本篇主要通过这个实践练习transform及3D旋转。浏览器中，3D旋转时，主要看x轴、y轴、z轴的方向，旋转所绕的轴是一条横线，为x轴旋转，竖线，为y轴旋转，x和y轴都在显示器所在的平面上。z轴则垂直显示器所在的平面。">
 
   <link rel="stylesheet" href="/blogs/css/main.css">
-  <link rel="canonical" href="http://insekkei.com/blogs//blogs/blogs/page3/">
+  <link rel="canonical" href="http://insekkei.com/blogs//blogs/css/2016/05/27/%E4%BD%BF%E7%94%A8css%E5%AE%8C%E6%88%90%E4%B8%80%E4%B8%AA%E4%B8%89%E7%BB%B4%E7%AB%8B%E4%BD%93%E6%97%8B%E8%BD%AC%E7%9B%B8%E5%86%8C.html">
   <link rel="alternate" type="application/rss+xml" title="web前端笔记" href="http://insekkei.com/blogs//blogs/feed.xml" />
   <link rel="icon" type="image/png" href="/blogs/images/icon.png">
 </head>
@@ -63,109 +62,121 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="home">
+        <div class="post">
 
-  <h1 class="page-heading">笔记目录</h1>
+  <header class="post-header">
+    <h1 class="post-title">使用css完成一个三维立体旋转相册</h1>
+    <p class="post-meta">May 27, 2016</p>
+  </header>
 
-  <ul class="post-list">
-    
-      <li>
-        <span class="post-meta">Jul 4, 2015</span>
+  <article class="post-content">
+    <p>本篇主要通过这个实践练习transform及3D旋转。</p>
 
-        <h2>
-          <a class="post-link" href="/blogs/gulp/js/2015/07/04/%E6%96%B0%E6%89%8B%E6%8E%A5%E8%A7%A6gulp.html">新手接触gulp</a>
-        </h2>
-        <p class="excerpt">因工作需要第一次接触到gulp（在前端混真的很惭愧…），在此记录下对gulp的认识。
+<p>浏览器中，3D旋转时，主要看x轴、y轴、z轴的方向，旋转所绕的轴是一条横线，为x轴旋转，竖线，为y轴旋转，x和y轴都在显示器所在的平面上。z轴则垂直显示器所在的平面。<!--more--></p>
 
-概念：
+<p>说到3D，必须提到的一个词：透视，也就是perspective，perspective属性定义3D元素距视图的距离，以像素计，定义观察者在z轴上与3D元素的距离（沿着z轴，与浏览器所在面垂直着，向前走，向后走…，越向前，值越小，越“靠近”3D元素，靠近到0时，看不见了！此刻元素在你脑后！越“远离”，值越大，大到一定程度时，也看不见了！此刻元素已经化身为一个点了…），与之配合的一个属性叫做perspective-origin，两个值，分别定义视角在x轴偏离的角度（从左边向右👉看？从正前方看？从右边向左👈看？）和在y轴偏离的角度（从上边👇俯视？从正前方看？从下边👆仰视？）。</p>
 
-Gulp.js是一个基于node.js的自动化构建工具，开发者可以使用它在项目开发过程中自动执行常见任务。
+<p>html代码：</p>
 
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;div class="stage"&gt;
+    &lt;div class="wrapper"&gt;
+        &lt;img src="http://ww1.sinaimg.cn/large/854f1e58jw1exjhap4pg2j21jk1jku0x.jpg"/&gt;
+        &lt;img src="http://ww3.sinaimg.cn/thumb180/854f1e58jw1f3adtzqrgvj21j01j0x26.jpg"/&gt;
+        &lt;img src="http://tupian.aladd.net/2015/7/2748.jpg"/&gt;
+        &lt;img src="http://ww3.sinaimg.cn/bmiddle/89f08a15gw1f3nc7unjq4j20k00k0dhd.jpg"/&gt;
+        &lt;img src="http://tpic.home.news.cn/xhCloudNewsPic/xhpic1501/M04/0D/54/wKhTlFcr1i-EX9ZYAAAAAG2hseo834.jpg"/&gt;
+        &lt;img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcT7Mf-EWjUIFy77lI2zj2bOyTEcF78SS_AYMo6PfFWzYDQsa_9HEg"/&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+</div>
 
+<p>stage是整个3D旋转相册的舞台，wrapper是一组相册的包装元素。</p>
 
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jun 16, 2015</span>
+<p>css代码如下，stage需要设置perspective，wrapper要定义transform-style: preserve-3d。</p>
 
-        <h2>
-          <a class="post-link" href="/blogs/js/function/2015/06/16/js%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D%E5%8F%8A%E8%AE%A1%E7%AE%97%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%AD%97%E7%AC%A6%E7%9A%84%E4%B8%AA%E6%95%B0.html">js数组去重 及 计算字符串中字符的个数</a>
-        </h2>
-        <p class="excerpt">1、数组去重。
+<p>对于img，首先通过absolute让一组元素重叠起来，然后分别设置旋转角度，六张图片，角度均匀分布的话，每个应该相差60度，此时六个图片仍然重叠在一起，只是各自面向不同的方位，接下来就是一个重要的设置：translateZ。</p>
 
-方法一：
+<p>当元素面向浏览器（没有rotateX或者Y）时，translateZ的运动垂直于浏览器所在的平面，而设置了旋转之后，z轴会分别垂直于各个元素旋转之后所在的平面，因此，对于不同方向的img，translateZ相当于让它们像花儿开放一样，手拉手，背对背，分散开来～</p>
 
-var arr = [1,2,3,4,5,1,3,12,55,22];
-function getArray(a){
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;style&gt;
+    .stage {
+        perspective: 800px;
+        position: relative;
+        height: 400px;
+    }
+    .wrapper {
+        transform-style: preserve-3d;
+        height: inherit;
+    }
+    .wrapper img {
+        position: absolute;
+        width: 108px;
+        height: 108px;
+        padding: 10px;
+        background: #eee;
+        left: 200px;
+    }
+    .wrapper img:nth-child(1) { transform: rotateY(   0deg ) translateZ(150px); }
+    .wrapper img:nth-child(2) { transform: rotateY(  60deg ) translateZ(150px); }
+    .wrapper img:nth-child(3) { transform: rotateY( 120deg ) translateZ(150px); }
+    .wrapper img:nth-child(4) { transform: rotateY( 180deg ) translateZ(150px); }
+    .wrapper img:nth-child(5) { transform: rotateY( 240deg ) translateZ(150px); }
+    .wrapper img:nth-child(6) { transform: rotateY( 300deg ) translateZ(150px); }
 
+    @keyframes rotatehaha {
+        0% {transform: rotateY(0deg);}
+        16% {transform: rotateY(60deg);}
+        32% {transform: rotateY(120deg);}
+        48% {transform: rotateY(180deg);}
+        64% {transform: rotateY(240deg);}
+        80% {transform: rotateY(300deg);}
+    }
+&lt;/style&gt;
+</code></pre>
+</div>
 
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jun 16, 2015</span>
+<p>over。如果要旋转整个相册，给wrapper元素加上transform: rotateY(${num}deg)就可以。自动旋转的话，可以写个小动画：</p>
 
-        <h2>
-          <a class="post-link" href="/blogs/js/function/2015/06/16/Javascript-%E5%8F%8D%E5%BA%8F%E8%BE%93%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2.html">Javascript反序输出字符串</a>
-        </h2>
-        <p class="excerpt">这是一个我在至少4次web前端笔试或者面试中遇到过的题目，就这么一行字的题目，最近一次看到却还让我如遭五雷轰顶，罪过，罪过。
+<div class="highlighter-rouge"><pre class="highlight"><code>.wrapper {
+    transform-style: preserve-3d;
+    height: inherit;
+    animation: rotatehaha 10s infinite;
+}
 
-解决方案一：
+@keyframes rotatehaha {
+    0% {transform: rotateY(0deg);}
+    16% {transform: rotateY(60deg);}
+    32% {transform: rotateY(120deg);}
+    48% {transform: rotateY(180deg);}
+    64% {transform: rotateY(240deg);}
+    80% {transform: rotateY(300deg);}
+}
+</code></pre>
+</div>
 
- &gt;'abcd ed'.split('').reverse().join(''); 
+<p>对于上边设置的3D相关的属性，可以在浏览器审查元素中通过上下键改变值的大小，感受全方位360度的视角，加深理解…</p>
 
+<p><a href="http://www.zhangxinxu.com/wordpress/2012/09/css3-3d-transform-perspective-animate-transition/">阅读更多</a></p>
 
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jun 16, 2015</span>
+  </article>
 
-        <h2>
-          <a class="post-link" href="/blogs/js/common/2015/06/16/Javascript-stopBubble.html">Javascript stop bubble</a>
-        </h2>
-        <p class="excerpt">js阻止冒泡方法：
-
-var stopBubble = function (e) {
-	//如果提供了事件对象，则这是一个非IE浏览器
-	if(e &amp;&amp; e.stopPropagation) {
-		//因此它支持W3C的stopPropagation()方法
-
-
-</p>
-      </li>
-    
-  </ul>
-
-  <!-- Pagination links -->
-  
-  <div class="pagination">
-    
-      <a class="prevpage" href="/blogs/blogs/page2">&laquo; Prev</a>
-    
-
-    
-      
-        <a href="/blogs/blogs/page2">1</a>
-      
-    
-      
-        <a href="/blogs/blogs/page2">2</a>
-      
-    
-      
-        <em>3</em>
-      
-    
-
-    
-      <span>Next &raquo;</span>
-    
-  </div>
-  
-
-  <p class="rss-subscribe">subscribe <a href="/blogs/feed.xml">via RSS</a></p>
+  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="使用css完成一个三维立体旋转相册"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"blogs2015"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	<!-- 多说公共JS代码 end -->
 
 </div>
 
