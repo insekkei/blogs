@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "nodejs中使用mongodb"
-date:   2016-05-27 16:37
+date:   2016-05-26 16:37
 categories: nodejs mongo
 ---
 

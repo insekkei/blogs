@@ -6,9 +6,82 @@
 </description>
     <link>http://insekkei.com/blogs//blogs/</link>
     <atom:link href="http://insekkei.com/blogs//blogs/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 27 May 2016 11:19:13 +0800</pubDate>
-    <lastBuildDate>Fri, 27 May 2016 11:19:13 +0800</lastBuildDate>
+    <pubDate>Fri, 27 May 2016 11:20:32 +0800</pubDate>
+    <lastBuildDate>Fri, 27 May 2016 11:20:32 +0800</lastBuildDate>
     <generator>Jekyll v3.1.1</generator>
+    
+      <item>
+        <title>nodejs中使用mongodb</title>
+        <description>&lt;p&gt;需求背景：线上出问题时可以找出近期数据相关的操作历史，但日志只在内网访问。&lt;/p&gt;
+
+&lt;p&gt;于是可以把日志相关的数据保存在mongodb中。&lt;/p&gt;
+
+&lt;p&gt;yog2的框架中，后端文件结构如下：&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;server | - action/api/xx.es
+         - lib/dataFetch.es..
+         - model | - schema/appfilterlog.es
+                   - appfilterlog.es
+         - config.es
+         - router.es
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;首先定义表结构，model/schema/appfilterlog.es中：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&#39;use strict&#39;;
+
+import * as mongoose from &#39;mongoose&#39;;
+let logSchema = mongoose.Schema({
+    time: Date,
+    operate: String,
+    operator: String,
+    requestData: String
+});
+
+let appfilterlog = mongoose.model(&#39;appfilterlog&#39;, logSchema, &#39;Appfilterlog&#39;);
+
+export default appfilterlog;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;存储数据的方法，在model/appfilterlog.es中，需要保存时间、操作（增加／删除／修改）、操作人、请求数据：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&#39;use strict&#39;;
+
+import appfilterlog from &#39;./schema/appfilterlog&#39;;
+
+export  async function newLog (operate, operator, requestData) {
+    appfilterlog.create({
+        time: new Date(),
+        operate: operate,
+        operator: operator,
+        requestData: requestData
+    });
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;在action中调用增加／删除／修改的参数时，也调用newLog的方法，例如action/api/add.es中：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import {newLog} from &#39;../../../../../../model/appfilterlog&#39;;
+...
+newLog(&#39;add&#39;, user.email, JSON.stringify(req.query));
+...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+</description>
+        <pubDate>Thu, 26 May 2016 16:37:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/nodejs/mongo/2016/05/26/mongoose-with-nodejs.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/nodejs/mongo/2016/05/26/mongoose-with-nodejs.html</guid>
+        
+        
+        <category>nodejs</category>
+        
+        <category>mongo</category>
+        
+      </item>
     
       <item>
         <title>使用css完成一个三维立体旋转相册</title>
@@ -101,9 +174,9 @@
 
 &lt;p&gt;&lt;a href=&quot;http://www.zhangxinxu.com/wordpress/2012/09/css3-3d-transform-perspective-animate-transition/&quot;&gt;阅读更多&lt;/a&gt;&lt;/p&gt;
 </description>
-        <pubDate>Thu, 26 May 2016 10:41:00 +0800</pubDate>
-        <link>http://insekkei.com/blogs//blogs/css3/2016/05/26/%E4%BD%BF%E7%94%A8css%E5%AE%8C%E6%88%90%E4%B8%80%E4%B8%AA%E4%B8%89%E7%BB%B4%E7%AB%8B%E4%BD%93%E6%97%8B%E8%BD%AC%E7%9B%B8%E5%86%8C.html</link>
-        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/css3/2016/05/26/%E4%BD%BF%E7%94%A8css%E5%AE%8C%E6%88%90%E4%B8%80%E4%B8%AA%E4%B8%89%E7%BB%B4%E7%AB%8B%E4%BD%93%E6%97%8B%E8%BD%AC%E7%9B%B8%E5%86%8C.html</guid>
+        <pubDate>Wed, 25 May 2016 10:41:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/css3/2016/05/25/%E4%BD%BF%E7%94%A8css%E5%AE%8C%E6%88%90%E4%B8%80%E4%B8%AA%E4%B8%89%E7%BB%B4%E7%AB%8B%E4%BD%93%E6%97%8B%E8%BD%AC%E7%9B%B8%E5%86%8C.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/css3/2016/05/25/%E4%BD%BF%E7%94%A8css%E5%AE%8C%E6%88%90%E4%B8%80%E4%B8%AA%E4%B8%89%E7%BB%B4%E7%AB%8B%E4%BD%93%E6%97%8B%E8%BD%AC%E7%9B%B8%E5%86%8C.html</guid>
         
         
         <category>css3</category>
@@ -737,127 +810,6 @@ Router.run(routes, Router.HistoryLocation, (Root) =&amp;gt; {
         
         
         <category>css</category>
-        
-      </item>
-    
-      <item>
-        <title>forever守护进程相关记录</title>
-        <description>&lt;h2 id=&quot;forever&quot;&gt;安装forever&lt;/h2&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ npm install forever -g
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;forever-1&quot;&gt;使用forever&lt;/h2&gt;
-
-&lt;h3 id=&quot;section&quot;&gt;用法一：&lt;/h3&gt;
-
-&lt;p&gt;例如：后台定时运行一个phantomjs截图的任务。&lt;/p&gt;
-
-&lt;p&gt;phantmjs截图的代码写在pagename.js中：
-&lt;!--more--&gt;
-    var page = require(‘webpage’).create();&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;page.open(&#39;pageurl&#39;, function() {
-    page.render(&#39;imagePath&#39;);
-    phantom.exit();
-});
-...
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;定时任务写在capturePage.js中：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;var childProcess = require(&#39;child_process&#39;);
-
-getImageDaily();
-
-function getImageDaily() {
-    getImageByDate(date, function () {
-        // 一小时后再更新
-        setTimeout(function () {
-            getImageDaily();
-        }, 60*60000);
-    }, function (error, stdout) {
-        ...
-    });
-}
-
-getImageByDate(date) {
-    childProcess.exec(&#39;phantomjs pagename.js&#39;, function (error, stdout, stderr) {
-        ...
-    });
-}
-
-app.listen(port || 8888);
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;执行&lt;code class=&quot;highlighter-rouge&quot;&gt;$ forever start capturePage.js&lt;/code&gt;后，查看node进程：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ ps aux|grep node
-
-xxx           13169   0.0  0.4  3058580  33252   ??  S     5:02PM   0:00.22 /usr/local/bin/node /Users/baidu/Documents/xxx/capturePage.js
-xxx           13168   0.0  0.5  3057732  39420   ??  Ss    5:02PM   0:00.37 /usr/local/bin/node /usr/local/lib/node_modules/forever/bin/monitor capturePage.js
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;多出了一个monitor的进程，然后，杀死13169即capturePage.js的进程：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ kill 13169
-$ ps aux|grep node
-
-xxx           13176   0.0  0.4  3058580  33144   ??  S     5:05PM   0:00.22 /usr/local/bin/node /Users/baidu/Documents/xxx/capturePage.js
-xxx           13168   0.0  0.5  3057732  39740   ??  Ss    5:02PM   0:00.38 /usr/local/bin/node /usr/local/lib/node_modules/forever/bin/monitor capturePage.js
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;可以看到，杀死capturePage.js之后，capturePage.js重启了，进程号不同了。&lt;/p&gt;
-
-&lt;h3 id=&quot;forever-monitorcapturepagejs&quot;&gt;用法二：安装forever-monitor，编码式监控capturePage.js&lt;/h3&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ npm install forever-monitor
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;新建文档monitor.js：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;var forever = require(&#39;forever-monitor&#39;);
-
-var child = new (forever.Monitor)(&#39;capturePage.js&#39;, {
-    max: 3,
-    silent: true,
-    args: []
-});
-
-child.on(&#39;exit&#39;, function () {
-    console.log(&#39;your-filename.js has exited after 3 restarts&#39;);
-});
-
-child.start();
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;后台执行monitor.js&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ node monitor.js &amp;amp;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;优点是，自主可控，缺点是，自己写的，功能不会很完善，当然比不上forever命令，还有日志管理等等。&lt;/p&gt;
-
-&lt;p&gt;资料参考：&lt;a href=&quot;https://github.com/foreverjs/forever-monitor&quot;&gt;forever-monitor&lt;/a&gt;、&lt;a href=&quot;https://github.com/foreverjs/forever&quot;&gt;forever&lt;/a&gt;、&lt;a href=&quot;http://phantomjs.org/screen-capture.html&quot;&gt;phantomjs&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Mon, 25 Jan 2016 16:35:00 +0800</pubDate>
-        <link>http://insekkei.com/blogs//blogs/node/forever/phantomjs/2016/01/25/forever%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%E7%9B%B8%E5%85%B3%E8%AE%B0%E5%BD%95.html</link>
-        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/node/forever/phantomjs/2016/01/25/forever%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%E7%9B%B8%E5%85%B3%E8%AE%B0%E5%BD%95.html</guid>
-        
-        
-        <category>node</category>
-        
-        <category>forever</category>
-        
-        <category>phantomjs</category>
         
       </item>
     
