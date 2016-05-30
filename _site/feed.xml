@@ -6,9 +6,84 @@
 </description>
     <link>http://insekkei.com/blogs//blogs/</link>
     <atom:link href="http://insekkei.com/blogs//blogs/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 27 May 2016 11:20:32 +0800</pubDate>
-    <lastBuildDate>Fri, 27 May 2016 11:20:32 +0800</lastBuildDate>
+    <pubDate>Mon, 30 May 2016 16:26:24 +0800</pubDate>
+    <lastBuildDate>Mon, 30 May 2016 16:26:24 +0800</lastBuildDate>
     <generator>Jekyll v3.1.1</generator>
+    
+      <item>
+        <title>一个copy对象的诡异😂问题</title>
+        <description>&lt;p&gt;遇到一个诡异的问题，简单写成代码如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt; var o = [{a: 1}, {a: 2}, {a: 3}]; var o2 = o; var o3 = o; o2.splice(0, 1); o3;
+&amp;lt; [Object, Object]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;真实的数据结构比这个复杂一些…&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;copy出o3的本意是，保存一个副本以便与o2经过各种操作后进行比较。然而每次遍历取o3里值组成一个简单数组时，总会发现，o3跟着o2动了…&lt;/p&gt;
+
+&lt;p&gt;too young too simple的我以为这是灵异事件…而忘了“世界上没有无缘无故的bug”这句话（嗯，这句话也是我总结出来的…）。&lt;/p&gt;
+
+&lt;p&gt;于是，我把代码逻辑改成了如下形式：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt; var o = [{a: 1}, {a: 2}, {a: 3}]; var o2 = o; var o3 = o.map(item =&amp;gt; item.a); o2.splice(0,1); o3;
+&amp;lt; [1, 2, 3]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;直接保存成一个目标数组了…&lt;/p&gt;
+
+&lt;p&gt;问题虽然解决了，可是为什么o3会跟着o2动呢？&lt;/p&gt;
+
+&lt;p&gt;有一天组里的小伙伴抛了一个问题在群里：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;var o = { 
+    a: {
+        b: 2
+    }
+}; 
+var o2 = o;
+o = 1;
+问：o2是什么？
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;我根据上次的经验，想也不想，回答：1&lt;/p&gt;
+
+&lt;p&gt;然而在控制台试了下，是 Object {a: Object}…&lt;/p&gt;
+
+&lt;p&gt;看了其他小伙伴的回复，再查了下，原来，&lt;code class=&quot;highlighter-rouge&quot;&gt;=&lt;/code&gt; 操作符中，对象和数组是引用，字符串数字才是副本…也就是说，o2，o3指向的是同一个地址，只是名字不一样而已…&lt;/p&gt;
+
+&lt;p&gt;我又恍惚地记起了一些面试题，slice复制数组什么的…object.assign什么的…&lt;/p&gt;
+
+&lt;p&gt;看来实践需要配合理论啊…&lt;/p&gt;
+</description>
+        <pubDate>Mon, 30 May 2016 16:05:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/js/object/2016/05/30/js-copy-object.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/js/object/2016/05/30/js-copy-object.html</guid>
+        
+        
+        <category>js</category>
+        
+        <category>object</category>
+        
+      </item>
+    
+      <item>
+        <title>nodejs中使用socket完成长连接</title>
+        <description>
+</description>
+        <pubDate>Fri, 27 May 2016 10:37:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/nodejs/socket/2016/05/27/nodejs-socket.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/nodejs/socket/2016/05/27/nodejs-socket.html</guid>
+        
+        
+        <category>nodejs</category>
+        
+        <category>socket</category>
+        
+      </item>
     
       <item>
         <title>nodejs中使用mongodb</title>
@@ -675,141 +750,6 @@ Router.run(routes, Router.HistoryLocation, (Root) =&amp;gt; {
         <category>js</category>
         
         <category>router</category>
-        
-      </item>
-    
-      <item>
-        <title>IE9不打开控制台无法正常执行js</title>
-        <description>&lt;p&gt;接手一个系统项目，必须运行在windows下，浏览器要求IE9。&lt;/p&gt;
-
-&lt;p&gt;调试脚本的过程中使用过&lt;code class=&quot;highlighter-rouge&quot;&gt;console.log()&lt;/code&gt;，同时页面包含一个&lt;code class=&quot;highlighter-rouge&quot;&gt;setInterval()&lt;/code&gt;方法，每隔300毫秒自动获取接口传过来的数据， 获取到正确的数据之后，停止定时器。&lt;!--more--&gt;&lt;/p&gt;
-
-&lt;p&gt;chrome中测试无误，然而转到IE9中之后，死活无法等到数据，便想打开控制台看看有没有报错，然而每每一打开控制台几乎瞬间数据就传过来了！试了好多次，确定不是机缘未到，抱着怀疑的心理搜索了一下“ie9 控制台打开才执行js”，果然很多人都遇到过这个问题，但是，故事的结局往往出人意料：&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;IE仅在开启developer tools的时候，脚本才能访问到console这个对象。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;这真是一个让人忍不住想吐槽的设定…&lt;/p&gt;
-
-&lt;p&gt;对此情况，解决方案有：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;生产环境下移除或者注释掉&lt;code class=&quot;highlighter-rouge&quot;&gt;console.log()&lt;/code&gt; 。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;为避免报错，这样声明&lt;code class=&quot;highlighter-rouge&quot;&gt;console&lt;/code&gt;：&lt;/p&gt;
-
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  var console = console || {
-      log : function () {
-          return;
-      }
-  }
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;自定义封装个方法调用：&lt;/p&gt;
-
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  function log(msg){
-      if (window.console){
-          console.log(msg);
-      }
-  }
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;更多内容：&lt;a href=&quot;https://msdn.microsoft.com/zh-cn/library/dn255006(v=vs.85).aspx&quot;&gt;https://msdn.microsoft.com/zh-cn/library/dn255006.aspx&lt;/a&gt;&lt;/p&gt;
-
-</description>
-        <pubDate>Mon, 25 Jan 2016 17:32:00 +0800</pubDate>
-        <link>http://insekkei.com/blogs//blogs/ie/js/2016/01/25/ie9%E6%97%A0%E6%B3%95%E5%85%BC%E5%AE%B9console%E5%AF%B9%E8%B1%A1.html</link>
-        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/ie/js/2016/01/25/ie9%E6%97%A0%E6%B3%95%E5%85%BC%E5%AE%B9console%E5%AF%B9%E8%B1%A1.html</guid>
-        
-        
-        <category>IE</category>
-        
-        <category>js</category>
-        
-      </item>
-    
-      <item>
-        <title>css实现背景图片局部滤镜加半透明效果</title>
-        <description>&lt;p&gt;实现效果预览：&lt;a href=&quot;http://www.daipuarchitects.com/?cat=14&quot;&gt;Daipu Architects&lt;/a&gt; 中间区域。&lt;/p&gt;
-
-&lt;p&gt;html：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;div class=&quot;wrapper&quot;&amp;gt;
-    &amp;lt;div class=&quot;overlay&quot;&amp;gt;
-        &amp;lt;div class=&quot;overlay-con&quot;&amp;gt;
-        &amp;lt;/div&amp;gt;
-    &amp;lt;/div&amp;gt;
-&amp;lt;/div&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;父级div，一般背景图会覆盖浏览器可视区域：&lt;!--more--&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;.wrapper{
-    ...
-    width: 100%;
-    height: 100%;
-    background: url(image.png);
-    background-size: cover;
-    ...
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;模糊背景层，固定宽度，高度为js计算得出，:after设置模糊效果，如果在child上设置，包含文字也会模糊掉:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;.overlay{
-    ...
-    width: 750px;
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    margin-left: -375px;
-    background: inherit;
-    ...
-
-    &amp;amp;:after {
-        content: &quot;&quot;;
-        display: block;
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        background: inherit;
-        z-index: 0;
-        -webkit-filter: blur(3px);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;文字层div：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;.overlay-con {
-    background: rgba(255,255,255,.6);
-    position: relative;
-    z-index: 1;
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;总结：没想到&lt;code class=&quot;highlighter-rouge&quot;&gt;background:inherit&lt;/code&gt;会带来这么大的惊喜～&lt;/p&gt;
-</description>
-        <pubDate>Mon, 25 Jan 2016 17:21:00 +0800</pubDate>
-        <link>http://insekkei.com/blogs//blogs/css/2016/01/25/css%E5%AE%9E%E7%8E%B0%E8%83%8C%E6%99%AF%E5%9B%BE%E5%B1%80%E9%83%A8%E6%BB%A4%E9%95%9C%E5%8A%A0%E5%8D%8A%E9%80%8F%E6%98%8E%E6%95%88%E6%9E%9C.html</link>
-        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/css/2016/01/25/css%E5%AE%9E%E7%8E%B0%E8%83%8C%E6%99%AF%E5%9B%BE%E5%B1%80%E9%83%A8%E6%BB%A4%E9%95%9C%E5%8A%A0%E5%8D%8A%E9%80%8F%E6%98%8E%E6%95%88%E6%9E%9C.html</guid>
-        
-        
-        <category>css</category>
         
       </item>
     
