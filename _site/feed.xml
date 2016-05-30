@@ -6,8 +6,8 @@
 </description>
     <link>http://insekkei.com/blogs//blogs/</link>
     <atom:link href="http://insekkei.com/blogs//blogs/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 30 May 2016 16:26:24 +0800</pubDate>
-    <lastBuildDate>Mon, 30 May 2016 16:26:24 +0800</lastBuildDate>
+    <pubDate>Mon, 30 May 2016 16:27:54 +0800</pubDate>
+    <lastBuildDate>Mon, 30 May 2016 16:27:54 +0800</lastBuildDate>
     <generator>Jekyll v3.1.1</generator>
     
       <item>
@@ -67,21 +67,6 @@ o = 1;
         <category>js</category>
         
         <category>object</category>
-        
-      </item>
-    
-      <item>
-        <title>nodejs中使用socket完成长连接</title>
-        <description>
-</description>
-        <pubDate>Fri, 27 May 2016 10:37:00 +0800</pubDate>
-        <link>http://insekkei.com/blogs//blogs/nodejs/socket/2016/05/27/nodejs-socket.html</link>
-        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/nodejs/socket/2016/05/27/nodejs-socket.html</guid>
-        
-        
-        <category>nodejs</category>
-        
-        <category>socket</category>
         
       </item>
     
@@ -750,6 +735,64 @@ Router.run(routes, Router.HistoryLocation, (Root) =&amp;gt; {
         <category>js</category>
         
         <category>router</category>
+        
+      </item>
+    
+      <item>
+        <title>IE9不打开控制台无法正常执行js</title>
+        <description>&lt;p&gt;接手一个系统项目，必须运行在windows下，浏览器要求IE9。&lt;/p&gt;
+
+&lt;p&gt;调试脚本的过程中使用过&lt;code class=&quot;highlighter-rouge&quot;&gt;console.log()&lt;/code&gt;，同时页面包含一个&lt;code class=&quot;highlighter-rouge&quot;&gt;setInterval()&lt;/code&gt;方法，每隔300毫秒自动获取接口传过来的数据， 获取到正确的数据之后，停止定时器。&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;chrome中测试无误，然而转到IE9中之后，死活无法等到数据，便想打开控制台看看有没有报错，然而每每一打开控制台几乎瞬间数据就传过来了！试了好多次，确定不是机缘未到，抱着怀疑的心理搜索了一下“ie9 控制台打开才执行js”，果然很多人都遇到过这个问题，但是，故事的结局往往出人意料：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;IE仅在开启developer tools的时候，脚本才能访问到console这个对象。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这真是一个让人忍不住想吐槽的设定…&lt;/p&gt;
+
+&lt;p&gt;对此情况，解决方案有：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;生产环境下移除或者注释掉&lt;code class=&quot;highlighter-rouge&quot;&gt;console.log()&lt;/code&gt; 。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;为避免报错，这样声明&lt;code class=&quot;highlighter-rouge&quot;&gt;console&lt;/code&gt;：&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  var console = console || {
+      log : function () {
+          return;
+      }
+  }
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;自定义封装个方法调用：&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  function log(msg){
+      if (window.console){
+          console.log(msg);
+      }
+  }
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;更多内容：&lt;a href=&quot;https://msdn.microsoft.com/zh-cn/library/dn255006(v=vs.85).aspx&quot;&gt;https://msdn.microsoft.com/zh-cn/library/dn255006.aspx&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 25 Jan 2016 17:32:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/ie/js/2016/01/25/ie9%E6%97%A0%E6%B3%95%E5%85%BC%E5%AE%B9console%E5%AF%B9%E8%B1%A1.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/ie/js/2016/01/25/ie9%E6%97%A0%E6%B3%95%E5%85%BC%E5%AE%B9console%E5%AF%B9%E8%B1%A1.html</guid>
+        
+        
+        <category>IE</category>
+        
+        <category>js</category>
         
       </item>
     
