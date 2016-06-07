@@ -85,5 +85,5 @@ css:
     
     <body contenteditable="true" spellcheck="false" style="min-height: 170px;"></body>
 
-<img src="http://img1.imgtn.bdimg.com/it/u=2508945455,3549020802&fm=21&gp=0.jpg" width="60"/> 难怪全屏写文章时光标经常就失踪了...
+难怪全屏写文章时光标经常就失踪了 (;´༎ຶД༎ຶ`) ...
 
