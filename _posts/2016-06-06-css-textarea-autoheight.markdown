@@ -80,3 +80,12 @@ css:
     }
 
 完美。
+
+于是再一次打开lofter准备写点儿什么时，顺手审查了一下编辑框：
+    
+    <body contenteditable="true" spellcheck="false" style="min-height: 170px;"></body>
+
+难怪全屏写文章时经常光标就失踪了...
+
+<img src="http://imgsrc.baidu.com/forum/w%3D580/sign=e98e7a017ed98d1076d40c39113eb807/8db1cb13495409231a078f839058d109b2de49e5.jpg"/>
+
