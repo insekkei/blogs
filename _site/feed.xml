@@ -6,8 +6,8 @@
 </description>
     <link>http://insekkei.com/blogs//blogs/</link>
     <atom:link href="http://insekkei.com/blogs//blogs/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 07 Jun 2016 15:37:30 +0800</pubDate>
-    <lastBuildDate>Tue, 07 Jun 2016 15:37:30 +0800</lastBuildDate>
+    <pubDate>Tue, 07 Jun 2016 15:57:27 +0800</pubDate>
+    <lastBuildDate>Tue, 07 Jun 2016 15:57:27 +0800</lastBuildDate>
     <generator>Jekyll v3.1.1</generator>
     
       <item>
@@ -15,7 +15,7 @@
         <description>&lt;p&gt;textarea默认有滚动条，设置height: auto或者固定高度的话，书写体验又不够好；若使用div，设置contentEditable为true，兼容起来比较麻烦，而且这家伙复制粘贴时带着源格式，不好操作。
 所以还是想办法使用textarea吧。&lt;!--more--&gt;&lt;/p&gt;
 
-&lt;p&gt;考虑文字换行等情况，这里使用&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;pre&amp;gt;&lt;/code&gt;符号，将textarea的值同步到&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;pre&amp;gt;&lt;/code&gt;中，通过这个看不见的&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;pre&amp;gt;&lt;/code&gt;盒子的高度自增长，撑高&lt;code class=&quot;highlighter-rouge&quot;&gt;autoHeight&lt;/code&gt;，然后设置textarea绝对定位，top为0，覆盖&amp;lt;pre&amp;gt;的位置，且高度撑满&lt;code class=&quot;highlighter-rouge&quot;&gt;autoHeight&lt;/code&gt;（100%）。&lt;/p&gt;
+&lt;p&gt;考虑文字换行等情况，这里使用 &amp;lt;pre&amp;gt; 符号，将textarea的值同步到 &amp;lt;pre&amp;gt; 中，通过这个看不见的 &amp;lt;pre&amp;gt; 盒子的高度自增长，撑高 autoHeight ，然后设置textarea绝对定位，top为0，覆盖&amp;lt;pre&amp;gt;的位置，且高度撑满 autoHeight （100%）。&lt;/p&gt;
 
 &lt;p&gt;js:&lt;/p&gt;
 
@@ -49,6 +49,9 @@ render() {
         display: block;
         visibility: hidden;
         min-height: 10em;
+        padding: 6px 7px; /*需要与textarea保持一致*/
+        white-space: pre-wrap;
+        line-height: 1.7em;
     }
 
     textarea {
@@ -56,11 +59,53 @@ render() {
         position: absolute;
         height: 100%;
         top: 0;
+        line-height: 1.7em;
     }
 }
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
+&lt;p&gt;理论上，这样就可以实现目的了，但总有点瑕疵——pre和textarea的高度并非完全相等，于是，我将pre的visibility和textarea的top注释掉，对比两个在页面上的表现，发现：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;pre&gt; 每段话是不换行的，横向一撑到底，相当于设置了white-space: no-wrap；
+
+&lt;/pre&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;pre&gt; 每一段（即textarea中的return换行）的段落间距比较大（其实是line-height）；
+
+&lt;/pre&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;textarea&gt; 有预置的padding
+
+&lt;/textarea&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;于是改成：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pre{
+    display: block;
+    visibility: hidden;
+    min-height: 10em;
+    padding: 6px 7px; /*需要与textarea保持一致*/
+    white-space: pre-wrap; /*按照textarea中的内容，该换行换行*/
+    line-height: 1.7em; /*需要与textarea保持一致*/
+}
+
+textarea {
+    resize: none;
+    position: absolute;
+    height: 100%;
+    top: 0;
+    line-height: 1.7em;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;完美。&lt;/p&gt;
 </description>
         <pubDate>Tue, 07 Jun 2016 15:21:00 +0800</pubDate>
         <link>http://insekkei.com/blogs//blogs/js/react/css/2016/06/07/css-textarea-autoheight.html</link>
