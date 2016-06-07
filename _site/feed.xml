@@ -6,9 +6,89 @@
 </description>
     <link>http://insekkei.com/blogs//blogs/</link>
     <atom:link href="http://insekkei.com/blogs//blogs/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 30 May 2016 16:27:54 +0800</pubDate>
-    <lastBuildDate>Mon, 30 May 2016 16:27:54 +0800</lastBuildDate>
+    <pubDate>Tue, 07 Jun 2016 15:37:30 +0800</pubDate>
+    <lastBuildDate>Tue, 07 Jun 2016 15:37:30 +0800</lastBuildDate>
     <generator>Jekyll v3.1.1</generator>
+    
+      <item>
+        <title>react和css实现一个高度自适应的textarea</title>
+        <description>&lt;p&gt;textarea默认有滚动条，设置height: auto或者固定高度的话，书写体验又不够好；若使用div，设置contentEditable为true，兼容起来比较麻烦，而且这家伙复制粘贴时带着源格式，不好操作。
+所以还是想办法使用textarea吧。&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;考虑文字换行等情况，这里使用&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;pre&amp;gt;&lt;/code&gt;符号，将textarea的值同步到&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;pre&amp;gt;&lt;/code&gt;中，通过这个看不见的&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;pre&amp;gt;&lt;/code&gt;盒子的高度自增长，撑高&lt;code class=&quot;highlighter-rouge&quot;&gt;autoHeight&lt;/code&gt;，然后设置textarea绝对定位，top为0，覆盖&amp;lt;pre&amp;gt;的位置，且高度撑满&lt;code class=&quot;highlighter-rouge&quot;&gt;autoHeight&lt;/code&gt;（100%）。&lt;/p&gt;
+
+&lt;p&gt;js:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;...
+getInitialState() {
+    return {
+        text: &#39;react和css实现一个高度自适应的textarea&#39;
+    }
+},
+changeText(e) {
+    this.setState({
+        text: e.target.value
+    });
+},
+render() {
+    return &amp;lt;div className=&quot;autoHeight&quot;&amp;gt;
+        &amp;lt;pre&amp;gt;{this.state.text}&amp;lt;/pre&amp;gt;
+        &amp;lt;textarea onChange={this.changeText}&amp;gt;&amp;lt;/textarea&amp;gt;
+    &amp;lt;/div&amp;gt;;
+}
+...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;css:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;.autoHeight {
+    position: relative;
+
+    pre{
+        display: block;
+        visibility: hidden;
+        min-height: 10em;
+    }
+
+    textarea {
+        resize: none;
+        position: absolute;
+        height: 100%;
+        top: 0;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+</description>
+        <pubDate>Tue, 07 Jun 2016 15:21:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/js/react/css/2016/06/07/css-textarea-autoheight.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/js/react/css/2016/06/07/css-textarea-autoheight.html</guid>
+        
+        
+        <category>js</category>
+        
+        <category>react</category>
+        
+        <category>css</category>
+        
+      </item>
+    
+      <item>
+        <title>nodejs中使用socket完成长连接</title>
+        <description>
+</description>
+        <pubDate>Tue, 31 May 2016 10:37:00 +0800</pubDate>
+        <link>http://insekkei.com/blogs//blogs/nodejs/socket/2016/05/31/nodejs-socket.html</link>
+        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/nodejs/socket/2016/05/31/nodejs-socket.html</guid>
+        
+        
+        <category>nodejs</category>
+        
+        <category>socket</category>
+        
+      </item>
     
       <item>
         <title>一个copy对象的诡异😂问题</title>
@@ -607,192 +687,6 @@ ReactDOM.render(AppRoute, document.getElementById(&#39;xxx&#39;));
         <category>js</category>
         
         <category>router</category>
-        
-      </item>
-    
-      <item>
-        <title>react router使用</title>
-        <description>&lt;blockquote&gt;
-  &lt;p&gt;React Router keeps your UI in sync with the URL. It has a simple API with powerful features like lazy code loading, dynamic route matching, and location transition handling built right in.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&quot;npm--more--&quot;&gt;使用npm安装&lt;!--more--&gt;&lt;/h2&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ npm install --save react-router
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;layoutroutehandler&quot;&gt;在Layout中使用RouteHandler&lt;/h2&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;A Layout is something that describes an entire page structure, such as a fixed navigation, viewport, sidebar, and footer.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;var React = require(&#39;react&#39;);
-var RouteHandler = require(&#39;react-router&#39;).RouteHandler;
-var Link = require(&#39;react-router&#39;).Link;
-
-...
-
-var Layout = React.createClass({
-    ...
-    render: function () {
-        return (
-            &amp;lt;div className=&quot;wrapper&quot;&amp;gt;
-                &amp;lt;PlatformHeader/&amp;gt;
-                &amp;lt;PlatformNav/&amp;gt;
-                &amp;lt;PlatformContent/&amp;gt;
-            &amp;lt;/div&amp;gt;
-        );
-    }
-});
-
-// RouteHandler是react router的核心组件之一，代表与当前路由（url）匹配的组件。
-var PlatformContent = React.createClass({
-    render: function() {
-        return (
-            &amp;lt;div className=&#39;main&#39;&amp;gt;
-                &amp;lt;RouteHandler/&amp;gt;
-            &amp;lt;/div&amp;gt;
-        );
-    }
-});
-
-// PlatformNav中有url链接（路由需求），例如index
-var PlatformNav = React.createClass({
-    render: function() {
-        return (
-            &amp;lt;div className=&#39;nav&#39;&amp;gt;
-                ...
-                &amp;lt;Link to=&quot;index&quot;&amp;gt;首页&amp;lt;/Link&amp;gt;
-                ...
-            &amp;lt;/div&amp;gt;
-        );
-    }
-});
-
-...
-module.exports = Layout;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;index&quot;&gt;index页&lt;/h2&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;var Index = React.createClass({
-    render: function() {
-        return (
-            &amp;lt;div&amp;gt;
-                Welcome!
-            &amp;lt;/div&amp;gt;
-        );
-    }
-});
-
-module.exports = Index;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;appjs&quot;&gt;在app.js中配置路由&lt;/h2&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;var Layout = require(&#39;./components/Layout&#39;);
-var Index = require(&#39;./components/Index&#39;);
-
-// 引入需要的组件
-var Router = require(&#39;react-router&#39;).Router;
-var Route  = require(&#39;react-router&#39;).Route;
-var DefaultRoute = require(&#39;react-router&#39;).DefaultRoute; // 默认路由，首页
-
-// 或使用es6
-import { Router, Route, DefaultRoute } from &#39;react-router&#39;
-
-// 设置路由，handler中是组件名称，path写url
-var routes = (
-    &amp;lt;Route&amp;gt;
-        &amp;lt;Route path=&quot;/&quot; handler={Layout}&amp;gt;
-            &amp;lt;DefaultRoute handler={Index}/&amp;gt;
-            &amp;lt;Route path=&#39;index&#39; name=&#39;index&#39; handler={Index}/&amp;gt;
-        &amp;lt;/Route&amp;gt;
-    &amp;lt;/Route&amp;gt;
-);
-
-Router.run(routes, Router.HistoryLocation, (Root) =&amp;gt; {
-    React.render(&amp;lt;Root/&amp;gt;, document.body);
-});
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;这样，点击nav中的“首页”链接时，浏览器地址栏中会出现’index’，同时页面上能看到“Welcome”。而刷新页面时，也能根据给当前url分配的组件Index，加载想要看到的内容。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/reactjs/react-router&quot;&gt;更多关于React-router&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Fri, 19 Feb 2016 11:40:00 +0800</pubDate>
-        <link>http://insekkei.com/blogs//blogs/react/js/router/2016/02/19/React-Router.html</link>
-        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/react/js/router/2016/02/19/React-Router.html</guid>
-        
-        
-        <category>react</category>
-        
-        <category>js</category>
-        
-        <category>router</category>
-        
-      </item>
-    
-      <item>
-        <title>IE9不打开控制台无法正常执行js</title>
-        <description>&lt;p&gt;接手一个系统项目，必须运行在windows下，浏览器要求IE9。&lt;/p&gt;
-
-&lt;p&gt;调试脚本的过程中使用过&lt;code class=&quot;highlighter-rouge&quot;&gt;console.log()&lt;/code&gt;，同时页面包含一个&lt;code class=&quot;highlighter-rouge&quot;&gt;setInterval()&lt;/code&gt;方法，每隔300毫秒自动获取接口传过来的数据， 获取到正确的数据之后，停止定时器。&lt;!--more--&gt;&lt;/p&gt;
-
-&lt;p&gt;chrome中测试无误，然而转到IE9中之后，死活无法等到数据，便想打开控制台看看有没有报错，然而每每一打开控制台几乎瞬间数据就传过来了！试了好多次，确定不是机缘未到，抱着怀疑的心理搜索了一下“ie9 控制台打开才执行js”，果然很多人都遇到过这个问题，但是，故事的结局往往出人意料：&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;IE仅在开启developer tools的时候，脚本才能访问到console这个对象。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;这真是一个让人忍不住想吐槽的设定…&lt;/p&gt;
-
-&lt;p&gt;对此情况，解决方案有：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;生产环境下移除或者注释掉&lt;code class=&quot;highlighter-rouge&quot;&gt;console.log()&lt;/code&gt; 。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;为避免报错，这样声明&lt;code class=&quot;highlighter-rouge&quot;&gt;console&lt;/code&gt;：&lt;/p&gt;
-
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  var console = console || {
-      log : function () {
-          return;
-      }
-  }
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;自定义封装个方法调用：&lt;/p&gt;
-
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  function log(msg){
-      if (window.console){
-          console.log(msg);
-      }
-  }
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;更多内容：&lt;a href=&quot;https://msdn.microsoft.com/zh-cn/library/dn255006(v=vs.85).aspx&quot;&gt;https://msdn.microsoft.com/zh-cn/library/dn255006.aspx&lt;/a&gt;&lt;/p&gt;
-
-</description>
-        <pubDate>Mon, 25 Jan 2016 17:32:00 +0800</pubDate>
-        <link>http://insekkei.com/blogs//blogs/ie/js/2016/01/25/ie9%E6%97%A0%E6%B3%95%E5%85%BC%E5%AE%B9console%E5%AF%B9%E8%B1%A1.html</link>
-        <guid isPermaLink="true">http://insekkei.com/blogs//blogs/ie/js/2016/01/25/ie9%E6%97%A0%E6%B3%95%E5%85%BC%E5%AE%B9console%E5%AF%B9%E8%B1%A1.html</guid>
-        
-        
-        <category>IE</category>
-        
-        <category>js</category>
         
       </item>
     

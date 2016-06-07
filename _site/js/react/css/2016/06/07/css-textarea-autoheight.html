@@ -6,12 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>web前端笔记</title>
-  <meta name="description" content="绿螘新醅酒，红泥小火炉。<br>晚来天欲雪，能饮一杯无？
-">
+  <title>react和css实现一个高度自适应的textarea</title>
+  <meta name="description" content="textarea默认有滚动条，设置height: auto或者固定高度的话，书写体验又不够好；若使用div，设置contentEditable为true，兼容起来比较麻烦，而且这家伙复制粘贴时带着源格式，不好操作。所以还是想办法使用textarea吧。">
 
   <link rel="stylesheet" href="/blogs/css/main.css">
-  <link rel="canonical" href="http://insekkei.com/blogs//blogs/archive.html">
+  <link rel="canonical" href="http://insekkei.com/blogs//blogs/js/react/css/2016/06/07/css-textarea-autoheight.html">
   <link rel="alternate" type="application/rss+xml" title="web前端笔记" href="http://insekkei.com/blogs//blogs/feed.xml" />
   <link rel="icon" type="image/png" href="/blogs/images/icon.png">
 </head>
@@ -63,208 +62,82 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="home">
+        <div class="post">
 
-  <h1 class="page-heading">文章归档</h1>
+  <header class="post-header">
+    <h1 class="post-title">react和css实现一个高度自适应的textarea</h1>
+    <p class="post-meta">Jun 7, 2016</p>
+  </header>
 
-  <section id="archive">
-    <h3>This year's posts</h3>
-    
-      
-        <ul class="this">
-      
-        <li><time>07 Jun</time><a href="/blogs/js/react/css/2016/06/07/css-textarea-autoheight.html">react和css实现一个高度自适应的textarea</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>31 May</time><a href="/blogs/nodejs/socket/2016/05/31/nodejs-socket.html">nodejs中使用socket完成长连接</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>30 May</time><a href="/blogs/js/object/2016/05/30/js-copy-object.html">一个copy对象的诡异😂问题</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>26 May</time><a href="/blogs/nodejs/mongo/2016/05/26/mongoose-with-nodejs.html">nodejs中使用mongodb</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>25 May</time><a href="/blogs/css3/2016/05/25/%E4%BD%BF%E7%94%A8css%E5%AE%8C%E6%88%90%E4%B8%80%E4%B8%AA%E4%B8%89%E7%BB%B4%E7%AB%8B%E4%BD%93%E6%97%8B%E8%BD%AC%E7%9B%B8%E5%86%8C.html">使用css完成一个三维立体旋转相册</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>05 May</time><a href="/blogs/react/context/2016/05/05/react-context.html">react context传值</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>19 Apr</time><a href="/blogs/react/js/echarts/2016/04/19/echarts-%E4%BF%AE%E6%94%B9legend%E7%9A%84select%E7%8A%B6%E6%80%81.html">echarts中需要保持legend的selected状态</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>19 Apr</time><a href="/blogs/react-native/2016/04/19/first-step-to-reactnative.html">react native初次会面</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>19 Apr</time><a href="/blogs/react/js/echarts/2016/04/19/echarts-react-shouldupdate.html">echarts多图时页面resize事件以及重绘需要判断</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>11 Mar</time><a href="/blogs/react/js/router/2016/03/11/React-Router-2.0.html">react router 2使用</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>19 Feb</time><a href="/blogs/react/js/router/2016/02/19/React-Router.html">react router使用</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>25 Jan</time><a href="/blogs/ie/js/2016/01/25/ie9%E6%97%A0%E6%B3%95%E5%85%BC%E5%AE%B9console%E5%AF%B9%E8%B1%A1.html">IE9不打开控制台无法正常执行js</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>25 Jan</time><a href="/blogs/css/2016/01/25/css%E5%AE%9E%E7%8E%B0%E8%83%8C%E6%99%AF%E5%9B%BE%E5%B1%80%E9%83%A8%E6%BB%A4%E9%95%9C%E5%8A%A0%E5%8D%8A%E9%80%8F%E6%98%8E%E6%95%88%E6%9E%9C.html">css实现背景图片局部滤镜加半透明效果</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>25 Jan</time><a href="/blogs/node/forever/phantomjs/2016/01/25/forever%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%E7%9B%B8%E5%85%B3%E8%AE%B0%E5%BD%95.html">forever守护进程相关记录</a></li>
-    
-      
-        
-        
-        
-          </ul>
-          <h3>2015</h3>
-          <ul class="past">
-        
-      
-        <li><time>21 Dec</time><a href="/blogs/gulp/browserity/2015/12/21/gulp%E6%89%93%E5%8C%85%E7%BC%96%E8%AF%91%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8C%96.html">gulp打包编译速度优化</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>24 Sep</time><a href="/blogs/react/loader/2015/09/24/react-loader-with-flux.html">flux中使用react-loder</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>07 Sep</time><a href="/blogs/react/js/2015/09/07/js-react-pagination.html">用react完成一个带省略号的分页</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>02 Sep</time><a href="/blogs/react/js/ajax/2015/09/02/js-react%E8%B7%A8%E5%9F%9F.html">react ajax跨域请求</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>25 Aug</time><a href="/blogs/react/js/flux/2015/08/25/react-flux-data-flow.html">react&flux之BasicSelect组件实现</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>25 Aug</time><a href="/blogs/bootstrap/js/2015/08/25/bootstrap-select-with-ajax-data.html">bootstrap-select.js使用ajax get到的option数据</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>05 Aug</time><a href="/blogs/angularjs/js/2015/08/05/angularjs-localstorage.html">angularjs结合localstorage完成一个简单的备忘录</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>29 Jul</time><a href="/blogs/jquery/js/2015/07/29/jquery%E4%B9%8Bradio-checkbox.html">jquery和dom中操作radio和checkbox</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>09 Jul</time><a href="/blogs/angular/js/2015/07/09/angular.js-%E8%AF%AD%E6%B3%95%E6%B5%85%E6%9E%90.html">angular.js语法浅析</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>04 Jul</time><a href="/blogs/gulp/js/2015/07/04/%E6%96%B0%E6%89%8B%E6%8E%A5%E8%A7%A6gulp.html">新手接触gulp</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>16 Jun</time><a href="/blogs/js/function/2015/06/16/js%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D%E5%8F%8A%E8%AE%A1%E7%AE%97%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%AD%97%E7%AC%A6%E7%9A%84%E4%B8%AA%E6%95%B0.html">js数组去重 及 计算字符串中字符的个数</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>16 Jun</time><a href="/blogs/js/function/2015/06/16/Javascript-%E5%8F%8D%E5%BA%8F%E8%BE%93%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2.html">Javascript反序输出字符串</a></li>
-    
-      
-        
-        
-        
-      
-        <li><time>16 Jun</time><a href="/blogs/js/common/2015/06/16/Javascript-stopBubble.html">Javascript stop bubble</a></li>
-    
-    </ul>
-  </section>
+  <article class="post-content">
+    <p>textarea默认有滚动条，设置height: auto或者固定高度的话，书写体验又不够好；若使用div，设置contentEditable为true，兼容起来比较麻烦，而且这家伙复制粘贴时带着源格式，不好操作。
+所以还是想办法使用textarea吧。<!--more--></p>
 
-  <p class="rss-subscribe">subscribe <a href="/blogs/feed.xml">via RSS</a></p>
+<p>考虑文字换行等情况，这里使用<code class="highlighter-rouge">&lt;pre&gt;</code>符号，将textarea的值同步到<code class="highlighter-rouge">&lt;pre&gt;</code>中，通过这个看不见的<code class="highlighter-rouge">&lt;pre&gt;</code>盒子的高度自增长，撑高<code class="highlighter-rouge">autoHeight</code>，然后设置textarea绝对定位，top为0，覆盖&lt;pre&gt;的位置，且高度撑满<code class="highlighter-rouge">autoHeight</code>（100%）。</p>
+
+<p>js:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>...
+getInitialState() {
+    return {
+        text: 'react和css实现一个高度自适应的textarea'
+    }
+},
+changeText(e) {
+    this.setState({
+        text: e.target.value
+    });
+},
+render() {
+    return &lt;div className="autoHeight"&gt;
+        &lt;pre&gt;{this.state.text}&lt;/pre&gt;
+        &lt;textarea onChange={this.changeText}&gt;&lt;/textarea&gt;
+    &lt;/div&gt;;
+}
+...
+</code></pre>
+</div>
+
+<p>css:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>.autoHeight {
+    position: relative;
+
+    pre{
+        display: block;
+        visibility: hidden;
+        min-height: 10em;
+    }
+
+    textarea {
+        resize: none;
+        position: absolute;
+        height: 100%;
+        top: 0;
+    }
+}
+</code></pre>
+</div>
+
+
+  </article>
+
+  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="react和css实现一个高度自适应的textarea"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"blogs2015"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	<!-- 多说公共JS代码 end -->
 
 </div>
 
