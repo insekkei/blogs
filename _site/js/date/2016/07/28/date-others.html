@@ -6,12 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>web前端笔记</title>
-  <meta name="description" content="绿螘新醅酒，红泥小火炉。<br>晚来天欲雪，能饮一杯无？
-">
+  <title>js中的Date另类使用</title>
+  <meta name="description" content="如何获得某个月的天数？方法一const EVERY_MONTH_DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];function getDays(year, month) {    if (month === 1 &amp;&amp; isLeap(...">
 
   <link rel="stylesheet" href="/blogs/css/main.css">
-  <link rel="canonical" href="http://insekkei.com/blogs//blogs/">
+  <link rel="canonical" href="http://insekkei.com/blogs//blogs/js/date/2016/07/28/date-others.html">
   <link rel="alternate" type="application/rss+xml" title="web前端笔记" href="http://insekkei.com/blogs//blogs/feed.xml" />
   <link rel="icon" type="image/png" href="/blogs/images/icon.png">
 </head>
@@ -63,213 +62,110 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="home">
+        <div class="post">
 
-  <h1 class="page-heading">笔记目录</h1>
+  <header class="post-header">
+    <h1 class="post-title">js中的Date另类使用</h1>
+    <p class="post-meta">Jul 28, 2016</p>
+  </header>
 
-  <ul class="post-list">
-    
-      <li>
-        <span class="post-meta">Jul 28, 2016</span>
+  <article class="post-content">
+    <h2 id="section">如何获得某个月的天数？</h2>
 
-        <h2>
-          <a class="post-link" href="/blogs/js/date/2016/07/28/date-others.html">js中的Date另类使用</a>
-        </h2>
-        <p class="excerpt">如何获得某个月的天数？
+<p>方法一</p>
 
-方法一
-
-const EVERY_MONTH_DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+<div class="highlighter-rouge"><pre class="highlight"><code>const EVERY_MONTH_DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 function getDays(year, month) {
     if (month === 1 &amp;&amp; isLeap(year)) return 29;
     return EVERY_MONTH_DAYS[month];
 }
+</code></pre>
+</div>
 
+<!--more-->
+<p>方法二</p>
 
+<p>我们发现，new Date()的第三个参数是可以大于我们所知的每个月的最后一天的的，比如：</p>
 
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jun 8, 2016</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>new Date(2016, 0, 200) //Mon Jul 18 2016 00:00:00 GMT+0800 (CST)
+</code></pre>
+</div>
 
-        <h2>
-          <a class="post-link" href="/blogs/nodejs/socket/2016/06/08/nodejs-socket.html">nodejs中使用socket完成长连接</a>
-        </h2>
-        <p class="excerpt">
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jun 6, 2016</span>
+<p>于是</p>
 
-        <h2>
-          <a class="post-link" href="/blogs/js/react/css/2016/06/06/css-textarea-autoheight.html">react和css实现一个高度自适应的textarea</a>
-        </h2>
-        <p class="excerpt">textarea默认有滚动条，设置height: auto或者固定高度的话，书写体验又不够好；若使用div，设置contentEditable为true，兼容起来比较麻烦，而且这家伙复制粘贴时带着源格式，不好操作。
-所以还是想办法使用textarea吧。
+<div class="highlighter-rouge"><pre class="highlight"><code>function getDays(year, month) {
+    if (month === 1) return new Date(year, month, 29).getMonth() === 1 ? 29 : 28;
+    return new Date(year, month, 31).getMonth() === month ? 31 : 30;
+}
+</code></pre>
+</div>
 
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">May 30, 2016</span>
+<p>方法三</p>
 
-        <h2>
-          <a class="post-link" href="/blogs/js/object/2016/05/30/js-copy-object.html">一个copy对象的诡异😂问题</a>
-        </h2>
-        <p class="excerpt">遇到一个诡异的问题，简单写成代码如下：
+<p>new Date()的第三个参数传小于1的值会怎么样了，比如传0，我们就获得了上个月的最后一天。</p>
 
-&gt; var o = [{a: 1}, {a: 2}, {a: 3}]; var o2 = o; var o3 = o; o2.splice(0, 1); o3;
-&lt; [Object, Object]
+<div class="highlighter-rouge"><pre class="highlight"><code>new Date(2016, 0, -200) //Sun Jun 14 2015 00:00:00 GMT+0800 (CST)
+</code></pre>
+</div>
 
+<p>于是</p>
 
+<div class="highlighter-rouge"><pre class="highlight"><code>function getDays(year, month) {
+    return new Date(year, month + 1, 0).getDate();
+}
+</code></pre>
+</div>
 
-真实的数据结构比这个复杂一些…
+<h2 id="javascript--y-m-d-his-">JavaScript 显示 Y-m-d H:i:s 的日期时间格式</h2>
 
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">May 26, 2016</span>
+<p>方法一</p>
 
-        <h2>
-          <a class="post-link" href="/blogs/nodejs/mongo/2016/05/26/mongoose-with-nodejs.html">nodejs中使用mongodb</a>
-        </h2>
-        <p class="excerpt">需求背景：线上出问题时可以找出近期数据相关的操作历史，但日志只在内网访问。
+<div class="highlighter-rouge"><pre class="highlight"><code>let date = new Date();
+let result = [
+    [
+        date.getFullYear(),
+        date.getMonth() + 1,
+        date.getDate()
+    ].join('-'),
+    [
+        date.getHours(),
+        date.getMinutes(),
+        date.getSeconds()
+    ].join(':')
+].join(' ').replace(/\b\d\b/g, '0$&amp;');
+</code></pre>
+</div>
 
-于是可以把日志相关的数据保存在mongodb中。
+<p>方法二</p>
 
-yog2的框架中，后端文件结构如下：
+<div class="highlighter-rouge"><pre class="highlight"><code>new Date().toLocaleString('zh-CN', { hour12: false }) // "2016/8/15 15:41:44"
+new Date().toLocaleString('zh-CN', { hour12: true }) // "2016/8/15 下午3:42:06"
 
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">May 25, 2016</span>
+var date = new Date();
+var result = date.toLocaleString('zh-CN', { hour12: false })
+    .replace(/\//g, '-').replace(/\b\d\b/g, '0$&amp;');
+</code></pre>
+</div>
 
-        <h2>
-          <a class="post-link" href="/blogs/css3/2016/05/25/%E4%BD%BF%E7%94%A8css%E5%AE%8C%E6%88%90%E4%B8%80%E4%B8%AA%E4%B8%89%E7%BB%B4%E7%AB%8B%E4%BD%93%E6%97%8B%E8%BD%AC%E7%9B%B8%E5%86%8C.html">使用css完成一个三维立体旋转相册</a>
-        </h2>
-        <p class="excerpt">本篇主要通过这个实践练习transform及3D旋转。
+  </article>
 
-浏览器中，3D旋转时，主要看x轴、y轴、z轴的方向，旋转所绕的轴是一条横线，为x轴旋转，竖线，为y轴旋转，x和y轴都在显示器所在的平面上。z轴则垂直显示器所在的平面。
-
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">May 5, 2016</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/react/context/2016/05/05/react-context.html">react context传值</a>
-        </h2>
-        <p class="excerpt">用react-router的时候，希望给{this.props.children}这个组件传一个layout里的用户名…
-
-Layout.js中：
-
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Apr 19, 2016</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/react/js/echarts/2016/04/19/echarts-%E4%BF%AE%E6%94%B9legend%E7%9A%84select%E7%8A%B6%E6%80%81.html">echarts中需要保持legend的selected状态</a>
-        </h2>
-        <p class="excerpt">背景：
-
-图表随着时间“自动更新”时，假如deSelect了某一项数据，在下次数据来临、图刷新时，依然deSelect这个数据项。
-
-思路：
-
-在公共的Chart组件中：
-
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Apr 19, 2016</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/react-native/2016/04/19/first-step-to-reactnative.html">react native初次会面</a>
-        </h2>
-        <p class="excerpt">preparation: XCode
-
-install
-
-$ sudo npm install -g react-native-cli
-
-
-
-init a project
-
-$ react-native init `${projectname}`
-$ cd `${projectname}`
-
-
-
-start
-
-$ react-native run-ios
-
-
-
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Apr 19, 2016</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/react/js/echarts/2016/04/19/echarts-react-shouldupdate.html">echarts多图时页面resize事件以及重绘需要判断</a>
-        </h2>
-        <p class="excerpt">resize事件
-
-当页面上有&gt;1个图表时，
-
-window.onresize = myChart.resize;
-
-
-
-并不能使所有的图响应浏览器resize事件，只有一个随机的图能随着resize。
-
-于是参考DOM Event Listeners in a Component里所写，添加了resize事件：
-
-</p>
-      </li>
-    
-  </ul>
-
-  <!-- Pagination links -->
-  
-  <div class="pagination">
-    
-      <span>&laquo; Prev</span>
-    
-
-    
-      
-        <em>1</em>
-      
-    
-      
-        <a href="/blogs/blogs/page2">2</a>
-      
-    
-      
-        <a href="/blogs/blogs/page3">3</a>
-      
-    
-
-    
-      <a class="nextpage" href="/blogs/blogs/page2">Next &raquo;</a>
-    
-  </div>
-  
-
-  <p class="rss-subscribe">subscribe <a href="/blogs/feed.xml">via RSS</a></p>
+  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="js中的Date另类使用"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"blogs2015"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	<!-- 多说公共JS代码 end -->
 
 </div>
 
