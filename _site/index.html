@@ -11,8 +11,8 @@
 ">
 
   <link rel="stylesheet" href="/blogs/css/main.css">
-  <link rel="canonical" href="http://insekkei.com/blogs//blogs/">
-  <link rel="alternate" type="application/rss+xml" title="web前端笔记" href="http://insekkei.com/blogs//blogs/feed.xml" />
+  <link rel="canonical" href="http://localhost:4000/blogs/">
+  <link rel="alternate" type="application/rss+xml" title="web前端笔记" href="http://localhost:4000/blogs/feed.xml" />
   <link rel="icon" type="image/png" href="/blogs/images/icon.png">
 </head>
 
@@ -70,6 +70,74 @@
   <ul class="post-list">
     
       <li>
+        <span class="post-meta">Dec 9, 2016</span>
+
+        <h2>
+          <a class="post-link" href="/blogs/js/express/webpack/2016/12/09/webpack-react-redux-ant-express-common-router-config.html">express和webpack配合时启动文件配置</a>
+        </h2>
+        <p class="excerpt">
+  
+    项目结构：react-redux-webpack-express-antui
+  
+  
+    client中存放react代码，分为src和build两个目录
+  
+  
+    server中存放express代码，分为src和build两个目录
+  
+  
+    client里的ajax请求包装形式为：/request.ajax?path=xxx
+  
+
+
+</p>
+      </li>
+    
+      <li>
+        <span class="post-meta">Dec 9, 2016</span>
+
+        <h2>
+          <a class="post-link" href="/blogs/js/express/charles/2016/12/09/express-charles-get-request.html">charles获取express里的node请求...</a>
+        </h2>
+        <p class="excerpt">node作为代理层请求后端接口时，一般会封装一个公共的请求方法，配置好host等信息，统一处理后端异常情况。
+
+这样的话，浏览器里就不能看到真正的api请求地址和原始的返回数据了，而在terminal里打印信息时，往往会被多重请求看得眼花缭乱…
+
+因此需要charles抓取node里的请求和返回。
+
+</p>
+      </li>
+    
+      <li>
+        <span class="post-meta">Dec 9, 2016</span>
+
+        <h2>
+          <a class="post-link" href="/blogs/js/image/file/2016/12/09/image-upload-relative.html">图片上传时可能遇到的一些情况...</a>
+        </h2>
+        <p class="excerpt">component
+
+&lt;input type="file" accept="image/png, image/jpeg, image/jpg"
+    title=""
+    onChange={this.handleReUpload} /&gt;
+
+
+
+类型、大小（体积）
+
+event.target.files[0]: {
+	type, size
+}
+
+
+
+此时也可以同时在express里对上传文件大小进行限制
+
+图片转换成base64
+
+</p>
+      </li>
+    
+      <li>
         <span class="post-meta">Jul 28, 2016</span>
 
         <h2>
@@ -109,24 +177,6 @@ function getDays(year, month) {
         </h2>
         <p class="excerpt">textarea默认有滚动条，设置height: auto或者固定高度的话，书写体验又不够好；若使用div，设置contentEditable为true，兼容起来比较麻烦，而且这家伙复制粘贴时带着源格式，不好操作。
 所以还是想办法使用textarea吧。
-
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">May 30, 2016</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/js/object/2016/05/30/js-copy-object.html">一个copy对象的诡异😂问题</a>
-        </h2>
-        <p class="excerpt">遇到一个诡异的问题，简单写成代码如下：
-
-&gt; var o = [{a: 1}, {a: 2}, {a: 3}]; var o2 = o; var o3 = o; o2.splice(0, 1); o3;
-&lt; [Object, Object]
-
-
-
-真实的数据结构比这个复杂一些…
 
 </p>
       </li>
@@ -185,57 +235,6 @@ Layout.js中：
 思路：
 
 在公共的Chart组件中：
-
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Apr 19, 2016</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/react-native/2016/04/19/first-step-to-reactnative.html">react native初次会面</a>
-        </h2>
-        <p class="excerpt">preparation: XCode
-
-install
-
-$ sudo npm install -g react-native-cli
-
-
-
-init a project
-
-$ react-native init `${projectname}`
-$ cd `${projectname}`
-
-
-
-start
-
-$ react-native run-ios
-
-
-
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Apr 19, 2016</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/react/js/echarts/2016/04/19/echarts-react-shouldupdate.html">echarts多图时页面resize事件以及重绘需要判断</a>
-        </h2>
-        <p class="excerpt">resize事件
-
-当页面上有&gt;1个图表时，
-
-window.onresize = myChart.resize;
-
-
-
-并不能使所有的图响应浏览器resize事件，只有一个随机的图能随着resize。
-
-于是参考DOM Event Listeners in a Component里所写，添加了resize事件：
 
 </p>
       </li>

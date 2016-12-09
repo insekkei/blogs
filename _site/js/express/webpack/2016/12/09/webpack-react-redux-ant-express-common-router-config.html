@@ -6,12 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>web前端笔记</title>
-  <meta name="description" content="绿螘新醅酒，红泥小火炉。<br>晚来天欲雪，能饮一杯无？
-">
+  <title>express和webpack配合时启动文件配置</title>
+  <meta name="description" content="      项目结构：react-redux-webpack-express-antui        client中存放react代码，分为src和build两个目录        server中存放express代码，分为src和build两个目录        client里的ajax请求包装形式为：/re...">
 
   <link rel="stylesheet" href="/blogs/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/blogs/blogs/page3/">
+  <link rel="canonical" href="http://localhost:4000/blogs/js/express/webpack/2016/12/09/webpack-react-redux-ant-express-common-router-config.html">
   <link rel="alternate" type="application/rss+xml" title="web前端笔记" href="http://localhost:4000/blogs/feed.xml" />
   <link rel="icon" type="image/png" href="/blogs/images/icon.png">
 </head>
@@ -63,213 +62,254 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="home">
+        <div class="post">
 
-  <h1 class="page-heading">笔记目录</h1>
+  <header class="post-header">
+    <h1 class="post-title">express和webpack配合时启动文件配置</h1>
+    <p class="post-meta">Dec 9, 2016</p>
+  </header>
 
-  <ul class="post-list">
-    
-      <li>
-        <span class="post-meta">Sep 2, 2015</span>
+  <article class="post-content">
+    <ul>
+  <li>
+    <p>项目结构：react-redux-webpack-express-antui</p>
+  </li>
+  <li>
+    <p>client中存放react代码，分为src和build两个目录</p>
+  </li>
+  <li>
+    <p>server中存放express代码，分为src和build两个目录</p>
+  </li>
+  <li>
+    <p>client里的ajax请求包装形式为：/request.ajax?path=xxx<!--more--></p>
+  </li>
+</ul>
 
-        <h2>
-          <a class="post-link" href="/blogs/react/js/ajax/2015/09/02/js-react%E8%B7%A8%E5%9F%9F.html">react ajax跨域请求</a>
-        </h2>
-        <p class="excerpt">同源策略
+<h2 id="clientserver">client里请求路径映射到server里的文件：</h2>
 
+<div class="highlighter-rouge"><pre class="highlight"><code>import _ from 'lodash';
+import fs from 'fs';
+import express from 'express';
+import xml2js from 'xml2js';
+import path from 'path';
+import fetch from 'isomorphic-fetch';
 
-  同源策略限制了一个源（origin）中加载文本或脚本与来自其它源（origin）中资源的交互方式。如果两个页面拥有相同的 协议（protocol），端口（如果指定），和 主机，那么这两个页面就属于同一个源（origin）。
+import {SERVERCONFIG} from '../config';
+const {nodeEnv, isMock, apiDir} = SERVERCONFIG;
+const serverPath = '../' + apiDir.replace(/[\\\/]?$/, '/');
+let router = express.Router();
 
+function getLocalApi(req, res, apiPath, params) {
+    // 获取文件路径
+    let file = path.resolve(__dirname, serverPath + apiPath + (isMock ? '-mock.js' : '.js'));
 
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Aug 25, 2015</span>
+    // 判断文件是否存在，若文件不存在返回错误
+    let isExist = fs.existsSync(file);
+    if (!isExist) {
+        return {errorCode: 500, message: 'error in server: invalid API path.', data: null};
+    }
 
-        <h2>
-          <a class="post-link" href="/blogs/react/js/flux/2015/08/25/react-flux-data-flow.html">react&flux之BasicSelect组件实现</a>
-        </h2>
-        <p class="excerpt">应工作需求，用到flux，为了解react设计思想及其flux强调的数据流，查找了各种在线资料，终于可以开工了。然而编码的时候时常产生一种怀疑：我真的是一个前端？
+    // 如果文件存在，返回请求到的数据
+    let result = require(file);
+    let resp = _.isPlainObject(result)
+        ? new Promise(function (resolve) { resolve(result); })
+        : result(req, res, apiPath, params);
+    return resp;
+}
 
-React
+router.all('/request.ajax*', function (req, res, next) {
+    // 解析出path
+    let body = req.body;
+    let path = body.path || req.query.path;
+    if (!path) {
+        return res.json({errorCode: 500, message: 'error in server: empty API path.', data: null});
+    }
 
-对于react，我是从这里开始了解的，然而这儿仅仅能了解到react的语法。
+    // 解析出参数
+    let params = typeof body.params === 'string' ? JSON.parse(body.params) : body.params;
 
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Aug 25, 2015</span>
+    // 获取对应文件的数据
+    getLocalApi(req, res, path, params).then(function (result) {
+        console.log('=================response result================');
+        console.log(result);
+        res.json(result);
+    });
 
-        <h2>
-          <a class="post-link" href="/blogs/bootstrap/js/2015/08/25/bootstrap-select-with-ajax-data.html">bootstrap-select.js使用ajax get到的option数据</a>
-        </h2>
-        <p class="excerpt">
-  第一次用到，搜了很多博文都没用，一篇抄一篇而且整得特复杂…还是官方文档比较给力，然而最近红杏什么的都没法用了，代理jquery到国内cdn后才能正确显示效果，非常之坑…有些东西遮遮掩掩真的有用吗？
+    // 设置超时
+    // 设置所有HTTP请求的超时时间
+    req.setTimeout(20000);
+    // 设置所有HTTP请求的服务器响应超时时间
+    res.setTimeout(20000);
+});
 
+export default router;
+</code></pre>
+</div>
 
-bootstrap-select.js官方文档
+<h2 id="express-">express 启动文件配置</h2>
 
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Aug 5, 2015</span>
+<p>express作为server时，webpack只需要负责编译就好了，辣么，单页应用中必然会出现刷新404的情形，怎么破？</p>
 
-        <h2>
-          <a class="post-link" href="/blogs/angularjs/js/2015/08/05/angularjs-localstorage.html">angularjs结合localstorage完成一个简单的备忘录</a>
-        </h2>
-        <p class="excerpt">
-  学习一种新的框架真的是痛并快乐着…而当确定了一个清晰的目标，向着这个目标努力时，成就感带来的快感将远大于茫然不解时的痛苦。
+<div class="highlighter-rouge"><pre class="highlight"><code>/**
+ * @file express server
+ * @author hancong05@baidu.com
+ * @date 2016-10-29
+ */
 
+'use strict';
 
-——&gt;预览效果
+// 非production环境里可以使用express-session来存储用户名等信息，但生产环境下不允许，可以用cookie-session或者Redis之类的方案代替它
+import cookieSession from 'cookie-session';
+import express from 'express';
+import path from 'path';
+// express接收到浏览器里传过来的的req.body不能直接拿来用，需要解析成正常的格式
+import bodyParser from 'body-parser';
+// 专业解决单页应用刷新问题，类似webpack-history-api-callback什么的
+import fallback from 'express-history-api-fallback';
 
-准备工作
+// 登录
+import loginFilter from './router/loginFilter';
+// 退出登录
+import logout from './router/logout';
+// 这是一个前端请求map后端js文件的方法，按照路径映射到express server层下对应的文件里
+import apiMap from './router/apiMap';
 
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jul 29, 2015</span>
+import {SERVERCONFIG} from './config';
+const {port, nodeEnv, postLimit} = SERVERCONFIG;
 
-        <h2>
-          <a class="post-link" href="/blogs/jquery/js/2015/07/29/jquery%E4%B9%8Bradio-checkbox.html">jquery和dom中操作radio和checkbox</a>
-        </h2>
-        <p class="excerpt">
-  DOM对象才能使用DOM中的方法，jquery对象不可以使用dom中的方法。
+let app = express();
 
+// use cookieSession
+app.use(cookieSession({
+    name: 'posterlab',
+    keys: ['userName'],
+    // 30 days
+    maxAge: 30 * 24 * 60 * 60 * 1000
+}));
 
-DOM对象可以和jquery对象互相转换：
+// login router
+app.use(loginFilter);
+app.use(logout);
+// static files
+let root = path.resolve(__dirname, '../../client/build/');
+app.use(express.static(root));
 
-#jquery对象转dom对象：
-
-$(selector).get(index);
-// or
-$(selector)[index];
-
-
-
-#dom对象转jquery对象：
-
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jul 9, 2015</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/angular/js/2015/07/09/angular.js-%E8%AF%AD%E6%B3%95%E6%B5%85%E6%9E%90.html">angular.js语法浅析</a>
-        </h2>
-        <p class="excerpt">声明：本文所有的双花括号，为了防止被jekyll当作本身变量编译，都在括号之间增加了空格，原本应该是没有空格的。
-
-概念
-
-
-  AngularJS is a structural framework for dynamic web apps.
-
-
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jul 4, 2015</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/gulp/js/2015/07/04/%E6%96%B0%E6%89%8B%E6%8E%A5%E8%A7%A6gulp.html">新手接触gulp</a>
-        </h2>
-        <p class="excerpt">因工作需要第一次接触到gulp（在前端混真的很惭愧…），在此记录下对gulp的认识。
-
-概念：
-
-Gulp.js是一个基于node.js的自动化构建工具，开发者可以使用它在项目开发过程中自动执行常见任务。
-
-
-
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jun 16, 2015</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/js/function/2015/06/16/js%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D%E5%8F%8A%E8%AE%A1%E7%AE%97%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%AD%97%E7%AC%A6%E7%9A%84%E4%B8%AA%E6%95%B0.html">js数组去重 及 计算字符串中字符的个数</a>
-        </h2>
-        <p class="excerpt">1、数组去重。
-
-方法一：
-
-var arr = [1,2,3,4,5,1,3,12,55,22];
-function getArray(a){
+// SPA refresh 404 resolution
+app.use(fallback('index.html', {root}));
 
 
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jun 16, 2015</span>
+// map request path to api file
+app.use(bodyParser.urlencoded({limit: `${postLimit}MB`, extended: true}));
+app.use(bodyParser.json({limit: `${postLimit}MB`}));
+app.use(apiMap);
 
-        <h2>
-          <a class="post-link" href="/blogs/js/function/2015/06/16/Javascript-%E5%8F%8D%E5%BA%8F%E8%BE%93%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2.html">Javascript反序输出字符串</a>
-        </h2>
-        <p class="excerpt">这是一个我在至少4次web前端笔试或者面试中遇到过的题目，就这么一行字的题目，最近一次看到却还让我如遭五雷轰顶，罪过，罪过。
+// server start
+if (!module.parent) {
+    app.listen(port, function () {
+        console.log('\n Express app listening on port ' + port + '.');
+    });
+}
+</code></pre>
+</div>
 
-解决方案一：
+<h2 id="serverconfig">SERVERCONFIG：</h2>
 
- &gt;'abcd ed'.split('').reverse().join(''); 
+<div class="highlighter-rouge"><pre class="highlight"><code>module.exports = {
+    // app server启动配置
+    SERVERCONFIG: {
+        apiDir: 'api',
+        // 后端接口host
+        apiBackEndHost: {
+            product: 'http://10.94.245.18:8888/ceres/launch/api',
+            promote: 'http://10.94.245.18:8889/ceres/show/api',
+            preview: 'http://10.94.245.18:8889/ceres/show/api'
+        },
+        // 是否mock，true时请求${path}-mock.js
+        isMock: 0,
+        // app port
+        port: process.env.NODE_ENV === 'production' ? 8080 : 8886,
+        // 开发／生产环境
+        nodeEnv: process.env.NODE_ENV || 'dev',
+        // 单位：MB
+        postLimit: 5
+    },
+    // UUAP配置
+    UUAPCONFIG: {
+        production: {
+            protocol: 'https',
+            hostname: 'uuap.baidu.com',
+            validateMethod: '/serviceValidate',
+            pathname: '/login',
+            logoutMethod: '/logout',
+            uicUrl: 'http://uuap.baidu.com:8086/ws/',
+            appKey: 'uuapclient-5-1E1FF0L10eb2TthZmAcc'
+        },
+        dev: {
+            protocol: 'http',
+            hostname: 'itebeta.baidu.com',
+            port: '8100',
+            pathname: '/login',
+            validateMethod: '/serviceValidate',
+            logoutMethod: '/logout',
+            uicUrl: 'http://itebeta.baidu.com:8102/ws/',
+            appKey: 'UICWSTestKey'
+        },
+        API: {
+            UserRemoteService: 'UserRemoteService?wsdl',
+            EmailGroupRemoteService: 'EmailgroupRemoteService?wsdl'
+        }
+    }
+};
+</code></pre>
+</div>
 
+<h2 id="babelrc">.babelrc</h2>
 
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jun 16, 2015</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"presets"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"es2015"</span><span class="p">,</span><span class="w"> </span><span class="s2">"react"</span><span class="p">,</span><span class="w"> </span><span class="s2">"stage-0"</span><span class="p">],</span><span class="w">
+    </span><span class="nt">"plugins"</span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="s2">"import"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"style"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"libraryDirectory"</span><span class="p">:</span><span class="w"> </span><span class="s2">"lib"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"libraryName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"antd"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"camel2DashComponentName"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="err">}</span><span class="p">]]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
 
-        <h2>
-          <a class="post-link" href="/blogs/js/common/2015/06/16/Javascript-stopBubble.html">Javascript stop bubble</a>
-        </h2>
-        <p class="excerpt">js阻止冒泡方法：
+<h2 id="packagejson">最外层package.json命令：</h2>
 
-var stopBubble = function (e) {
-	//如果提供了事件对象，则这是一个非IE浏览器
-	if(e &amp;&amp; e.stopPropagation) {
-		//因此它支持W3C的stopPropagation()方法
+<div class="highlighter-rouge"><pre class="highlight"><code>"scripts": {
+    // 服务启动
+    "start": "nodemon server/src/app.js --ignore client/ --exec babel-node",
+    // client里编译
+    "build": "webpack --watch --config client/webpack-dev-server.config.js",
+    // client里发布
+    "release": "webpack --watch --config client/webpack-production.config.js",
+    // server里编译
+    "buildServer": "babel server/src -d server/build"
+},
+</code></pre>
+</div>
 
+  </article>
 
-</p>
-      </li>
-    
-  </ul>
-
-  <!-- Pagination links -->
-  
-  <div class="pagination">
-    
-      <a class="prevpage" href="/blogs/blogs/page2">&laquo; Prev</a>
-    
-
-    
-      
-        <a href="/blogs/blogs/page2">1</a>
-      
-    
-      
-        <a href="/blogs/blogs/page2">2</a>
-      
-    
-      
-        <em>3</em>
-      
-    
-
-    
-      <span>Next &raquo;</span>
-    
-  </div>
-  
-
-  <p class="rss-subscribe">subscribe <a href="/blogs/feed.xml">via RSS</a></p>
+  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="express和webpack配合时启动文件配置"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"blogs2015"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	<!-- 多说公共JS代码 end -->
 
 </div>
 

@@ -6,12 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>一个copy对象的诡异😂问题</title>
-  <meta name="description" content="遇到一个诡异的问题，简单写成代码如下：&gt; var o = [{a: 1}, {a: 2}, {a: 3}]; var o2 = o; var o3 = o; o2.splice(0, 1); o3;&lt; [Object, Object]真实的数据结构比这个复杂一些…">
+  <title>charles获取express里的node请求...</title>
+  <meta name="description" content="node作为代理层请求后端接口时，一般会封装一个公共的请求方法，配置好host等信息，统一处理后端异常情况。这样的话，浏览器里就不能看到真正的api请求地址和原始的返回数据了，而在terminal里打印信息时，往往会被多重请求看得眼花缭乱…因此需要charles抓取node里的请求和返回。">
 
   <link rel="stylesheet" href="/blogs/css/main.css">
-  <link rel="canonical" href="http://insekkei.com/blogs//blogs/js/object/2016/05/30/js-copy-object.html">
-  <link rel="alternate" type="application/rss+xml" title="web前端笔记" href="http://insekkei.com/blogs//blogs/feed.xml" />
+  <link rel="canonical" href="http://localhost:4000/blogs/js/express/charles/2016/12/09/express-charles-get-request.html">
+  <link rel="alternate" type="application/rss+xml" title="web前端笔记" href="http://localhost:4000/blogs/feed.xml" />
   <link rel="icon" type="image/png" href="/blogs/images/icon.png">
 </head>
 
@@ -65,62 +65,83 @@
         <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">一个copy对象的诡异😂问题</h1>
-    <p class="post-meta">May 30, 2016</p>
+    <h1 class="post-title">charles获取express里的node请求...</h1>
+    <p class="post-meta">Dec 9, 2016</p>
   </header>
 
   <article class="post-content">
-    <p>遇到一个诡异的问题，简单写成代码如下：</p>
+    <p>node作为代理层请求后端接口时，一般会封装一个公共的请求方法，配置好host等信息，统一处理后端异常情况。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&gt; var o = [{a: 1}, {a: 2}, {a: 3}]; var o2 = o; var o3 = o; o2.splice(0, 1); o3;
-&lt; [Object, Object]
-</code></pre>
-</div>
+<p>这样的话，浏览器里就不能看到真正的api请求地址和原始的返回数据了，而在terminal里打印信息时，往往会被多重请求看得眼花缭乱…</p>
 
-<p>真实的数据结构比这个复杂一些…<!--more--></p>
+<p>因此需要charles抓取node里的请求和返回。<!--more--></p>
 
-<p>copy出o3的本意是，保存一个副本以便与o2经过各种操作后进行比较。然而每次遍历取o3里值组成一个简单数组时，总会发现，o3跟着o2动了…</p>
+<p>express里写个fetch方法：</p>
 
-<p>too young too simple的我以为这是灵异事件…而忘了“世界上没有无缘无故的bug”这句话（嗯，这句话也是我总结出来的…）。</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>import fetch from 'isomorphic-fetch';
+import tunnel from 'tunnel';
+import {SERVERCONFIG} from '../config';
+const nodeEnv = process.env.NODE_ENV || 'dev';
+...
+module.exports = {
+    fetchData(req, res, apiPath, params, host) {
+        let ext = {};
+        params = params || {};
 
-<p>于是，我把代码逻辑改成了如下形式：</p>
+        if (_.isPlainObject(params)) {
+            ext = {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(params)
+            };
+            // 设置本地调试代理，端口8888
+            if (nodeEnv === 'local') {
+                ext.agent = tunnel.httpOverHttp({
+                    proxy: {
+                        host: 'localhost',
+                        port: 8888
+                    }
+                });
+            }
+        }
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&gt; var o = [{a: 1}, {a: 2}, {a: 3}]; var o2 = o; var o3 = o.map(item =&gt; item.a); o2.splice(0,1); o3;
-&lt; [1, 2, 3]
-</code></pre>
-</div>
+        let apiBackEndHost = SERVERCONFIG.apiBackEndHost[host];
 
-<p>直接保存成一个目标数组了…</p>
-
-<p>问题虽然解决了，可是为什么o3会跟着o2动呢？</p>
-
-<p>有一天组里的小伙伴抛了一个问题在群里：</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>var o = { 
-    a: {
-        b: 2
+        return fetch(apiBackEndHost + apiPath, Object.assign({}, ext)).then(response =&gt; {
+            return response.json();
+        }).catch(error =&gt; {
+            // 统一设置错误处理
+            return Promise.resolve({
+                status: 505,
+                msg: '',
+                body: { // 字段没确定
+                    error: error
+                }
+            });
+        });
     }
-}; 
-var o2 = o;
-o = 1;
-问：o2是什么？
+};
 </code></pre>
 </div>
 
-<p>我根据上次的经验，想也不想，回答：1</p>
+<p>开启charles，配置httpProxy为8888，执行：</p>
 
-<p>然而在控制台试了下，是 Object {a: Object}…</p>
+<p>NODE_ENV=local npm start</p>
 
-<p>看了其他小伙伴的回复，再查了下，原来，<code class="highlighter-rouge">=</code> 操作符中，对象和数组是引用，字符串数字才是副本…也就是说，o2，o3指向的是同一个地址，只是名字不一样而已…</p>
+<p>就可以在charles中看到真正的后端请求和返回了～</p>
 
-<p>我又恍惚地记起了一些面试题，slice复制数组什么的…object.assign什么的…</p>
+<p>开了shadowSocks这架小飞机怎么办？别怕，SwitchyOmega里配置Protocol为SOCKS5，Server 127.0.0.1，port 1080，
+然后在charles的Proxies里选中Enable Socks proxy，设置端口1080.</p>
 
-<p>看来实践需要配合理论啊…</p>
+<p>备注：此时可以前往mac-&gt;system preference-&gt;network-&gt;advanced-&gt;Proxies中查看web Proxy什么的，是不是被设置了什么端口～～</p>
 
   </article>
 
   <!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="" data-title="一个copy对象的诡异😂问题"></div>
+	<div class="ds-thread" data-thread-key="" data-title="charles获取express里的node请求..."></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

@@ -6,12 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>web前端笔记</title>
-  <meta name="description" content="绿螘新醅酒，红泥小火炉。<br>晚来天欲雪，能饮一杯无？
-">
+  <title>图片上传时可能遇到的一些情况...</title>
+  <meta name="description" content="component&lt;input type="file" accept="image/png, image/jpeg, image/jpg"    title=""    onChange={this.handleReUpload} /&gt;类型、大小（体积）event.target.files[0]: {...">
 
   <link rel="stylesheet" href="/blogs/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/blogs/blogs/page3/">
+  <link rel="canonical" href="http://localhost:4000/blogs/js/image/file/2016/12/09/image-upload-relative.html">
   <link rel="alternate" type="application/rss+xml" title="web前端笔记" href="http://localhost:4000/blogs/feed.xml" />
   <link rel="icon" type="image/png" href="/blogs/images/icon.png">
 </head>
@@ -63,213 +62,86 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="home">
+        <div class="post">
 
-  <h1 class="page-heading">笔记目录</h1>
+  <header class="post-header">
+    <h1 class="post-title">图片上传时可能遇到的一些情况...</h1>
+    <p class="post-meta">Dec 9, 2016</p>
+  </header>
 
-  <ul class="post-list">
-    
-      <li>
-        <span class="post-meta">Sep 2, 2015</span>
+  <article class="post-content">
+    <h2 id="component">component</h2>
 
-        <h2>
-          <a class="post-link" href="/blogs/react/js/ajax/2015/09/02/js-react%E8%B7%A8%E5%9F%9F.html">react ajax跨域请求</a>
-        </h2>
-        <p class="excerpt">同源策略
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;input type="file" accept="image/png, image/jpeg, image/jpg"
+    title=""
+    onChange={this.handleReUpload} /&gt;
+</code></pre>
+</div>
 
+<h2 id="section">类型、大小（体积）</h2>
 
-  同源策略限制了一个源（origin）中加载文本或脚本与来自其它源（origin）中资源的交互方式。如果两个页面拥有相同的 协议（protocol），端口（如果指定），和 主机，那么这两个页面就属于同一个源（origin）。
+<div class="highlighter-rouge"><pre class="highlight"><code>event.target.files[0]: {
+	type, size
+}
+</code></pre>
+</div>
 
+<p>此时也可以同时在express里对上传文件大小进行限制</p>
 
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Aug 25, 2015</span>
+<h2 id="base64--more--">图片转换成base64<!--more--></h2>
 
-        <h2>
-          <a class="post-link" href="/blogs/react/js/flux/2015/08/25/react-flux-data-flow.html">react&flux之BasicSelect组件实现</a>
-        </h2>
-        <p class="excerpt">应工作需求，用到flux，为了解react设计思想及其flux强调的数据流，查找了各种在线资料，终于可以开工了。然而编码的时候时常产生一种怀疑：我真的是一个前端？
+<div class="highlighter-rouge"><pre class="highlight"><code>inputTypeFileChangeHandler = event =&gt; {
+    let me = this;
+    let reader = new FileReader();
+    // onload() 当读取操作成功完成时调用
+    reader.onload = function () {
+        // reader.result 读取到的文件内容.这个属性只在读取操作完成之后才有效,并且数据的格式取决于读取操作是由哪个方法发起的
+        me.setState({
+            imageUrl: reader.result
+        });
+    }
+    if (event.target.files[0]) {
+        // readAsDataURL()开始读取指定的Blob对象或File对象中的内容
+        reader.readAsDataURL(event.target.files[0]);
+    }
+}
+</code></pre>
+</div>
 
-React
+<h2 id="base64">通过base64编码获取图片原始宽高</h2>
 
-对于react，我是从这里开始了解的，然而这儿仅仅能了解到react的语法。
+<div class="highlighter-rouge"><pre class="highlight"><code>let image = new Image();
+image.src = reader.result;
+let {width, height} = image;
+// 校验逻辑
+...
+</code></pre>
+</div>
 
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Aug 25, 2015</span>
+<h2 id="inputonchange">关于上传input的onChange事件</h2>
 
-        <h2>
-          <a class="post-link" href="/blogs/bootstrap/js/2015/08/25/bootstrap-select-with-ajax-data.html">bootstrap-select.js使用ajax get到的option数据</a>
-        </h2>
-        <p class="excerpt">
-  第一次用到，搜了很多博文都没用，一篇抄一篇而且整得特复杂…还是官方文档比较给力，然而最近红杏什么的都没法用了，代理jquery到国内cdn后才能正确显示效果，非常之坑…有些东西遮遮掩掩真的有用吗？
+<p>连续上传同一张图片时，不会触发onChange事件，解决思路：每次上传完，先销毁组件，再重新render一个组件…</p>
 
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/FileReader">阅读更多</a></p>
 
-bootstrap-select.js官方文档
+  </article>
 
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Aug 5, 2015</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/angularjs/js/2015/08/05/angularjs-localstorage.html">angularjs结合localstorage完成一个简单的备忘录</a>
-        </h2>
-        <p class="excerpt">
-  学习一种新的框架真的是痛并快乐着…而当确定了一个清晰的目标，向着这个目标努力时，成就感带来的快感将远大于茫然不解时的痛苦。
-
-
-——&gt;预览效果
-
-准备工作
-
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jul 29, 2015</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/jquery/js/2015/07/29/jquery%E4%B9%8Bradio-checkbox.html">jquery和dom中操作radio和checkbox</a>
-        </h2>
-        <p class="excerpt">
-  DOM对象才能使用DOM中的方法，jquery对象不可以使用dom中的方法。
-
-
-DOM对象可以和jquery对象互相转换：
-
-#jquery对象转dom对象：
-
-$(selector).get(index);
-// or
-$(selector)[index];
-
-
-
-#dom对象转jquery对象：
-
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jul 9, 2015</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/angular/js/2015/07/09/angular.js-%E8%AF%AD%E6%B3%95%E6%B5%85%E6%9E%90.html">angular.js语法浅析</a>
-        </h2>
-        <p class="excerpt">声明：本文所有的双花括号，为了防止被jekyll当作本身变量编译，都在括号之间增加了空格，原本应该是没有空格的。
-
-概念
-
-
-  AngularJS is a structural framework for dynamic web apps.
-
-
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jul 4, 2015</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/gulp/js/2015/07/04/%E6%96%B0%E6%89%8B%E6%8E%A5%E8%A7%A6gulp.html">新手接触gulp</a>
-        </h2>
-        <p class="excerpt">因工作需要第一次接触到gulp（在前端混真的很惭愧…），在此记录下对gulp的认识。
-
-概念：
-
-Gulp.js是一个基于node.js的自动化构建工具，开发者可以使用它在项目开发过程中自动执行常见任务。
-
-
-
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jun 16, 2015</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/js/function/2015/06/16/js%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D%E5%8F%8A%E8%AE%A1%E7%AE%97%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%AD%97%E7%AC%A6%E7%9A%84%E4%B8%AA%E6%95%B0.html">js数组去重 及 计算字符串中字符的个数</a>
-        </h2>
-        <p class="excerpt">1、数组去重。
-
-方法一：
-
-var arr = [1,2,3,4,5,1,3,12,55,22];
-function getArray(a){
-
-
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jun 16, 2015</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/js/function/2015/06/16/Javascript-%E5%8F%8D%E5%BA%8F%E8%BE%93%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2.html">Javascript反序输出字符串</a>
-        </h2>
-        <p class="excerpt">这是一个我在至少4次web前端笔试或者面试中遇到过的题目，就这么一行字的题目，最近一次看到却还让我如遭五雷轰顶，罪过，罪过。
-
-解决方案一：
-
- &gt;'abcd ed'.split('').reverse().join(''); 
-
-
-</p>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jun 16, 2015</span>
-
-        <h2>
-          <a class="post-link" href="/blogs/js/common/2015/06/16/Javascript-stopBubble.html">Javascript stop bubble</a>
-        </h2>
-        <p class="excerpt">js阻止冒泡方法：
-
-var stopBubble = function (e) {
-	//如果提供了事件对象，则这是一个非IE浏览器
-	if(e &amp;&amp; e.stopPropagation) {
-		//因此它支持W3C的stopPropagation()方法
-
-
-</p>
-      </li>
-    
-  </ul>
-
-  <!-- Pagination links -->
-  
-  <div class="pagination">
-    
-      <a class="prevpage" href="/blogs/blogs/page2">&laquo; Prev</a>
-    
-
-    
-      
-        <a href="/blogs/blogs/page2">1</a>
-      
-    
-      
-        <a href="/blogs/blogs/page2">2</a>
-      
-    
-      
-        <em>3</em>
-      
-    
-
-    
-      <span>Next &raquo;</span>
-    
-  </div>
-  
-
-  <p class="rss-subscribe">subscribe <a href="/blogs/feed.xml">via RSS</a></p>
+  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="图片上传时可能遇到的一些情况..."></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"blogs2015"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	<!-- 多说公共JS代码 end -->
 
 </div>
 

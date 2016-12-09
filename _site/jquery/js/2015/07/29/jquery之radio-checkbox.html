@@ -7,11 +7,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>jquery和dom中操作radio和checkbox</title>
-  <meta name="description" content="  DOM对象才能使用DOM中的方法，jquery对象不可以使用dom中的方法。DOM对象可以和jquery对象互相转换：jquery对象转dom对象：$(selector).get(index);// or$(selector)[index];dom对象转jquery对象：">
+  <meta name="description" content="  DOM对象才能使用DOM中的方法，jquery对象不可以使用dom中的方法。DOM对象可以和jquery对象互相转换：#jquery对象转dom对象：$(selector).get(index);// or$(selector)[index];#dom对象转jquery对象：">
 
   <link rel="stylesheet" href="/blogs/css/main.css">
-  <link rel="canonical" href="http://insekkei.com/blogs//blogs/jquery/js/2015/07/29/jquery%E4%B9%8Bradio-checkbox.html">
-  <link rel="alternate" type="application/rss+xml" title="web前端笔记" href="http://insekkei.com/blogs//blogs/feed.xml" />
+  <link rel="canonical" href="http://localhost:4000/blogs/jquery/js/2015/07/29/jquery%E4%B9%8Bradio-checkbox.html">
+  <link rel="alternate" type="application/rss+xml" title="web前端笔记" href="http://localhost:4000/blogs/feed.xml" />
   <link rel="icon" type="image/png" href="/blogs/images/icon.png">
 </head>
 
@@ -76,7 +76,7 @@
 
 <p>DOM对象可以和jquery对象互相转换：</p>
 
-<h1 id="jquerydom">jquery对象转dom对象：</h1>
+<p>#jquery对象转dom对象：</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>$(selector).get(index);
 // or
@@ -84,7 +84,7 @@ $(selector)[index];
 </code></pre>
 </div>
 
-<h1 id="domjquery--more--">dom对象转jquery对象：<!--more--></h1>
+<p>#dom对象转jquery对象：<!--more--></p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>// dom对象
 var object = document.getElementById('object');
@@ -93,14 +93,14 @@ var $object = $(object);
 </code></pre>
 </div>
 
-<h1 id="jqueryradiocheckboxjquery">jquery判断radio或者checkbox是否被选中，需要jquery类型的对象。</h1>
+<p>#jquery判断radio或者checkbox是否被选中，需要jquery类型的对象。</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>// 返回true or false
 $('selector').is(':checked');
 </code></pre>
 </div>
 
-<h1 id="domradiocheckboxdom">DOM方式判断radio或者checkbox是否被选中，需要用dom类型的对象。</h1>
+<p>#DOM方式判断radio或者checkbox是否被选中，需要用dom类型的对象。</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>// 返回true or false
 $('selector')[0].checked;
@@ -109,7 +109,7 @@ $('selector').get(0).checked;
 </code></pre>
 </div>
 
-<h1 id="jqueryradiocheckbox">jquery操作radio或者checkbox使它们被选中</h1>
+<p>#jquery操作radio或者checkbox使它们被选中</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>//For versions higher than 1.6, use:
 $('#radio_1').prop('checked', true)
